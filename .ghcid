@@ -1,0 +1,2 @@
+--command "stack ghci --main-is monomer-widgets:exe:example"
+--test ":main"

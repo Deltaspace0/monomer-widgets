@@ -1,0 +1,64 @@
+name:                monomer-widgets
+version:             0.1.0.0
+github:              Deltaspace0/monomer-widgets
+license:             MIT
+author:              Ruslan Gadeev
+maintainer:          rgadeew@yandex.ru
+copyright:           2022 Ruslan Gadeev
+
+extra-source-files:
+- README.md
+- CHANGELOG.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/Deltaspace0/monomer-widgets#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- containers
+- lens
+- monomer
+- text
+- text-show
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+
+library:
+  source-dirs: src
+
+executables:
+  example:
+    main:                Main.hs
+    source-dirs:         examples/example
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - monomer-widgets
+
+tests:
+  monomer-widgets-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - monomer-widgets
