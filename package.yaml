@@ -42,9 +42,9 @@ library:
   source-dirs: src
 
 executables:
-  example:
+  enhanced-slider-example:
     main:                Main.hs
-    source-dirs:         examples/example
+    source-dirs:         examples/enhanced-slider
     ghc-options:
     - -threaded
     - -rtsopts

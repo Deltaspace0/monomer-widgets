@@ -1,2 +1,2 @@
---command "stack ghci --main-is monomer-widgets:exe:example"
+--command "stack ghci --main-is monomer-widgets:exe:enhanced-slider-example"
 --test ":main"
