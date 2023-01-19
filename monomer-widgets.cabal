@@ -24,6 +24,11 @@ source-repository head
   location: https://github.com/Deltaspace0/monomer-widgets
 
 library
+  exposed-modules:
+      Monomer.EnhancedSlider
+      Monomer.EnhancedSlider.EnhancedSliderCfg
+      Monomer.EnhancedSlider.EnhancedSliderEvent
+      Monomer.EnhancedSlider.UI
   other-modules:
       Paths_monomer_widgets
   hs-source-dirs:
@@ -32,6 +37,7 @@ library
   build-depends:
       base >=4.7 && <5
     , containers
+    , data-default
     , lens
     , monomer
     , text
@@ -52,6 +58,7 @@ executable enhanced-slider-example
   build-depends:
       base >=4.7 && <5
     , containers
+    , data-default
     , lens
     , monomer
     , monomer-widgets
@@ -70,6 +77,7 @@ test-suite monomer-widgets-test
   build-depends:
       base >=4.7 && <5
     , containers
+    , data-default
     , lens
     , monomer
     , monomer-widgets
