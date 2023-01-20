@@ -36,6 +36,7 @@ buildUI config a b _ model = tree where
     sliderConfig =
         [ wheelRate 0
         , dragRate $ toRational changeRate
+        , onChange EventSetField
         ]
     button' c e = button c e `styleBasic`
         [ width 32

@@ -14,17 +14,21 @@ data EnhancedSliderEvent a
 
 handleEvent
     :: (SliderValue a)
-    => (EnhancedSliderCfg s e a)
+    => (EnhancedSliderCfg sp ep a)
     -> a
     -> a
     -> EventHandler a (EnhancedSliderEvent a) sp ep
-handleEvent _ a b _ _ _ event = case event of
-    EventSetField value -> setFieldHandle a b value
+handleEvent config a b _ _ _ event = case event of
+    EventSetField value -> setFieldHandle config a b value
 
 setFieldHandle
     :: (SliderValue a)
-    => a
+    => (EnhancedSliderCfg sp ep a)
+    -> a
     -> a
     -> a
     -> [EventResponse a (EnhancedSliderEvent a) sp ep]
-setFieldHandle a b value = [Model $ min b $ max a value]
+setFieldHandle config a b value = [Model newValue] <> report where
+    report = RequestParent <$> (($ newValue) <$> req)
+    newValue = min b $ max a value
+    req = _escOnChangeReq config
