@@ -3,14 +3,22 @@ module Model.AppEvent
     , handleEvent
     ) where
 
+import Control.Lens
 import Monomer
 
 import Model.AppModel
 
 data AppEvent
     = AppInit
+    | AppIncrementChanges
     deriving (Eq, Show)
 
+type EventHandle = AppModel -> [AppEventResponse AppModel AppEvent]
+
 handleEvent :: AppEventHandler AppModel AppEvent
-handleEvent _ _ _ event = case event of
+handleEvent _ _ model event = case event of
     AppInit -> []
+    AppIncrementChanges -> incrementChangesHandle model
+
+incrementChangesHandle :: EventHandle
+incrementChangesHandle model = [Model $ model & changes +~ 1]
