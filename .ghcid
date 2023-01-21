@@ -1,2 +1,3 @@
---command "stack ghci --main-is monomer-widgets:exe:enhanced-slider-example"
+--command "stack ghci monomer-widgets:exe:save-manager-example"
 --test ":main"
+--reload "src"

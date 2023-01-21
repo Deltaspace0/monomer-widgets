@@ -66,6 +66,28 @@ executable enhanced-slider-example
     , text-show
   default-language: Haskell2010
 
+executable save-manager-example
+  main-is: Main.hs
+  other-modules:
+      Model
+      Model.AppEvent
+      Model.AppModel
+      UI
+      Paths_monomer_widgets
+  hs-source-dirs:
+      examples/save-manager
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , data-default
+    , lens
+    , monomer
+    , monomer-widgets
+    , text
+    , text-show
+  default-language: Haskell2010
+
 test-suite monomer-widgets-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
