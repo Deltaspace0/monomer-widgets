@@ -21,10 +21,10 @@ import Monomer.SaveManager.SaveManagerEvent
 import Monomer.SaveManager.SaveManagerModel
 
 buildUI
-    :: (Eq a, Typeable a)
+    :: (Typeable a)
     => (SaveManagerCfg s e a)
     -> UIBuilder (SaveManagerModel a) (SaveManagerEvent a)
-buildUI config _ model = widgetTree where
+buildUI _ _ model = widgetTree where
     widgetTree = vstack_ [childSpacing_ 16]
         [ hgrid_ [childSpacing_ 16]
             [ button' "New slot" EventNewSlot

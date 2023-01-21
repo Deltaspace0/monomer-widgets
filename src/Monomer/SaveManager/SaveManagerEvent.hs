@@ -5,7 +5,6 @@ module Monomer.SaveManager.SaveManagerEvent
 
 import Control.Lens
 import Data.Maybe
-import Data.Sequence (Seq)
 import Data.Text (Text)
 import Data.Time.LocalTime
 import Monomer.Widgets.Composite
@@ -49,7 +48,8 @@ newSlotHandle :: EventHandle a sp ep
 newSlotHandle config model = [Producer handler] where
     handler raiseEvent = do
         x <- makeCaption config $ model ^. currentData
-        raiseEvent $ EventSetSavedData $ x <| (model ^. savedData)
+        let newSavedData = x <| (model ^. savedData)
+        _ <- raiseEvent $ EventSetSavedData newSavedData
         raiseEvent $ EventSetSelectedData $ Just 0
 
 saveHandle :: EventHandle a sp ep
@@ -86,22 +86,22 @@ removeHandle _ model = responses where
 setSavedDataHandle :: Saves a -> EventHandle a sp ep
 setSavedDataHandle newSavedData config model = responses where
     responses = (Model $ model & savedData .~ newSavedData):req
-    req = RequestParent <$> (($ newSavedData) <$> onSavesChangeReq)
-    onSavesChangeReq = _smcOnSavesChangeReq config
+    req = RequestParent <$> (($ newSavedData) <$> onSavesChangeReq')
+    onSavesChangeReq' = _smcOnSavesChangeReq config
 
 setSelectedDataHandle :: Maybe Int -> EventHandle a sp ep
 setSelectedDataHandle newSelectedData _ model = [Model model'] where
     model' = model & selectedData .~ newSelectedData
 
 focusHandle :: WidgetNode s e -> Path -> EventHandle a sp ep
-focusHandle node prev config model = response where
+focusHandle node prev config _ = response where
     response = if valid
         then RequestParent <$> (($ prev) <$> _smcOnFocusReq config)
         else []
     valid = not $ isNodeParentOfPath node prev
 
 blurHandle :: WidgetNode s e -> Path -> EventHandle a sp ep
-blurHandle node next config model = response where
+blurHandle node next config _ = response where
     response = if valid
         then RequestParent <$> (($ next) <$> _smcOnBlurReq config)
         else []
