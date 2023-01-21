@@ -4,6 +4,7 @@ This is a collection of custom widgets (composites) for [Monomer](https://github
 
 ## List of widgets
 - [Enhanced slider](readme/enhanced-slider/README.md)
+- [Save manager](readme/save-manager/README.md)
 
 ## License
 - This project is licensed under the [MIT license](LICENSE.md).
