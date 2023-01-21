@@ -27,6 +27,7 @@ dependencies:
 - monomer
 - text
 - text-show
+- time
 
 ghc-options:
 - -Wall

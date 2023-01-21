@@ -29,6 +29,11 @@ library
       Monomer.EnhancedSlider.EnhancedSliderCfg
       Monomer.EnhancedSlider.EnhancedSliderEvent
       Monomer.EnhancedSlider.UI
+      Monomer.SaveManager
+      Monomer.SaveManager.SaveManagerCfg
+      Monomer.SaveManager.SaveManagerEvent
+      Monomer.SaveManager.SaveManagerModel
+      Monomer.SaveManager.UI
   other-modules:
       Paths_monomer_widgets
   hs-source-dirs:
@@ -42,6 +47,7 @@ library
     , monomer
     , text
     , text-show
+    , time
   default-language: Haskell2010
 
 executable enhanced-slider-example
@@ -64,6 +70,7 @@ executable enhanced-slider-example
     , monomer-widgets
     , text
     , text-show
+    , time
   default-language: Haskell2010
 
 executable save-manager-example
@@ -86,6 +93,7 @@ executable save-manager-example
     , monomer-widgets
     , text
     , text-show
+    , time
   default-language: Haskell2010
 
 test-suite monomer-widgets-test
@@ -105,4 +113,5 @@ test-suite monomer-widgets-test
     , monomer-widgets
     , text
     , text-show
+    , time
   default-language: Haskell2010

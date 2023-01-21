@@ -1,15 +1,22 @@
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module Model.AppModel
     ( AppModel(..)
     , initModel
+    , saves
     ) where
 
-import Data.Text
+import Control.Lens
+import Monomer.SaveManager
 
 data AppModel = AppModel
-    { _amField :: Text
-    } deriving (Eq, Show)
+    { _amSaves :: SaveManagerModel Int
+    } deriving Eq
+
+makeLensesWith abbreviatedFields 'AppModel
 
 initModel :: AppModel
-initModel = AppModel "[save manager]"
+initModel = AppModel $ initSaveManagerModel 0
