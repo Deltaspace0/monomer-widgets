@@ -29,6 +29,9 @@ dependencies:
 - text-show
 - time
 
+default-extensions:
+- OverloadedStrings
+
 ghc-options:
 - -Wall
 - -Wcompat

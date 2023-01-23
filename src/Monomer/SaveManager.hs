@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Monomer.SaveManager
     ( module Monomer.SaveManager.SaveManagerModel
     , module Monomer.SaveManager.SaveManagerCfg

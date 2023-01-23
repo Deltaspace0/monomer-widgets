@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Monomer.EnhancedSlider
     ( EnhancedSliderCfg
     , enhancedSlider

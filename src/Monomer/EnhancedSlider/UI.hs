@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Monomer.EnhancedSlider.UI
     ( buildUI
     ) where
