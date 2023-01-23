@@ -74,5 +74,10 @@ tests:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    - -w
     dependencies:
+    - bytestring
+    - hspec
     - monomer-widgets
+    - mtl
+    - stm

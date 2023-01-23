@@ -1,2 +1,2 @@
---command "stack ghci monomer-widgets:lib monomer-widgets:exe:save-manager-example"
+--command "stack ghci monomer-widgets:lib monomer-widgets:test:monomer-widgets-test"
 --test ":main"
