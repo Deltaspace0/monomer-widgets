@@ -107,6 +107,7 @@ test-suite monomer-widgets-test
   main-is: Spec.hs
   other-modules:
       Monomer.EnhancedSliderSpec
+      Monomer.SaveManagerSpec
       Monomer.TestEventUtil
       Monomer.TestUtil
       Paths_monomer_widgets
