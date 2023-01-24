@@ -1,8 +1,10 @@
 module Monomer.EnhancedSlider.UI
     ( buildUI
+    , makeTitle
     ) where
 
 import Data.Maybe
+import Data.Text (Text)
 import Monomer.Core.Combinators
 import Monomer.Widgets.Composite
 import Monomer.Widgets.Containers.Stack
@@ -22,15 +24,13 @@ buildUI
     -> UIBuilder a (EnhancedSliderEvent a)
 buildUI config a b _ model = tree where
     tree = vstack_ [childSpacing_ 16]
-        [ label $ fromMaybe showValue titleValue
+        [ label $ makeTitle config model
         , hstack_ [childSpacing_ 32]
             [ hslider_ id a b sliderConfig
             , button' "-" $ EventSetField $ model-changeRate
             , button' "+" $ EventSetField $ model+changeRate
             ]
         ]
-    showValue = T.pack $ show model
-    titleValue = (<> ": " <> showValue) <$> _escTitle config
     sliderConfig =
         [ wheelRate 0
         , dragRate $ toRational changeRate
@@ -47,3 +47,12 @@ buildUI config a b _ model = tree where
         , onBlur EventBlur
         ]
     changeRate = fromFractional $ fromMaybe 1 $ _escDragRate config
+
+makeTitle
+    :: (SliderValue a)
+    => (EnhancedSliderCfg s e a)
+    -> a
+    -> Text
+makeTitle config value = fromMaybe showValue titleValue where
+    titleValue = (<> ": " <> showValue) <$> _escTitle config
+    showValue = T.pack $ show value
