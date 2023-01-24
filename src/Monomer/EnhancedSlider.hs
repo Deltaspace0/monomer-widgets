@@ -1,5 +1,5 @@
 module Monomer.EnhancedSlider
-    ( EnhancedSliderCfg
+    ( module Monomer.EnhancedSlider.EnhancedSliderCfg
     , enhancedSlider
     , enhancedSlider_
     , enhancedSliderV

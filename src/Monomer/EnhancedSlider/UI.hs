@@ -3,6 +3,7 @@ module Monomer.EnhancedSlider.UI
     , makeTitle
     ) where
 
+import Control.Applicative ((<|>))
 import Data.Maybe
 import Data.Text (Text)
 import Monomer.Core.Combinators
@@ -53,6 +54,8 @@ makeTitle
     => (EnhancedSliderCfg s e a)
     -> a
     -> Text
-makeTitle config value = fromMaybe showValue titleValue where
+makeTitle config value = fromMaybe showValue customTitle where
+    customTitle = withMethod <|> titleValue
+    withMethod = ($ value) <$> _escTitleMethod config
     titleValue = (<> ": " <> showValue) <$> _escTitle config
     showValue = T.pack $ show value

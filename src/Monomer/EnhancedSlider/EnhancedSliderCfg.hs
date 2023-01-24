@@ -3,6 +3,7 @@
 
 module Monomer.EnhancedSlider.EnhancedSliderCfg
     ( EnhancedSliderCfg(..)
+    , titleMethod
     ) where
 
 import Control.Applicative ((<|>))
@@ -13,6 +14,7 @@ import Monomer.Widgets.Single
 data EnhancedSliderCfg s e a = EnhancedSliderCfg
     { _escDragRate :: Maybe Rational
     , _escTitle :: Maybe Text
+    , _escTitleMethod :: Maybe (a -> Text)
     , _escOnFocusReq :: [Path -> WidgetRequest s e]
     , _escOnBlurReq :: [Path -> WidgetRequest s e]
     , _escOnChangeReq :: [a -> WidgetRequest s e]
@@ -22,6 +24,7 @@ instance Default (EnhancedSliderCfg s e a) where
     def = EnhancedSliderCfg
         { _escDragRate = Nothing
         , _escTitle = Nothing
+        , _escTitleMethod = Nothing
         , _escOnFocusReq = []
         , _escOnBlurReq = []
         , _escOnChangeReq = []
@@ -31,6 +34,8 @@ instance Semigroup (EnhancedSliderCfg s e a) where
     (<>) c1 c2 = EnhancedSliderCfg
         { _escDragRate = _escDragRate c1 <|> _escDragRate c2
         , _escTitle = _escTitle c1 <|> _escTitle c2
+        , _escTitleMethod =
+            _escTitleMethod c1 <|> _escTitleMethod c2
         , _escOnFocusReq = _escOnFocusReq c1 <> _escOnFocusReq c2
         , _escOnBlurReq = _escOnBlurReq c1 <> _escOnBlurReq c2
         , _escOnChangeReq = _escOnChangeReq c1 <> _escOnChangeReq c2
@@ -81,3 +86,8 @@ instance CmbOnChangeReq (EnhancedSliderCfg s e a) s e a where
     onChangeReq req = def
         { _escOnChangeReq = [req]
         }
+
+titleMethod :: (a -> Text) -> EnhancedSliderCfg s e a
+titleMethod makeTitle = def
+    { _escTitleMethod = Just makeTitle
+    }

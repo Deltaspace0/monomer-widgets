@@ -10,6 +10,7 @@ import Monomer.TestEventUtil
 import Monomer.TestUtil
 import Test.Hspec
 import qualified Data.Sequence as Seq
+import qualified Data.Text as T
 
 import Monomer.EnhancedSlider
 import Monomer.EnhancedSlider.UI (makeTitle)
@@ -104,7 +105,11 @@ handleEventV = describe "handleEventV" $ do
 title :: Spec
 title = describe "title" $ do
     let config = titleCaption "custom title"
+        configM = titleMethod $ \x -> "x = " <> T.pack (show x)
+        value = 42 :: Int
     it "should just show value by default" $
-        makeTitle def (42 :: Int) `shouldBe` "42"
+        makeTitle def value `shouldBe` "42"
     it "should show custom title with value" $
-        makeTitle config (42 :: Int) `shouldBe` "custom title: 42"
+        makeTitle config value `shouldBe` "custom title: 42"
+    it "should show custom title made by user provided method" $
+        makeTitle configM value `shouldBe` "x = 42"
