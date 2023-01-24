@@ -12,7 +12,11 @@ import qualified Data.Sequence as Seq
 
 import Monomer.EnhancedSlider
 
-data Event = ValueChanged Double deriving (Eq, Show)
+data Event
+    = ValueChanged Double
+    | GotFocus Path
+    | LostFocus Path
+    deriving (Eq, Show)
 
 data TestModel = TestModel
     { _tmField :: Double
@@ -23,7 +27,7 @@ makeLensesWith abbreviatedFields 'TestModel
 spec :: Spec
 spec = describe "EnhancedSlider" $ do
     buttons
-    reportOnChange
+    handleEvent
 
 buttons :: Spec
 buttons = describe "buttons" $ do
@@ -35,11 +39,22 @@ buttons = describe "buttons" $ do
     it "should increase the value when clicked on \"+\" button" $
         model (Point (640-1) 50) ^. field `shouldBe` 44
 
-reportOnChange :: Spec
-reportOnChange = describe "reportOnChange" $ do
+handleEvent :: Spec
+handleEvent = describe "handleEvent" $ do
     let wenv = mockWenv (TestModel 42)
-        node = enhancedSlider_ field 0 50 [onChange ValueChanged]
+        node = enhancedSlider_ field 0 50
+            [ onChange ValueChanged
+            , onFocus GotFocus
+            , onBlur LostFocus
+            ]
         clickEvents p = nodeHandleEventEvts wenv [evtClick p] node
+        events evt = nodeHandleEventEvts wenv [evt] node
         expectedEvents = Seq.singleton $ ValueChanged 43
-    it "should generate an event on change" $
+        focusEvents = Seq.singleton $ GotFocus emptyPath
+        blurEvents = Seq.singleton $ LostFocus emptyPath
+    it "should generate an event when it changes the value" $
         clickEvents (Point (640-1) 50) `shouldBe` expectedEvents
+    it "should generate an event when focus is received" $
+        events evtFocus `shouldBe` focusEvents
+    it "should generate an event when focus is lost" $
+        events evtBlur `shouldBe` blurEvents

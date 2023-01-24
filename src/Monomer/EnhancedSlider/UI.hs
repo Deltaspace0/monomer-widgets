@@ -35,9 +35,15 @@ buildUI config a b _ model = tree where
         [ wheelRate 0
         , dragRate $ toRational changeRate
         , onChange EventSetField
+        , onFocus EventFocus
+        , onBlur EventBlur
         ]
-    button' c e = button c e `styleBasic`
+    button' c e = button_ c e buttonConfig `styleBasic`
         [ width 32
         , height 24
+        ]
+    buttonConfig =
+        [ onFocus EventFocus
+        , onBlur EventBlur
         ]
     changeRate = fromFractional $ fromMaybe 1 $ _escDragRate config
