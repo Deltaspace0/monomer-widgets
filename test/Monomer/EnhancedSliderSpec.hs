@@ -4,6 +4,7 @@
 module Monomer.EnhancedSliderSpec (spec) where
 
 import Control.Lens
+import Data.Default
 import Monomer
 import Monomer.TestEventUtil
 import Monomer.TestUtil
@@ -11,6 +12,7 @@ import Test.Hspec
 import qualified Data.Sequence as Seq
 
 import Monomer.EnhancedSlider
+import Monomer.EnhancedSlider.UI (makeTitle)
 
 data Event
     = ValueChanged Double
@@ -29,6 +31,7 @@ spec = describe "EnhancedSlider" $ do
     buttons
     handleEvent
     handleEventV
+    title
 
 buttons :: Spec
 buttons = describe "buttons" $ do
@@ -97,3 +100,11 @@ handleEventV = describe "handleEventV" $ do
         events evtFocus `shouldBe` focusEvents
     it "should generate an event when focus is lost" $
         events evtBlur `shouldBe` blurEvents
+
+title :: Spec
+title = describe "title" $ do
+    let config = titleCaption "custom title"
+    it "should just show value by default" $
+        makeTitle def (42 :: Int) `shouldBe` "42"
+    it "should show custom title with value" $
+        makeTitle config (42 :: Int) `shouldBe` "custom title: 42"
