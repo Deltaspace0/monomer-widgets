@@ -54,26 +54,32 @@ loadButton = describe "Load" $ do
     let s = Seq.singleton (0, "a")
         m = initSaveManagerModel 42
             & savedData .~ s
-            & selectedData .~ Just 0
+        m' = m & selectedData .~ Just 0
         wenv = mockWenvEvtUnit $ TestModel m
+        wenvS = mockWenvEvtUnit $ TestModel m'
         node = saveManager field
         p = Point ((640+16)/4*2+1) 5
-        model = nodeHandleEventModel wenv [evtClick p] node
+        model wenv' = nodeHandleEventModel wenv' [evtClick p] node
+    it "should not load when slot is not selected" $
+        model wenv ^. field . currentData `shouldBe` 42
     it "should load from selected slot" $
-        model ^. field . currentData `shouldBe` 0
+        model wenvS ^. field . currentData `shouldBe` 0
 
 removeButton :: Spec
 removeButton = describe "Remove" $ do
     let s = Seq.singleton (0, "a")
         m = initSaveManagerModel 42
             & savedData .~ s
-            & selectedData .~ Just 0
+        m' = m & selectedData .~ Just 0
         wenv = mockWenvEvtUnit $ TestModel m
+        wenvS = mockWenvEvtUnit $ TestModel m'
         node = saveManager field
         p = Point ((640+16)/4*3+1) 5
-        model = nodeHandleEventModel wenv [evtClick p] node
+        model wenv' = nodeHandleEventModel wenv' [evtClick p] node
+    it "should not remove when slot is not selected" $
+        model wenv ^. field . savedData `shouldBe` s
     it "should remove selected slot" $
-        model ^. field . savedData `shouldBe` Seq.empty
+        model wenvS ^. field . savedData `shouldBe` Seq.empty
 
 handleEvent :: Spec
 handleEvent = describe "handleEvent" $ do
