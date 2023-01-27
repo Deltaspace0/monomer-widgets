@@ -30,6 +30,7 @@ spec :: Spec
 spec = describe "SaveManager" $ do
     buttons
     handleEvent
+    handleEventV
 
 buttons :: Spec
 buttons = describe "buttons" $ do
@@ -86,6 +87,35 @@ handleEvent = describe "handleEvent" $ do
             , onBlur LostFocus
             , onSavesChange SavesChanged
             , onChange ValueChanged
+            ]
+        clickEvents p = nodeHandleEventEvts wenv [evtClick p] node
+        events evt = nodeHandleEventEvts wenv [evt] node
+    it "should generate an event when saves change" $ do
+        let p = Point (640-2) 2
+            expectedEvents = Seq.singleton $ SavesChanged Seq.empty
+        clickEvents p `shouldBe` expectedEvents
+    it "should generate an event when current value is changed" $ do
+        let p = Point ((640+16)/4*2+1) 5
+            expectedEvents = Seq.singleton $ ValueChanged 0
+        clickEvents p `shouldBe` expectedEvents
+    it "should generate an event when focus is received" $ do
+        let expectedEvents = Seq.singleton $ GotFocus emptyPath
+        events evtFocus `shouldBe` expectedEvents
+    it "should generate an event when focus is lost" $ do
+        let expectedEvents = Seq.singleton $ LostFocus emptyPath
+        events evtBlur `shouldBe` expectedEvents
+
+handleEventV :: Spec
+handleEventV = describe "handleEventV" $ do
+    let s = Seq.singleton (0, "a")
+        m = initSaveManagerModel 42
+            & savedData .~ s
+            & selectedData .~ Just 0
+        wenv = mockWenv $ TestModel m
+        node = saveManagerV_ m ValueChanged
+            [ onFocus GotFocus
+            , onBlur LostFocus
+            , onSavesChange SavesChanged
             ]
         clickEvents p = nodeHandleEventEvts wenv [evtClick p] node
         events evt = nodeHandleEventEvts wenv [evt] node
