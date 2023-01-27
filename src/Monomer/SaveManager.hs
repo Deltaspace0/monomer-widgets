@@ -37,14 +37,14 @@ saveManager_ field configs = saveManagerD_ wlens configs [] where
 saveManagerV
     :: (WidgetModel s, WidgetEvent e, Eq a, Typeable a)
     => SaveManagerModel a
-    -> (SaveManagerModel a -> e)
+    -> (a -> e)
     -> WidgetNode s e
 saveManagerV value handler = saveManagerV_ value handler def
 
 saveManagerV_
     :: (WidgetModel s, WidgetEvent e, Eq a, Typeable a)
     => SaveManagerModel a
-    -> (SaveManagerModel a -> e)
+    -> (a -> e)
     -> [SaveManagerCfg s e a]
     -> WidgetNode s e
 saveManagerV_ value handler configs = node where

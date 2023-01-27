@@ -24,7 +24,7 @@ type Saves a = Seq (a, Text)
 data SaveManagerCfg s e a = SaveManagerCfg
     { _smcOnFocusReq :: [Path -> WidgetRequest s e]
     , _smcOnBlurReq :: [Path -> WidgetRequest s e]
-    , _smcOnChangeReq :: [SaveManagerModel a -> WidgetRequest s e]
+    , _smcOnChangeReq :: [a -> WidgetRequest s e]
     , _smcOnSavesChangeReq :: [Saves a -> WidgetRequest s e]
     , _smcCaptionMethod :: Maybe (a -> ZonedTime -> Text)
     }
@@ -75,13 +75,13 @@ instance CmbOnBlurReq (SaveManagerCfg s e a) s e Path where
         }
 
 instance WidgetEvent e =>
-    CmbOnChange (SaveManagerCfg s e a) (SaveManagerModel a) e where
+    CmbOnChange (SaveManagerCfg s e a) a e where
         onChange fn = def
             { _smcOnChangeReq = [RaiseEvent . fn]
             }
 
 instance CmbOnChangeReq
-    (SaveManagerCfg s e a) s e (SaveManagerModel a) where
+    (SaveManagerCfg s e a) s e a where
         onChangeReq req = def
             { _smcOnChangeReq = [req]
             }
