@@ -46,9 +46,9 @@ minusButton = describe "\"-\" button" $ do
         node = enhancedSlider_ field 0 50 [dragRate 2]
         p = Point (640-32-32-1) 50
         model wenv' = nodeHandleEventModel wenv' [evtClick p] node
-    it "should decrease the value if it's not minimum" $
+    it "should decrease the value if it is not minimum" $
         model wenv ^. field `shouldBe` 40
-    it "shouldn't decrease the value if it's minimum" $
+    it "should not decrease the value if it is minimum" $
         model wenvM ^. field `shouldBe` 0
 
 plusButton :: Spec
@@ -58,9 +58,9 @@ plusButton = describe "\"+\" button" $ do
         node = enhancedSlider_ field 0 50 [dragRate 2]
         p = Point (640-1) 50
         model wenv' = nodeHandleEventModel wenv' [evtClick p] node
-    it "should increase the value if it's not maximum" $
+    it "should increase the value if it is not maximum" $
         model wenv ^. field `shouldBe` 44
-    it "shouldn't increase the value if it's maximum" $
+    it "should not increase the value if it is maximum" $
         model wenvM ^. field `shouldBe` 50
 
 handleEvent :: Spec
