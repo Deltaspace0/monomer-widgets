@@ -15,6 +15,7 @@ import Monomer.SaveManager
 
 data Event
     = SavesChanged (Saves Double)
+    | ValueChanged Double
     | GotFocus Path
     | LostFocus Path
     deriving (Eq, Show)
@@ -84,15 +85,21 @@ handleEvent = describe "handleEvent" $ do
             [ onFocus GotFocus
             , onBlur LostFocus
             , onSavesChange SavesChanged
+            , onChange ValueChanged
             ]
         clickEvents p = nodeHandleEventEvts wenv [evtClick p] node
         events evt = nodeHandleEventEvts wenv [evt] node
-        expectedEvents = Seq.singleton $ SavesChanged Seq.empty
-        focusEvents = Seq.singleton $ GotFocus emptyPath
-        blurEvents = Seq.singleton $ LostFocus emptyPath
-    it "should generate an event when saves change" $
-        clickEvents (Point (640-2) 2) `shouldBe` expectedEvents
-    it "should generate an event when focus is received" $
-        events evtFocus `shouldBe` focusEvents
-    it "should generate an event when focus is lost" $
-        events evtBlur `shouldBe` blurEvents
+    it "should generate an event when saves change" $ do
+        let p = Point (640-2) 2
+            expectedEvents = Seq.singleton $ SavesChanged Seq.empty
+        clickEvents p `shouldBe` expectedEvents
+    it "should generate an event when current value is changed" $ do
+        let p = Point ((640+16)/4*2+1) 5
+            expectedEvents = Seq.singleton $ ValueChanged 0
+        clickEvents p `shouldBe` expectedEvents
+    it "should generate an event when focus is received" $ do
+        let expectedEvents = Seq.singleton $ GotFocus emptyPath
+        events evtFocus `shouldBe` expectedEvents
+    it "should generate an event when focus is lost" $ do
+        let expectedEvents = Seq.singleton $ LostFocus emptyPath
+        events evtBlur `shouldBe` expectedEvents
