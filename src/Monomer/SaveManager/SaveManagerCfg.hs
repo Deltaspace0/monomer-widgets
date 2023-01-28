@@ -17,8 +17,6 @@ import Data.Time.LocalTime (ZonedTime)
 import Monomer.Core
 import Monomer.Core.Combinators
 
-import Monomer.SaveManager.SaveManagerModel
-
 type Saves a = Seq (a, Text)
 
 data SaveManagerCfg s e a = SaveManagerCfg
