@@ -1,5 +1,16 @@
+{-|
+This is a slider with a label, which shows current value, and
+buttons to increase and decrease value.
+
+@
+enhancedSlider lens 0 100
+@
+-}
+
 module Monomer.EnhancedSlider
-    ( module Monomer.EnhancedSlider.EnhancedSliderCfg
+    ( -- * Re-exported modules
+      module Monomer.EnhancedSlider.EnhancedSliderCfg
+      -- * Constructors
     , enhancedSlider
     , enhancedSlider_
     , enhancedSliderV
@@ -19,54 +30,74 @@ import Monomer.EnhancedSlider.EnhancedSliderCfg
 import Monomer.EnhancedSlider.EnhancedSliderEvent
 import Monomer.EnhancedSlider.UI
 
+{-|
+Creates an enhanced slider using the given lens, providing minimum
+and maximum values.
+-}
 enhancedSlider
     :: (WidgetModel s, WidgetEvent e, SliderValue a)
-    => ALens' s a
-    -> a
-    -> a
-    -> WidgetNode s e
+    => ALens' s a -- ^ The lens into the model.
+    -> a -- ^ Minimum value.
+    -> a -- ^ Maximum value.
+    -> WidgetNode s e -- ^ The created enhanced slider.
 enhancedSlider field a b = enhancedSlider_ field a b def
 
+{-|
+Creates an enhanced slider using the given lens, providing minimum
+and maximum values. Accepts config.
+-}
 enhancedSlider_
     :: (WidgetModel s, WidgetEvent e, SliderValue a)
-    => ALens' s a
-    -> a
-    -> a
-    -> [EnhancedSliderCfg s e a]
-    -> WidgetNode s e
+    => ALens' s a -- ^ The lens into the model.
+    -> a -- ^ Minimum value.
+    -> a -- ^ Maximum value.
+    -> [EnhancedSliderCfg s e a] -- ^ The config options.
+    -> WidgetNode s e -- ^ The created enhanced slider.
 enhancedSlider_ field a b configs = node where
     node = enhancedSliderD_ wlens a b configs []
     wlens = WidgetLens field
 
+{-|
+Creates an enhanced slider using the given value and 'onChange'
+event handler, providing minimum and maximum values.
+-}
 enhancedSliderV
     :: (WidgetModel s, WidgetEvent e, SliderValue a)
-    => a
-    -> (a -> e)
-    -> a
-    -> a
-    -> WidgetNode s e
+    => a -- ^ The current value.
+    -> (a -> e) -- ^ The event to raise on change.
+    -> a -- ^ Minimum value.
+    -> a -- ^ Maximum value.
+    -> WidgetNode s e -- ^ The created enhanced slider.
 enhancedSliderV v handler a b = enhancedSliderV_ v handler a b def
 
+{-|
+Creates an enhanced slider using the given value and 'onChange'
+event handler, providing minimum and maximum values. Accepts config.
+-}
 enhancedSliderV_
     :: (WidgetModel s, WidgetEvent e, SliderValue a)
-    => a
-    -> (a -> e)
-    -> a
-    -> a
-    -> [EnhancedSliderCfg s e a]
-    -> WidgetNode s e
+    => a -- ^ The current value.
+    -> (a -> e) -- ^ The event to raise on change.
+    -> a -- ^ Minimum value.
+    -> a -- ^ Maximum value.
+    -> [EnhancedSliderCfg s e a] -- ^ The config options.
+    -> WidgetNode s e -- ^ The created enhanced slider.
 enhancedSliderV_ v handler a b configs = node where
     node = enhancedSliderD_ (WidgetValue v) a b newConfigs []
     newConfigs = onChange handler : configs
 
+{-|
+Creates an enhanced slider providing a 'WidgetData' instance,
+minimum and maximum values and config.
+-}
 enhancedSliderD_
     :: (WidgetModel s, WidgetEvent e, SliderValue a)
-    => WidgetData s a
-    -> a
-    -> a
-    -> [EnhancedSliderCfg s e a]
-    -> [CompositeCfg a (EnhancedSliderEvent a) s e]
-    -> WidgetNode s e
+    => WidgetData s a -- ^ The 'WidgetData' to retrieve the value from.
+    -> a -- ^ Minimum value.
+    -> a -- ^ Maximum value.
+    -> [EnhancedSliderCfg s e a] -- ^ The config options.
+    -> [CompositeCfg a (EnhancedSliderEvent a) s e] -- ^ The composite config options.
+    -> WidgetNode s e -- ^ The created enhanced slider.
 enhancedSliderD_ wdata a b configs cmpConfigs = node where
     node = compositeD_ wt wdata uiBuilder eventHandler cmpConfigs
     wt = WidgetType $ "enhancedSlider-" <> (showt $ typeOf a)
