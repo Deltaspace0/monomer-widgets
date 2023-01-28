@@ -2,7 +2,8 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Monomer.EnhancedSlider.EnhancedSliderCfg
-    ( EnhancedSliderCfg(..)
+    ( -- * Configuration
+      EnhancedSliderCfg(..)
     , titleMethod
     ) where
 
@@ -11,6 +12,19 @@ import Data.Default
 import Data.Text (Text)
 import Monomer.Widgets.Single
 
+{-|
+Configuration options for enhancedSlider:
+
+- 'dragRate': the rate at which drag movement affects the number.
+- 'titleCaption': the title for the shown value.
+- 'titleMethod': function to generate the label with value.
+- 'onFocus': event to raise when focus is received.
+- 'onFocusReq': 'WidgetRequest' to generate when focus is received.
+- 'onBlur': event to raise when focus is lost.
+- 'onBlurReq': 'WidgetRequest' to generate when focus is lost.
+- 'onChange': event to raise when the value changes.
+- 'onChangeReq': 'WidgetRequest' to generate when the value changes.
+-}
 data EnhancedSliderCfg s e a = EnhancedSliderCfg
     { _escDragRate :: Maybe Rational
     , _escTitle :: Maybe Text
@@ -87,6 +101,11 @@ instance CmbOnChangeReq (EnhancedSliderCfg s e a) s e a where
         { _escOnChangeReq = [req]
         }
 
+{-|
+Receives function which converts the value into text and uses it to
+generate the label. Should be used if the title depends on the value
+or different formatting is needed.
+-}
 titleMethod :: (a -> Text) -> EnhancedSliderCfg s e a
 titleMethod makeTitle = def
     { _escTitleMethod = Just makeTitle
