@@ -11,6 +11,7 @@ import Monomer.TestUtil
 import Test.Hspec
 import qualified Data.Sequence as Seq
 import qualified Data.Text as T
+import qualified Monomer.Lens as L
 
 import Monomer.EnhancedSlider
 import Monomer.EnhancedSlider.UI (makeTitle)
@@ -32,6 +33,7 @@ spec = describe "EnhancedSlider" $ do
     buttons
     handleEvent
     handleEventV
+    testWidgetType
     title
 
 buttons :: Spec
@@ -101,6 +103,13 @@ handleEventV = describe "handleEventV" $ do
         events evtFocus `shouldBe` focusEvents
     it "should generate an event when focus is lost" $
         events evtBlur `shouldBe` blurEvents
+
+testWidgetType :: Spec
+testWidgetType = describe "testWidgetType" $ do
+    let node = enhancedSlider field 0 50 :: WidgetNode TestModel ()
+    it "should set the correct widgetType" $ do
+        let expectedType = "enhancedSlider-Double"
+        node ^. L.info . L.widgetType `shouldBe` expectedType
 
 title :: Spec
 title = describe "title" $ do

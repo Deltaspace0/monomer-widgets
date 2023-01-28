@@ -9,9 +9,11 @@ module Monomer.EnhancedSlider
 
 import Control.Lens
 import Data.Default
+import Data.Typeable
 import Monomer.Core.Combinators
 import Monomer.Widgets.Composite
 import Monomer.Widgets.Singles.Slider
+import TextShow
 
 import Monomer.EnhancedSlider.EnhancedSliderCfg
 import Monomer.EnhancedSlider.EnhancedSliderEvent
@@ -67,7 +69,7 @@ enhancedSliderD_
     -> WidgetNode s e
 enhancedSliderD_ wdata a b configs cmpConfigs = node where
     node = compositeD_ wt wdata uiBuilder eventHandler cmpConfigs
-    wt = "enhancedSlider"
+    wt = WidgetType $ "enhancedSlider-" <> (showt $ typeOf a)
     uiBuilder = buildUI config a b
     eventHandler = handleEvent config a b
     config = mconcat configs
