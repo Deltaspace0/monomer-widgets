@@ -4,12 +4,16 @@
 
 module Monomer.SaveManagerSpec (spec) where
 
+import Control.Concurrent.Async
 import Control.Lens
+import Control.Monad.State
 import Monomer
+import Monomer.Main.WidgetTask
 import Monomer.TestEventUtil
 import Monomer.TestUtil
 import Test.Hspec
 import qualified Data.Sequence as Seq
+import qualified Monomer.Lens as L
 
 import Monomer.SaveManager
 
@@ -41,8 +45,22 @@ buttons = describe "buttons" $ do
 
 newSlotButton :: Spec
 newSlotButton = describe "New slot" $ do
-    it "should make new save" $
-        pendingWith "can't test async events"
+    let wenv = mockWenvEvtUnit $ TestModel $ initSaveManagerModel 42
+        node = saveManager field
+        es = [evtClick $ Point 5 5]
+        stepCtx = nodeHandleEvents wenv WInit es node
+        ((rqWenv, rqRoot, _), ctx) = stepCtx
+    it "should make new save and select it" $ do
+        let tasks = ctx ^. L.widgetTasks
+        Seq.length tasks `shouldSatisfy` (>= 1)
+        let WidgetProducer _ _ async = Seq.index tasks 0
+        wait async
+        ((wtWenv, _, _), _) <- flip runStateT ctx $
+            handleWidgetTasks rqWenv rqRoot
+        let savedData' = _weModel wtWenv ^. field . savedData
+        Seq.length savedData' `shouldSatisfy` (>= 1)
+        fst (Seq.index savedData' 0) `shouldBe` 42
+        _weModel wtWenv ^. field . selectedData `shouldBe` Just 0
 
 saveButton :: Spec
 saveButton = describe "Save" $ do

@@ -76,6 +76,7 @@ tests:
     - -with-rtsopts=-N
     - -w
     dependencies:
+    - async
     - bytestring
     - hspec
     - monomer-widgets
