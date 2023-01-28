@@ -45,6 +45,12 @@ ghc-options:
 
 library:
   source-dirs: src
+  other-modules:
+  - Monomer.EnhancedSlider.EnhancedSliderEvent
+  - Monomer.EnhancedSlider.UI
+  - Monomer.SaveManager.SaveManagerEvent
+  - Monomer.SaveManager.UI
+  - Paths_monomer_widgets
 
 executables:
   enhanced-slider-example:

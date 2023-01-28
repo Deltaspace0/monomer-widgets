@@ -27,14 +27,14 @@ library
   exposed-modules:
       Monomer.EnhancedSlider
       Monomer.EnhancedSlider.EnhancedSliderCfg
-      Monomer.EnhancedSlider.EnhancedSliderEvent
-      Monomer.EnhancedSlider.UI
       Monomer.SaveManager
       Monomer.SaveManager.SaveManagerCfg
-      Monomer.SaveManager.SaveManagerEvent
       Monomer.SaveManager.SaveManagerModel
-      Monomer.SaveManager.UI
   other-modules:
+      Monomer.EnhancedSlider.EnhancedSliderEvent
+      Monomer.EnhancedSlider.UI
+      Monomer.SaveManager.SaveManagerEvent
+      Monomer.SaveManager.UI
       Paths_monomer_widgets
   hs-source-dirs:
       src
