@@ -108,19 +108,33 @@ loadButton = describe "Load" $ do
 
 removeButton :: Spec
 removeButton = describe "Remove" $ do
-    let s = Seq.singleton (0, "a")
+    let s = Seq.fromList [(0, "a"), (1, "b"), (2, "c")]
         m = initSaveManagerModel 42
             & savedData .~ s
-        m' = m & selectedData .~ Just 0
-        wenv = mockWenvEvtUnit $ TestModel m
-        wenvS = mockWenvEvtUnit $ TestModel m'
         node = saveManager field
-        p = Point ((640+16)/4*3+1) 5
-        model wenv' = nodeHandleEventModel wenv' [evtClick p] node
-    it "should not remove when slot is not selected" $
-        model wenv ^. field . savedData `shouldBe` s
-    it "should remove selected slot" $
-        model wenvS ^. field . savedData `shouldBe` Seq.empty
+        es = [evtClick $ Point ((640+16)/4*3+1) 5]
+        getWenv = mockWenvEvtUnit . TestModel
+        model m' = nodeHandleEventModel (getWenv m') es node
+    it "should not remove when slot is not selected" $ do
+        model m ^. field . savedData `shouldBe` s
+    it "should remove selected slot" $ do
+        let m' = m & selectedData .~ Just 1
+            s' = Seq.fromList [(0, "a"), (2, "c")]
+        model m' ^. field . savedData `shouldBe` s'
+    context "when selected slot is not last in the list" $
+        it "should select next slot after removal" $ do
+            let m' = m & selectedData .~ Just 1
+            model m' ^. field . selectedData `shouldBe` Just 1
+    context "when selected slot is last in the list" $
+        it "should select previous slot after removal" $ do
+            let m' = m & selectedData .~ Just 2
+            model m' ^. field . selectedData `shouldBe` Just 1
+    context "when selected slot is the only one left" $
+        it "should select Nothing" $ do
+            let m' = m
+                    & savedData .~ Seq.singleton (0, "a")
+                    & selectedData .~ Just 0
+            model m' ^. field . selectedData `shouldBe` Nothing
 
 handleEvent :: Spec
 handleEvent = describe "handleEvent" $ do
