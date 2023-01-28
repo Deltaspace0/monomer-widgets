@@ -64,8 +64,31 @@ newSlotButton = describe "New slot" $ do
 
 saveButton :: Spec
 saveButton = describe "Save" $ do
-    it "should save into selected slot" $
-        pendingWith "can't test async events"
+    let s = Seq.singleton (0, "a")
+        m = initSaveManagerModel 42
+            & savedData .~ s
+        m' = m & selectedData .~ Just 0
+        wenv = mockWenvEvtUnit $ TestModel m
+        wenvS = mockWenvEvtUnit $ TestModel m'
+        node = saveManager field
+        es = [evtClick $ Point ((640+16)/4+1) 5]
+        stepCtx wenv' = nodeHandleEvents wenv' WInit es node
+        ((rqWenv, rqRoot, _), ctx) = stepCtx wenv
+        ((rqWenvS, rqRootS, _), ctxS) = stepCtx wenvS
+    it "should not save when slot is not selected" $ do
+        let tasks = ctx ^. L.widgetTasks
+        Seq.length tasks `shouldBe` 0
+        _weModel rqWenv ^. field . savedData `shouldBe` s
+    it "should save into selected slot" $ do
+        let tasks = ctxS ^. L.widgetTasks
+        Seq.length tasks `shouldSatisfy` (>= 1)
+        let WidgetProducer _ _ async = Seq.index tasks 0
+        wait async
+        ((wtWenvS, _, _), _) <- flip runStateT ctxS $
+            handleWidgetTasks rqWenvS rqRootS
+        let savedData' = _weModel wtWenvS ^. field . savedData
+        Seq.length savedData' `shouldSatisfy` (>= 1)
+        fst (Seq.index savedData' 0) `shouldBe` 42
 
 loadButton :: Spec
 loadButton = describe "Load" $ do
