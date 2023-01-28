@@ -2,8 +2,6 @@
 
 This is a collection of custom widgets (composites) for [Monomer](https://github.com/fjvallarino/monomer) library.
 
-Currently there is no documentation, but it will be added soon.
-
 ## List of widgets
 - [Enhanced slider](readme/enhanced-slider/README.md)
 - [Save manager](readme/save-manager/README.md)
