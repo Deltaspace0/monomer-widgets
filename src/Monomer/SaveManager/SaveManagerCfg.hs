@@ -2,7 +2,8 @@
 {-# LANGUAGE FunctionalDependencies #-}
 
 module Monomer.SaveManager.SaveManagerCfg
-    ( Saves
+    ( -- * Configuration
+      Saves
     , SaveManagerCfg(..)
     , onSavesChange
     , onSavesChangeReq
@@ -19,6 +20,19 @@ import Monomer.Core.Combinators
 
 type Saves a = Seq (a, Text)
 
+{-|
+Configuration options for saveManager:
+
+- 'onFocus': event to raise when focus is received.
+- 'onFocusReq': 'WidgetRequest' to generate when focus is received.
+- 'onBlur': event to raise when focus is lost.
+- 'onBlurReq': 'WidgetRequest' to generate when focus is lost.
+- 'onChange': event to raise when the value changes.
+- 'onChangeReq': 'WidgetRequest' to generate when the value changes.
+- 'onSavesChange': event to raise when the saves change.
+- 'onSavesChangeReq': 'WidgetRequest' to generate when the saves change.
+- 'captionMethod': function to generate the caption for the slot.
+-}
 data SaveManagerCfg s e a = SaveManagerCfg
     { _smcOnFocusReq :: [Path -> WidgetRequest s e]
     , _smcOnBlurReq :: [Path -> WidgetRequest s e]
@@ -84,6 +98,9 @@ instance CmbOnChangeReq
             { _smcOnChangeReq = [req]
             }
 
+{-|
+On saves change event.
+-}
 onSavesChange
     :: (WidgetEvent e)
     => (Saves a -> e)
@@ -92,6 +109,9 @@ onSavesChange fn = def
     { _smcOnSavesChangeReq = [RaiseEvent . fn]
     }
 
+{-|
+On saves change 'WidgetRequest'.
+-}
 onSavesChangeReq
     :: (Saves a -> WidgetRequest s e)
     -> SaveManagerCfg s e a
@@ -99,6 +119,12 @@ onSavesChangeReq req = def
     { _smcOnSavesChangeReq = [req]
     }
 
+{-|
+Receives function which converts the value and current time into
+text and uses it to generate the caption for the slot. Should be
+used to show more information than just modification time about the
+stored value.
+-}
 captionMethod :: (a -> ZonedTime -> Text) -> SaveManagerCfg s e a
 captionMethod makeCaption = def
     { _smcCaptionMethod = Just makeCaption
