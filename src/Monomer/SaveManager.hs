@@ -41,8 +41,8 @@ Creates a save manager using the given lens.
 -}
 saveManager
     :: (WidgetModel s, WidgetEvent e, Eq a, Typeable a)
-    => ALens' s (SaveManagerModel a) -- ^ The lens into the model.
-    -> WidgetNode s e -- ^ The created save manager.
+    => ALens' s (SaveManagerModel a)  -- ^ The lens into the model.
+    -> WidgetNode s e                 -- ^ The created save manager.
 saveManager field = saveManager_ field def
 
 {-|
@@ -50,9 +50,9 @@ Creates a save manager using the given lens. Accepts config.
 -}
 saveManager_
     :: (WidgetModel s, WidgetEvent e, Eq a, Typeable a)
-    => ALens' s (SaveManagerModel a) -- ^ The lens into the model.
-    -> [SaveManagerCfg s e a] -- ^ The config options.
-    -> WidgetNode s e -- ^ The created save manager.
+    => ALens' s (SaveManagerModel a)  -- ^ The lens into the model.
+    -> [SaveManagerCfg s e a]         -- ^ The config options.
+    -> WidgetNode s e                 -- ^ The created save manager.
 saveManager_ field configs = saveManagerD_ wlens configs [] where
     wlens = WidgetLens field
 
@@ -62,9 +62,9 @@ Creates a save manager using the given composite model and
 -}
 saveManagerV
     :: (WidgetModel s, WidgetEvent e, Eq a, Typeable a)
-    => SaveManagerModel a -- ^ The composite model.
-    -> (a -> e) -- ^ The event to raise on change.
-    -> WidgetNode s e -- ^ The created save manager.
+    => SaveManagerModel a  -- ^ The composite model.
+    -> (a -> e)            -- ^ The event to raise on change.
+    -> WidgetNode s e      -- ^ The created save manager.
 saveManagerV value handler = saveManagerV_ value handler def
 
 {-|
@@ -73,10 +73,10 @@ Creates a save manager using the given composite model and
 -}
 saveManagerV_
     :: (WidgetModel s, WidgetEvent e, Eq a, Typeable a)
-    => SaveManagerModel a -- ^ The composite model.
-    -> (a -> e) -- ^ The event to raise on change.
-    -> [SaveManagerCfg s e a] -- ^ The config options.
-    -> WidgetNode s e -- ^ The created save manager.
+    => SaveManagerModel a      -- ^ The composite model.
+    -> (a -> e)                -- ^ The event to raise on change.
+    -> [SaveManagerCfg s e a]  -- ^ The config options.
+    -> WidgetNode s e          -- ^ The created save manager.
 saveManagerV_ value handler configs = node where
     node = saveManagerD_ wdata newConfigs []
     wdata = WidgetValue value
@@ -87,10 +87,14 @@ Creates a save manager providing a 'WidgetData' instance and config.
 -}
 saveManagerD_
     :: (WidgetModel s, WidgetEvent e, Eq a, Typeable a)
-    => WidgetData s (SaveManagerModel a) -- ^ The 'WidgetData' to retrieve the model from.
-    -> [SaveManagerCfg s e a] -- ^ The config options.
-    -> [CompositeCfg (SaveManagerModel a) (SaveManagerEvent a) s e] -- ^ The composite config options.
-    -> WidgetNode s e -- ^ The created save manager.
+    => WidgetData s (SaveManagerModel a)
+    -- ^ The 'WidgetData' to retrieve the model from.
+    -> [SaveManagerCfg s e a]
+    -- ^ The config options.
+    -> [CompositeCfg (SaveManagerModel a) (SaveManagerEvent a) s e]
+    -- ^ The composite config options.
+    -> WidgetNode s e
+    -- ^ The created save manager.
 saveManagerD_ wdata configs cmpConfigs = node where
     node = compositeD_ wt wdata uiBuilder eventHandler cmpConfigs
     wt = "saveManager"
