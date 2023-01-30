@@ -22,3 +22,4 @@ extra-deps:
 ## License
 - This project is licensed under the [MIT license](LICENSE).
 - This project uses [Laconic](https://www.fontsquirrel.com/fonts/laconic) font, licensed under the [SIL Open Font License](https://www.fontsquirrel.com/license/laconic).
+- This project uses fresca chess pieces by sadsnake1, licensed under the [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
