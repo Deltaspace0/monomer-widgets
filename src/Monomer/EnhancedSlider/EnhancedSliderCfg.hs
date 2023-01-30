@@ -5,6 +5,8 @@ module Monomer.EnhancedSlider.EnhancedSliderCfg
     ( -- * Configuration
       EnhancedSliderCfg(..)
     , titleMethod
+    , hideLabel
+    , hideLabel_
     ) where
 
 import Control.Applicative ((<|>))
@@ -16,6 +18,7 @@ import Monomer.Widgets.Single
 Configuration options for enhancedSlider:
 
 - 'dragRate': the rate at which drag movement affects the number.
+- 'hideLabel': don't show the label, leave only slider and buttons.
 - 'titleCaption': the title for the shown value.
 - 'titleMethod': function to generate the label with value.
 - 'onFocus': event to raise when focus is received.
@@ -27,6 +30,7 @@ Configuration options for enhancedSlider:
 -}
 data EnhancedSliderCfg s e a = EnhancedSliderCfg
     { _escDragRate :: Maybe Rational
+    , _escHideLabel :: Maybe Bool
     , _escTitle :: Maybe Text
     , _escTitleMethod :: Maybe (a -> Text)
     , _escOnFocusReq :: [Path -> WidgetRequest s e]
@@ -37,6 +41,7 @@ data EnhancedSliderCfg s e a = EnhancedSliderCfg
 instance Default (EnhancedSliderCfg s e a) where
     def = EnhancedSliderCfg
         { _escDragRate = Nothing
+        , _escHideLabel = Nothing
         , _escTitle = Nothing
         , _escTitleMethod = Nothing
         , _escOnFocusReq = []
@@ -47,6 +52,7 @@ instance Default (EnhancedSliderCfg s e a) where
 instance Semigroup (EnhancedSliderCfg s e a) where
     (<>) c1 c2 = EnhancedSliderCfg
         { _escDragRate = _escDragRate c1 <|> _escDragRate c2
+        , _escHideLabel = _escHideLabel c1 <|> _escHideLabel c2
         , _escTitle = _escTitle c1 <|> _escTitle c2
         , _escTitleMethod =
             _escTitleMethod c1 <|> _escTitleMethod c2
@@ -109,4 +115,15 @@ or different formatting is needed.
 titleMethod :: (a -> Text) -> EnhancedSliderCfg s e a
 titleMethod makeTitle = def
     { _escTitleMethod = Just makeTitle
+    }
+
+{-|
+Should be used when the label with the current value is not needed.
+-}
+hideLabel :: EnhancedSliderCfg s e a
+hideLabel = hideLabel_ True
+
+hideLabel_ :: Bool -> EnhancedSliderCfg s e a
+hideLabel_ v = def
+    { _escHideLabel = Just v
     }

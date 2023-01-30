@@ -24,13 +24,17 @@ buildUI
     -> a
     -> UIBuilder a (EnhancedSliderEvent a)
 buildUI config a b _ model = tree where
-    tree = vstack_ [childSpacing_ 16]
-        [ label $ makeTitle config model
-        , hstack_ [childSpacing_ 32]
-            [ hslider_ id a b sliderConfig
-            , button' "-" $ EventSetField $ model-changeRate
-            , button' "+" $ EventSetField $ model+changeRate
+    tree = if labelVisible
+        then vstack_ [childSpacing_ 16]
+            [ label $ makeTitle config model
+            , mainStack
             ]
+        else mainStack
+    labelVisible = not $ fromMaybe False $ _escHideLabel config
+    mainStack = hstack_ [childSpacing_ 32]
+        [ hslider_ id a b sliderConfig
+        , button' "-" $ EventSetField $ model-changeRate
+        , button' "+" $ EventSetField $ model+changeRate
         ]
     sliderConfig =
         [ wheelRate 0

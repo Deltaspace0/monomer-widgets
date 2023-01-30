@@ -34,7 +34,7 @@ spec = describe "EnhancedSlider" $ do
     handleEvent
     handleEventV
     testWidgetType
-    title
+    configuration
 
 buttons :: Spec
 buttons = describe "buttons" $ do
@@ -111,6 +111,11 @@ testWidgetType = describe "testWidgetType" $ do
         let expectedType = "enhancedSlider-Double"
         node ^. L.info . L.widgetType `shouldBe` expectedType
 
+configuration :: Spec
+configuration = describe "configuration" $ do
+    title
+    labelHiding
+
 title :: Spec
 title = describe "title" $ do
     let config = titleCaption "custom title"
@@ -122,3 +127,12 @@ title = describe "title" $ do
         makeTitle config value `shouldBe` "custom title: 42"
     it "should show custom title made by user provided method" $
         makeTitle configM value `shouldBe` "x = 42"
+
+labelHiding :: Spec
+labelHiding = describe "labelHiding" $ do
+    let wenv = mockWenvEvtUnit (TestModel 42)
+        node = enhancedSlider_ field 0 50 [hideLabel]
+        p = Point (640-32-32-1) 5
+        model = nodeHandleEventModel wenv [evtClick p] node
+    it "should hide label" $
+        model ^. field `shouldBe` 41
