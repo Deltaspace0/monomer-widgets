@@ -11,7 +11,7 @@ import qualified Data.Text as T
 import Model
 
 buildUI :: UIBuilder AppModel AppEvent
-buildUI _ model = hstack_ [childSpacing_ 128]
+buildUI _ model = hstack_ [childSpacing_ 64]
     [ saveManager_ saves
         [ captionMethod $
             \x z -> (showt x) <> " -- " <> (T.pack $ show z)

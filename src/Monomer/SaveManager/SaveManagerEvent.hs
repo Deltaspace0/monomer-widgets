@@ -19,6 +19,8 @@ data SaveManagerEvent a
     | EventSave
     | EventLoad
     | EventRemove
+    | EventConfirmRemove
+    | EventCancel
     | EventSetCurrentData a
     | EventSetSavedData (Saves a)
     | EventSetSelectedData (Maybe Int)
@@ -40,6 +42,8 @@ handleEvent config _ node model event = case event of
     EventSave -> saveHandle config model
     EventLoad -> loadHandle config model
     EventRemove -> removeHandle config model
+    EventConfirmRemove -> confirmRemoveHandle config model
+    EventCancel -> cancelHandle config model
     EventSetCurrentData s -> setCurrentDataHandle s config model
     EventSetSavedData s -> setSavedDataHandle s config model
     EventSetSelectedData s -> setSelectedDataHandle s config model
@@ -76,6 +80,7 @@ removeHandle _ model = responses where
         then
             [ Event $ EventSetSelectedData newSelectedData
             , Event $ EventSetSavedData newSavedData
+            , Event $ EventCancel
             ]
         else []
     selected = not $ null $ model ^. selectedData
@@ -84,6 +89,13 @@ removeHandle _ model = responses where
     newSelectedData = if null newSavedData
         then Nothing
         else Just $ min i $ Seq.length newSavedData - 1
+
+confirmRemoveHandle :: EventHandle a sp ep
+confirmRemoveHandle _ model = responses where
+    responses = [Model $ model & showConfirmRemove .~ True]
+
+cancelHandle :: EventHandle a sp ep
+cancelHandle _ model = [Model $ model & showConfirmRemove .~ False]
 
 setCurrentDataHandle :: a -> EventHandle a sp ep
 setCurrentDataHandle newCurrentData config model = responses where

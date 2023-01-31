@@ -7,9 +7,11 @@ import Data.Maybe
 import Data.Typeable
 import Monomer.Core.Combinators
 import Monomer.Widgets.Composite
+import Monomer.Widgets.Containers.Confirm
 import Monomer.Widgets.Containers.Grid
 import Monomer.Widgets.Containers.SelectList
 import Monomer.Widgets.Containers.Stack
+import Monomer.Widgets.Containers.ZStack
 import Monomer.Widgets.Singles.Button
 import Monomer.Widgets.Singles.Label
 import qualified Data.Sequence as Seq
@@ -23,12 +25,18 @@ buildUI
     => (SaveManagerCfg s e a)
     -> UIBuilder (SaveManagerModel a) (SaveManagerEvent a)
 buildUI _ _ model = widgetTree where
-    widgetTree = vstack_ [childSpacing_ 16]
+    widgetTree = zstack
+        [ mainTree
+        , confirmMsg_ "Are you sure?" EventRemove EventCancel
+            [acceptCaption "Remove"]
+            `nodeVisible` model ^. showConfirmRemove
+        ]
+    mainTree = vstack_ [childSpacing_ 16]
         [ hgrid_ [childSpacing_ 16]
             [ button' "New slot" EventNewSlot
             , buttonIfSelected "Save" EventSave
             , buttonIfSelected "Load" EventLoad
-            , buttonIfSelected "Remove" EventRemove
+            , buttonIfSelected "Remove" EventConfirmRemove
             ]
         , selectListV_ selectedCaption f savedDataList makeRow
             [ onFocus EventFocus
