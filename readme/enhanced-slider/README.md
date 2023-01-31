@@ -14,6 +14,9 @@ This is a slider with a label, which shows current value, and buttons to increas
 - `enhancedSlider_ field min max [titleMethod f]`, where type of `f` is `a -> Text`. Should be used if the title depends on the value
 or different formatting is needed.
 - `enhancedSlider_ field min max [hideLabel]`. Should be used when the label with the current value is not needed.
-- `... [alignLeft]`. Put slider to the left of the buttons. Default behavior.
-- `... [alignCenter]`. Put slider between the buttons.
-- `... [alignRight]`. Put slider to the right of the buttons.
+- `... [alignLeft]`. Put horizontal slider to the left of the buttons. Default behavior.
+- `... [alignCenter]`. Put horizontal slider between the buttons.
+- `... [alignRight]`. Put horizontal slider to the right of the buttons.
+- `... [alignTop]`. Put vertical slider to the top of the buttons.
+- `... [alignMiddle]`. Put vertical slider between the buttons.
+- `... [alignBottom]`. Put vertical slider to the bottom of the buttons.

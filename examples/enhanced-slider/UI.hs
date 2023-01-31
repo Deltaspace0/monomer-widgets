@@ -16,8 +16,9 @@ buildUI _ _ = tree where
             , onChange fn
             , alignCenter
             ]
-        , enhancedSlider_ changes 0 1000
+        , hgrid $ replicate 3 $ enhancedSlider_ changes 0 1000
             [ titleCaption "Changes"
+            , alignBottom
             ]
         ]
     fn :: Double -> AppEvent

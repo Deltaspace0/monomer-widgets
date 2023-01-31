@@ -8,6 +8,7 @@ import Data.Maybe
 import Data.Text (Text)
 import Monomer.Core.Combinators
 import Monomer.Widgets.Composite
+import Monomer.Widgets.Containers.Box
 import Monomer.Widgets.Containers.Stack
 import Monomer.Widgets.Single
 import Monomer.Widgets.Singles.Button
@@ -27,17 +28,24 @@ buildUI
 buildUI config a b _ model = tree where
     tree = if labelVisible
         then vstack_ [childSpacing_ 16]
-            [ label $ makeTitle config model
-            , mainStack
+            [ box_ [alignLeft] $ label $ makeTitle config model
+            , box_ [alignLeft] mainStack
             ]
         else mainStack
     labelVisible = not $ fromMaybe False $ _escHideLabel config
-    mainStack = hstack_ [childSpacing_ 32] arrangement
-    arrangement = case fromMaybe ALeft (_escAlignH config) of
-        ALeft -> [sliderWidget, minusButton, plusButton]
-        ACenter -> [minusButton, sliderWidget, plusButton]
-        ARight -> [minusButton, plusButton, sliderWidget]
-    sliderWidget = hslider_ id a b sliderConfig
+    mainStack = if null (_escAlignV config)
+        then hstack_ [childSpacing_ 32] arrangementH
+        else vstack_ [childSpacing_ 24] arrangementV
+    arrangementH = case fromMaybe ALeft (_escAlignH config) of
+        ALeft -> [hsliderWidget, minusButton, plusButton]
+        ACenter -> [minusButton, hsliderWidget, plusButton]
+        ARight -> [minusButton, plusButton, hsliderWidget]
+    arrangementV = case fromMaybe ABottom (_escAlignV config) of
+        ATop -> [vsliderWidget, plusButton, minusButton]
+        AMiddle -> [plusButton, vsliderWidget, minusButton]
+        ABottom -> [plusButton, minusButton, vsliderWidget]
+    hsliderWidget = hslider_ id a b sliderConfig
+    vsliderWidget = vslider_ id a b sliderConfig
     minusButton = button' "-" $ EventSetField $ model-changeRate
     plusButton = button' "+" $ EventSetField $ model+changeRate
     sliderConfig =
