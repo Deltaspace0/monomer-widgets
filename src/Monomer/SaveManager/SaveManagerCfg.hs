@@ -8,6 +8,8 @@ module Monomer.SaveManager.SaveManagerCfg
     , onSavesChange
     , onSavesChangeReq
     , captionMethod
+    , noConfirm
+    , noConfirm_
     ) where
 
 import Control.Applicative ((<|>))
@@ -32,6 +34,7 @@ Configuration options for saveManager:
 - 'onSavesChange': event to raise when the saves change.
 - 'onSavesChangeReq': 'WidgetRequest' to generate when the saves change.
 - 'captionMethod': function to generate the caption for the slot.
+- 'noConfirm': don't show confirmation dialog.
 -}
 data SaveManagerCfg s e a = SaveManagerCfg
     { _smcOnFocusReq :: [Path -> WidgetRequest s e]
@@ -39,6 +42,7 @@ data SaveManagerCfg s e a = SaveManagerCfg
     , _smcOnChangeReq :: [a -> WidgetRequest s e]
     , _smcOnSavesChangeReq :: [Saves a -> WidgetRequest s e]
     , _smcCaptionMethod :: Maybe (a -> ZonedTime -> Text)
+    , _smcNoConfirm :: Maybe Bool
     }
 
 instance Default (SaveManagerCfg s e a) where
@@ -48,6 +52,7 @@ instance Default (SaveManagerCfg s e a) where
         , _smcOnChangeReq = []
         , _smcOnSavesChangeReq = []
         , _smcCaptionMethod = Nothing
+        , _smcNoConfirm = Nothing
         }
 
 instance Semigroup (SaveManagerCfg s e a) where
@@ -59,6 +64,7 @@ instance Semigroup (SaveManagerCfg s e a) where
             _smcOnSavesChangeReq a1 <> _smcOnSavesChangeReq a2
         , _smcCaptionMethod =
             _smcCaptionMethod a1 <|> _smcCaptionMethod a2
+        , _smcNoConfirm = _smcNoConfirm a1 <|> _smcNoConfirm a2
         }
 
 instance Monoid (SaveManagerCfg s e a) where
@@ -128,4 +134,15 @@ stored value.
 captionMethod :: (a -> ZonedTime -> Text) -> SaveManagerCfg s e a
 captionMethod makeCaption = def
     { _smcCaptionMethod = Just makeCaption
+    }
+
+{-|
+Should be used when the confirmation dialog is not needed.
+-}
+noConfirm :: SaveManagerCfg s e a
+noConfirm = noConfirm_ True
+
+noConfirm_ :: Bool -> SaveManagerCfg s e a
+noConfirm_ v = def
+    { _smcNoConfirm = Just v
     }

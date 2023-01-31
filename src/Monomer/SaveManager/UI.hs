@@ -24,7 +24,7 @@ buildUI
     :: (Typeable a)
     => (SaveManagerCfg s e a)
     -> UIBuilder (SaveManagerModel a) (SaveManagerEvent a)
-buildUI _ _ model = widgetTree where
+buildUI config _ model = widgetTree where
     widgetTree = zstack
         [ mainTree
         , confirmMsg_ "Are you sure?" EventRemove EventCancel
@@ -36,7 +36,9 @@ buildUI _ _ model = widgetTree where
             [ button' "New slot" EventNewSlot
             , buttonIfSelected "Save" EventSave
             , buttonIfSelected "Load" EventLoad
-            , buttonIfSelected "Remove" EventConfirmRemove
+            , if fromMaybe False (_smcNoConfirm config)
+                then buttonIfSelected "Remove" EventRemove
+                else buttonIfSelected "Remove" EventConfirmRemove
             ]
         , selectListV_ selectedCaption f savedDataList makeRow
             [ onFocus EventFocus

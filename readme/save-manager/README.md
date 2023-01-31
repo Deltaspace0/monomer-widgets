@@ -35,7 +35,7 @@ When this button is clicked, the active value is saved into the selected slot an
 When this button is clicked, the active value is loaded from the selected slot.
 
 ## Remove
-When this button is clicked, the confirmation dialog is shown with `Remove` and `Cancel` buttons. `Cancel` will just close the dialog and `Remove` will remove the selected slot.
+When this button is clicked, the confirmation dialog is shown with `Remove` and `Cancel` buttons. `Cancel` will just close the dialog and `Remove` will remove the selected slot. However, if configured with `noConfirm` option, then no confirmation dialog will be shown and the selected slot will be removed immediately.
 
 ## Configuration
 - `saveManager_ field [captionMethod f]`, where `f` is a function of type `a -> ZonedTime -> Text`. By default slot captions show only time of its modification. `captionMethod` can be used to show more information about the stored value.
@@ -43,3 +43,4 @@ When this button is clicked, the confirmation dialog is shown with `Remove` and 
 - `saveManager_ field [onChange f]`, where type of `f` is `a -> e`: `a` is loaded value and `e` is the event.
 - `saveManager_ field [onFocus f]`, where type of `f` is `Path -> e`: event to raise when the composite receives focus.
 - `saveManager_ field [onBlur f]`, where type of `f` is `Path -> e`: event to raise when the composite losts focus.
+- `saveManager_ field [noConfirm]`. Should be used when the confirmation dialog is not needed.
