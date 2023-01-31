@@ -115,6 +115,7 @@ configuration :: Spec
 configuration = describe "configuration" $ do
     title
     labelHiding
+    alignment
 
 title :: Spec
 title = describe "title" $ do
@@ -136,3 +137,20 @@ labelHiding = describe "labelHiding" $ do
         model = nodeHandleEventModel wenv [evtClick p] node
     it "should hide label" $
         model ^. field `shouldBe` 41
+
+alignment :: Spec
+alignment = describe "alignment" $ do
+    let wenv = mockWenvEvtUnit (TestModel 42)
+        model node p = nodeHandleEventModel wenv [evtClick p] node
+    it "should put slider to the left of the buttons" $ do
+        let node = enhancedSlider_ field 0 50 [alignLeft]
+            p = Point (640-32-32-1) 50
+        model node p ^. field `shouldBe` 41
+    it "should put slider between the buttons" $ do
+        let node = enhancedSlider_ field 0 50 [alignCenter]
+            p = Point 5 50
+        model node p ^. field `shouldBe` 41
+    it "should put slider to the right of the buttons" $ do
+        let node = enhancedSlider_ field 0 50 [alignRight]
+            p = Point 65 50
+        model node p ^. field `shouldBe` 43

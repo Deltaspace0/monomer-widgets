@@ -9,6 +9,7 @@ import Data.Text (Text)
 import Monomer.Core.Combinators
 import Monomer.Widgets.Composite
 import Monomer.Widgets.Containers.Stack
+import Monomer.Widgets.Single
 import Monomer.Widgets.Singles.Button
 import Monomer.Widgets.Singles.Label
 import Monomer.Widgets.Singles.Slider
@@ -31,11 +32,14 @@ buildUI config a b _ model = tree where
             ]
         else mainStack
     labelVisible = not $ fromMaybe False $ _escHideLabel config
-    mainStack = hstack_ [childSpacing_ 32]
-        [ hslider_ id a b sliderConfig
-        , button' "-" $ EventSetField $ model-changeRate
-        , button' "+" $ EventSetField $ model+changeRate
-        ]
+    mainStack = hstack_ [childSpacing_ 32] arrangement
+    arrangement = case fromMaybe ALeft (_escAlignH config) of
+        ALeft -> [sliderWidget, minusButton, plusButton]
+        ACenter -> [minusButton, sliderWidget, plusButton]
+        ARight -> [minusButton, plusButton, sliderWidget]
+    sliderWidget = hslider_ id a b sliderConfig
+    minusButton = button' "-" $ EventSetField $ model-changeRate
+    plusButton = button' "+" $ EventSetField $ model+changeRate
     sliderConfig =
         [ wheelRate 0
         , dragRate $ toRational changeRate

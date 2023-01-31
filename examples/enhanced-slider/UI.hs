@@ -14,6 +14,7 @@ buildUI _ _ = tree where
             [ titleCaption "Current value"
             , dragRate 0.5
             , onChange fn
+            , alignCenter
             ]
         , enhancedSlider_ changes 0 1000
             [ titleCaption "Changes"
