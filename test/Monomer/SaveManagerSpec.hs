@@ -117,7 +117,8 @@ removeButtonWithConfirmation = describe "with confirmation" $ do
         m = initSaveManagerModel 42
             & savedData .~ s
         node = saveManager field
-        getWenv = mockWenvEvtUnit . TestModel
+        setTheme = L.theme .~ darkTheme
+        getWenv = setTheme . mockWenvEvtUnit . TestModel
         model m' es = nodeHandleEventModel (getWenv m') es node
     it "should do nothing when slot is not selected" $ do
         let es = [evtClick $ Point ((640+16)/4*3+1) 5]
@@ -132,14 +133,13 @@ removeButtonWithConfirmation = describe "with confirmation" $ do
             es = [evtClick $ Point 5 5]
         model m' es ^. field . showConfirmRemove `shouldBe` False
     it "should remove selected slot when confirmed" $ do
-        pendingWith "unit test does not pass although it should"
-        -- let m' = m
-        --         & selectedData .~ Just 1
-        --         & showConfirmRemove .~ True
-        --     es = [evtClick $ Point 500 280]
-        --     s' = Seq.fromList [(0, "a"), (2, "c")]
-        -- model m' es ^. field . showConfirmRemove `shouldBe` False
-        -- model m' es ^. field . savedData `shouldBe` s'
+        let m' = m
+                & selectedData .~ Just 1
+                & showConfirmRemove .~ True
+            es = [evtClick $ Point 500 280]
+            s' = Seq.fromList [(0, "a"), (2, "c")]
+        model m' es ^. field . showConfirmRemove `shouldBe` False
+        model m' es ^. field . savedData `shouldBe` s'
 
 removeButtonWithNoConfirmation :: Spec
 removeButtonWithNoConfirmation = describe "no confirmation" $ do
