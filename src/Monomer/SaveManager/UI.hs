@@ -6,6 +6,7 @@ import Control.Lens
 import Data.Maybe
 import Data.Typeable
 import Monomer.Core.Combinators
+import Monomer.Main.UserUtil
 import Monomer.Widgets.Composite
 import Monomer.Widgets.Containers.Confirm
 import Monomer.Widgets.Containers.Grid
@@ -27,9 +28,9 @@ buildUI
 buildUI config _ model = widgetTree where
     widgetTree = zstack
         [ mainTree
-        , confirmMsg_ "Are you sure?" EventRemove EventCancel
-            [acceptCaption "Remove"]
-            `nodeVisible` model ^. showConfirmRemove
+        , widgetIf (model ^. showConfirmRemove) $
+            confirmMsg_ "Are you sure?" EventRemove EventCancel
+                [acceptCaption "Remove"]
         ]
     mainTree = vstack_ [childSpacing_ 16]
         [ hgrid_ [childSpacing_ 16]
