@@ -1,2 +1,2 @@
---command "stack ghci monomer-widgets:lib monomer-widgets:test:monomer-widgets-test"
+--command "stack ghci monomer-widgets:lib monomer-widgets:exe:checkerboard-example"
 --test ":main"
