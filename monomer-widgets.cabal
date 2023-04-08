@@ -27,8 +27,6 @@ library
   exposed-modules:
       Monomer.Checkerboard
       Monomer.Checkerboard.CheckerboardCfg
-      Monomer.Checkerboard.CheckerboardEvent
-      Monomer.Checkerboard.UI
       Monomer.EnhancedSlider
       Monomer.EnhancedSlider.EnhancedSliderCfg
       Monomer.SaveManager

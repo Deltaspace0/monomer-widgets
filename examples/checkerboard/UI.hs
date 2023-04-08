@@ -32,7 +32,7 @@ buildUI _ model = tree where
         , spacer
         , spacer
         , spacer
-        , label "HI"
+        , button "123" AppInit
         ]
     c = model ^. boardCols
     r = model ^. boardRows
