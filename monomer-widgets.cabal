@@ -26,6 +26,9 @@ source-repository head
 library
   exposed-modules:
       Monomer.Checkerboard
+      Monomer.Checkerboard.CheckerboardCfg
+      Monomer.Checkerboard.CheckerboardEvent
+      Monomer.Checkerboard.UI
       Monomer.EnhancedSlider
       Monomer.EnhancedSlider.EnhancedSliderCfg
       Monomer.SaveManager
@@ -48,6 +51,7 @@ library
     , data-default
     , lens
     , monomer
+    , split
     , text
     , text-show
     , time
@@ -73,6 +77,7 @@ executable checkerboard-example
     , lens
     , monomer
     , monomer-widgets
+    , split
     , text
     , text-show
     , time
@@ -98,6 +103,7 @@ executable enhanced-slider-example
     , lens
     , monomer
     , monomer-widgets
+    , split
     , text
     , text-show
     , time
@@ -123,6 +129,7 @@ executable save-manager-example
     , lens
     , monomer
     , monomer-widgets
+    , split
     , text
     , text-show
     , time
@@ -153,6 +160,7 @@ test-suite monomer-widgets-test
     , monomer
     , monomer-widgets
     , mtl
+    , split
     , stm
     , text
     , text-show
