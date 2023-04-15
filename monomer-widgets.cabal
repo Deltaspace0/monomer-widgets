@@ -27,6 +27,10 @@ library
   exposed-modules:
       Monomer.Checkerboard
       Monomer.Checkerboard.CheckerboardCfg
+      Monomer.Dragboard
+      Monomer.Dragboard.DragboardCfg
+      Monomer.Dragboard.DragboardEvent
+      Monomer.Dragboard.UI
       Monomer.EnhancedSlider
       Monomer.EnhancedSlider.EnhancedSliderCfg
       Monomer.SaveManager
@@ -87,6 +91,7 @@ executable dragboard-example
       Model
       Model.AppEvent
       Model.AppModel
+      Model.Piece
       UI
       Paths_monomer_widgets
   hs-source-dirs:

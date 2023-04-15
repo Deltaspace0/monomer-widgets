@@ -29,7 +29,7 @@ checkerboard_
     :: (WidgetModel s, WidgetEvent e, Traversable t)
     => Int
     -> Int
-    -> [CheckerboardCfg s e]
+    -> [CheckerboardCfg]
     -> t (WidgetNode s e)
     -> WidgetNode s e
 checkerboard_ c r configs children = tree where
