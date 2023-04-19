@@ -13,12 +13,14 @@ import Data.Default
 import Monomer.Checkerboard.CheckerboardCfg
 import Monomer.Widgets.Single
 
+type Info a = ([[a]], Int, Int)
+
 data DragboardCfg s e a = DragboardCfg
-    { _dcMoveValidator :: Maybe ([[a]] -> Int -> Int -> Bool)
+    { _dcMoveValidator :: Maybe (Info a -> Bool)
     , _dcCheckerCfg :: [CheckerboardCfg]
     , _dcOnFocusReq :: [Path -> WidgetRequest s e]
     , _dcOnBlurReq :: [Path -> WidgetRequest s e]
-    , _dcOnChangeReq :: [[[a]] -> WidgetRequest s e]
+    , _dcOnChangeReq :: [Info a -> WidgetRequest s e]
     }
 
 instance Default (DragboardCfg s e a) where
@@ -66,17 +68,17 @@ instance CmbOnBlurReq (DragboardCfg s e a) s e Path where
         }
 
 instance WidgetEvent e =>
-    CmbOnChange (DragboardCfg s e a) [[a]] e where
+    CmbOnChange (DragboardCfg s e a) (Info a) e where
         onChange fn = def
             { _dcOnChangeReq = [RaiseEvent . fn]
             }
 
-instance CmbOnChangeReq (DragboardCfg s e a) s e [[a]] where
+instance CmbOnChangeReq (DragboardCfg s e a) s e (Info a) where
     onChangeReq req = def
         { _dcOnChangeReq = [req]
         }
 
-moveValidator :: ([[a]] -> Int -> Int -> Bool) -> DragboardCfg s e a
+moveValidator :: (Info a -> Bool) -> DragboardCfg s e a
 moveValidator validateMove = def
     { _dcMoveValidator = Just validateMove
     }
