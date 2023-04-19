@@ -73,8 +73,9 @@ dragboardD_
     -> [CompositeCfg [[a]] DragboardEvent s e]
     -> WidgetNode s e
 dragboardD_ c r wdata f configs cmpConfigs = node where
-    node = compositeD_ wt wdata uiBuilder eventHandler cmpConfigs
+    node = compositeD_ wt wdata uiBuilder eventHandler cmpConfigs'
     wt = WidgetType "dragboard"
     uiBuilder = buildUI config c r f
     eventHandler = handleEvent config
     config = mconcat configs
+    cmpConfigs' = mergeRequired (\_ _ _ -> True) : cmpConfigs
