@@ -48,20 +48,39 @@ handleEvent = describe "handleEvent" $ do
     let wenv = mockWenv $ TestModel [[42], []]
         node = dragboard_ 2 1 field getColor
             [ onChange ValueChanged
+            , onFocus GotFocus
+            , onBlur LostFocus
             ]
         drag p1 p2 = nodeHandleEventEvts wenv (evtDrag p1 p2) node
+        events evt = nodeHandleEventEvts wenv [evt] node
         expectedEvents = Seq.singleton $ ValueChanged [[], [42]]
+        focusEvents = Seq.singleton $ GotFocus emptyPath
+        blurEvents = Seq.singleton $ LostFocus emptyPath
     it "should generate an event when it changes the board state" $
         drag (Point 5 5) (Point 325 5) `shouldBe` expectedEvents
+    it "should generate an event when focus is received" $
+        events evtFocus `shouldBe` focusEvents
+    it "should generate an event when focus is lost" $
+        events evtBlur `shouldBe` blurEvents
 
 handleEventV :: Spec
 handleEventV = describe "handleEventV" $ do
     let wenv = mockWenv $ TestModel [[42], []]
-        node = dragboardV 2 1 [[42], []] ValueChanged getColor
+        node = dragboardV_ 2 1 [[42], []] ValueChanged getColor
+            [ onFocus GotFocus
+            , onBlur LostFocus
+            ]
         drag p1 p2 = nodeHandleEventEvts wenv (evtDrag p1 p2) node
+        events evt = nodeHandleEventEvts wenv [evt] node
         expectedEvents = Seq.singleton $ ValueChanged [[], [42]]
+        focusEvents = Seq.singleton $ GotFocus emptyPath
+        blurEvents = Seq.singleton $ LostFocus emptyPath
     it "should generate an event when it changes the board state" $
         drag (Point 5 5) (Point 325 5) `shouldBe` expectedEvents
+    it "should generate an event when focus is received" $
+        events evtFocus `shouldBe` focusEvents
+    it "should generate an event when focus is lost" $
+        events evtBlur `shouldBe` blurEvents
 
 getColor :: Double -> Either Text Color
 getColor = const $ Right white

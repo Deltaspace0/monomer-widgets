@@ -7,6 +7,7 @@ import Data.Typeable
 import Monomer.Checkerboard
 import Monomer.Core.Combinators
 import Monomer.Graphics.Types
+import Monomer.Widgets.Containers.Box
 import Monomer.Widgets.Containers.Draggable
 import Monomer.Widgets.Containers.DropTarget
 import Monomer.Widgets.Singles.Image
@@ -24,7 +25,10 @@ buildUI
     -> (a -> Either Text Color)
     -> UIBuilder [[a]] DragboardEvent
 buildUI config c r getPathOrColor _ model = node where
-    node = checkerboard_ c r cc $ zipWith f [0..] model
+    node = box_
+        [ onFocus EventFocus
+        , onBlur EventBlur
+        ] $ checkerboard_ c r cc $ zipWith f [0..] model
     cc = _dcCheckerCfg config
     f i xs = dropTarget (EventDrop i) $ if null xs
         then filler
