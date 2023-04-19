@@ -23,9 +23,10 @@ buildUI _ model = tree where
             , label $ "Cols: " <> (showt c)
             , hslider boardCols 2 12
             , button "Reset board" AppResetBoard
+            , toggleButton "All pawns mode" allPawns
             ]
         ] `styleBasic` [padding 64]
-    gameBoard = dragboard_ c r boardState getPathOrColor
+    gameBoard = dragboard_ c r boardState (getPathOrColor model)
         [ checkerConfig [lightColor gray]
         ]
     c = model ^. boardCols

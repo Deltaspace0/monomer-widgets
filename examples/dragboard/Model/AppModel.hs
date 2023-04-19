@@ -9,6 +9,7 @@ module Model.AppModel
     , boardCols
     , boardState
     , initBoardState
+    , allPawns
     , initModel
     , getPathOrColor
     ) where
@@ -24,12 +25,13 @@ data AppModel = AppModel
     , _amBoardCols :: Int
     , _amBoardState :: [[Piece]]
     , _amInitBoardState :: [[Piece]]
+    , _amAllPawns :: Bool
     } deriving (Eq, Show)
 
 makeLensesWith abbreviatedFields 'AppModel
 
 initModel :: AppModel
-initModel = AppModel 8 8 initBoard initBoard where
+initModel = AppModel 8 8 initBoard initBoard False where
     initBoard =
         [ [BR], [BN], [BB], [BQ], [BK], [BB], [BN], [BR]
         , [BP], [BP], [BP], [BP], [BP], [BP], [BP], [BP]
@@ -41,16 +43,32 @@ initModel = AppModel 8 8 initBoard initBoard where
         , [WR], [WN], [WB], [WQ], [WK], [WB], [WN], [WR]
         ]
 
-getPathOrColor :: Piece -> Either Text Color
-getPathOrColor BR = Left "assets/chess-pieces/bR.png"
-getPathOrColor BN = Left "assets/chess-pieces/bN.png"
-getPathOrColor BB = Left "assets/chess-pieces/bB.png"
-getPathOrColor BQ = Left "assets/chess-pieces/bQ.png"
-getPathOrColor BK = Left "assets/chess-pieces/bK.png"
-getPathOrColor BP = Left "assets/chess-pieces/bP.png"
-getPathOrColor WR = Left "assets/chess-pieces/wR.png"
-getPathOrColor WN = Left "assets/chess-pieces/wN.png"
-getPathOrColor WB = Left "assets/chess-pieces/wB.png"
-getPathOrColor WQ = Left "assets/chess-pieces/wQ.png"
-getPathOrColor WK = Left "assets/chess-pieces/wK.png"
-getPathOrColor WP = Left "assets/chess-pieces/wP.png"
+getPathOrColor :: AppModel -> Piece -> Either Text Color
+getPathOrColor model piece = if model ^. allPawns
+    then case piece of
+        BR -> Left "assets/chess-pieces/bP.png"
+        BN -> Left "assets/chess-pieces/bP.png"
+        BB -> Left "assets/chess-pieces/bP.png"
+        BQ -> Left "assets/chess-pieces/bP.png"
+        BK -> Left "assets/chess-pieces/bP.png"
+        BP -> Left "assets/chess-pieces/bP.png"
+        WR -> Left "assets/chess-pieces/wP.png"
+        WN -> Left "assets/chess-pieces/wP.png"
+        WB -> Left "assets/chess-pieces/wP.png"
+        WQ -> Left "assets/chess-pieces/wP.png"
+        WK -> Left "assets/chess-pieces/wP.png"
+        WP -> Left "assets/chess-pieces/wP.png"
+    else case piece of
+        BR -> Left "assets/chess-pieces/bR.png"
+        BN -> Left "assets/chess-pieces/bN.png"
+        BB -> Left "assets/chess-pieces/bB.png"
+        BQ -> Left "assets/chess-pieces/bQ.png"
+        BK -> Left "assets/chess-pieces/bK.png"
+        BP -> Left "assets/chess-pieces/bP.png"
+        WR -> Left "assets/chess-pieces/wR.png"
+        WN -> Left "assets/chess-pieces/wN.png"
+        WB -> Left "assets/chess-pieces/wB.png"
+        WQ -> Left "assets/chess-pieces/wQ.png"
+        WK -> Left "assets/chess-pieces/wK.png"
+        WP -> Left "assets/chess-pieces/wP.png"
+
