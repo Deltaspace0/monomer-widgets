@@ -22,6 +22,7 @@ buildUI _ model = tree where
             , hslider boardRows 2 12
             , label $ "Cols: " <> (showt c)
             , hslider boardCols 2 12
+            , button "Reset board" AppResetBoard
             ]
         ] `styleBasic` [padding 64]
     gameBoard = dragboard_ c r boardState getPathOrColor

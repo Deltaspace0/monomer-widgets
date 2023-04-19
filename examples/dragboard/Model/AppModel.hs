@@ -8,6 +8,7 @@ module Model.AppModel
     , boardRows
     , boardCols
     , boardState
+    , initBoardState
     , initModel
     , getPathOrColor
     ) where
@@ -22,21 +23,23 @@ data AppModel = AppModel
     { _amBoardRows :: Int
     , _amBoardCols :: Int
     , _amBoardState :: [[Piece]]
+    , _amInitBoardState :: [[Piece]]
     } deriving (Eq, Show)
 
 makeLensesWith abbreviatedFields 'AppModel
 
 initModel :: AppModel
-initModel = AppModel 8 8
-    [ [BR], [BN], [BB], [BQ], [BK], [BB], [BN], [BR]
-    , [BP], [BP], [BP], [BP], [BP], [BP], [BP], [BP]
-    , [], [], [], [], [], [], [], []
-    , [], [], [], [], [], [], [], []
-    , [], [], [], [], [], [], [], []
-    , [], [], [], [], [], [], [], []
-    , [WP], [WP], [WP], [WP], [WP], [WP], [WP], [WP]
-    , [WR], [WN], [WB], [WQ], [WK], [WB], [WN], [WR]
-    ]
+initModel = AppModel 8 8 initBoard initBoard where
+    initBoard =
+        [ [BR], [BN], [BB], [BQ], [BK], [BB], [BN], [BR]
+        , [BP], [BP], [BP], [BP], [BP], [BP], [BP], [BP]
+        , [], [], [], [], [], [], [], []
+        , [], [], [], [], [], [], [], []
+        , [], [], [], [], [], [], [], []
+        , [], [], [], [], [], [], [], []
+        , [WP], [WP], [WP], [WP], [WP], [WP], [WP], [WP]
+        , [WR], [WN], [WB], [WQ], [WK], [WB], [WN], [WR]
+        ]
 
 getPathOrColor :: Piece -> Either Text Color
 getPathOrColor BR = Left "assets/chess-pieces/bR.png"
