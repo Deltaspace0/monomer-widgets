@@ -12,9 +12,9 @@ import Model
 buildUI :: UIBuilder AppModel AppEvent
 buildUI _ model = tree where
     tree = hstack_ [childSpacing_ 64]
-        [ box $ gameBoard `styleBasic`
-            [ sizeReqW $ fixedSize 400
-            , sizeReqH $ fixedSize 400
+        [ box' $ gameBoard `styleBasic`
+            [ sizeReqW $ fixedSize w
+            , sizeReqH $ fixedSize h
             ]
         , separatorLine
         , vstack_ [childSpacing_ 64]
@@ -29,5 +29,15 @@ buildUI _ model = tree where
     gameBoard = dragboard_ c r boardState (getPathOrColor model)
         [ checkerConfig [lightColor gray]
         ]
+    box' x = box_ [alignMiddle, alignCenter] x `styleBasic`
+        [ sizeReqW $ fixedSize 400
+        , sizeReqH $ fixedSize 400
+        ]
+    w = if c > r
+        then 400
+        else 400*(fromIntegral c)/(fromIntegral r)
+    h = if c < r
+        then 400
+        else 400*(fromIntegral r)/(fromIntegral c)
     c = model ^. boardCols
     r = model ^. boardRows
