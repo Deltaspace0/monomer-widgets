@@ -1,5 +1,18 @@
+{-|
+This is a checkerboard container (grid of boxes with alternating
+background colors). Provided widgets are distributed from left to
+right, top to bottom. If the are more provided widgets than there
+are boxes in the grid then last widgets are ignored.
+
+@
+checkerboard 3 3 [filler, filler, label ":D"]
+@
+-}
+
 module Monomer.Checkerboard
-    ( module Monomer.Checkerboard.CheckerboardCfg
+    ( -- * Re-exported modules
+      module Monomer.Checkerboard.CheckerboardCfg
+      -- * Constructors
     , checkerboard
     , checkerboard_
     ) where
@@ -17,21 +30,29 @@ import Monomer.Widgets.Singles.Spacer
 
 import Monomer.Checkerboard.CheckerboardCfg
 
+{-|
+Creates a checkerboard container for multiple items using number
+of columns and rows.
+-}
 checkerboard
     :: (WidgetModel s, WidgetEvent e, Traversable t)
-    => Int
-    -> Int
-    -> t (WidgetNode s e)
-    -> WidgetNode s e
+    => Int                 -- ^ Number of columns.
+    -> Int                 -- ^ Number of rows.
+    -> t (WidgetNode s e)  -- ^ The list of items.
+    -> WidgetNode s e      -- ^ The created checkerboard.
 checkerboard c r children = checkerboard_ c r def children
 
+{-|
+Creates a checkerboard container for multiple items using number
+of columns and rows. Accepts config.
+-}
 checkerboard_
     :: (WidgetModel s, WidgetEvent e, Traversable t)
-    => Int
-    -> Int
-    -> [CheckerboardCfg]
-    -> t (WidgetNode s e)
-    -> WidgetNode s e
+    => Int                 -- ^ Number of columns.
+    -> Int                 -- ^ Number of rows.
+    -> [CheckerboardCfg]   -- ^ The config options.
+    -> t (WidgetNode s e)  -- ^ The list of items.
+    -> WidgetNode s e      -- ^ The created checkerboard.
 checkerboard_ c r configs children = tree where
     tree = vgrid $ zipWith makeRow boxGrid $ cs <> repeat []
     makeRow f x = hgrid $ zipWith ($) f $ x <> repeat spacer

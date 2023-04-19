@@ -1,5 +1,6 @@
 module Monomer.Checkerboard.CheckerboardCfg
-    ( CheckerboardCfg(..)
+    ( -- * Configuration
+      CheckerboardCfg(..)
     , lightColor
     , darkColor
     ) where
@@ -8,6 +9,12 @@ import Control.Applicative ((<|>))
 import Data.Default
 import Monomer.Graphics.Types
 
+{-|
+Configuration options for checkerboard:
+
+- 'lightColor': color of light squares in the checkerboard pattern.
+- 'darkColor': color of dark squares in the checkerboard pattern.
+-}
 data CheckerboardCfg = CheckerboardCfg
     { _ccBgLightColor :: Maybe Color
     , _ccBgDarkColor :: Maybe Color
@@ -29,11 +36,17 @@ instance Semigroup CheckerboardCfg where
 instance Monoid CheckerboardCfg where
     mempty = def
 
+{-|
+Sets color of light squares in the checkerboard pattern.
+-}
 lightColor :: Color -> CheckerboardCfg
 lightColor c = def
     { _ccBgLightColor = Just c
     }
 
+{-|
+Sets color of dark squares in the checkerboard pattern.
+-}
 darkColor :: Color -> CheckerboardCfg
 darkColor c = def
     { _ccBgDarkColor = Just c
