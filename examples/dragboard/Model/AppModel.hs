@@ -9,11 +9,12 @@ module Model.AppModel
     , boardCols
     , boardState
     , initModel
-    , getPieceImagePath
+    , getPathOrColor
     ) where
 
 import Control.Lens
 import Data.Text (Text)
+import Monomer
 
 import Model.Piece
 
@@ -37,16 +38,16 @@ initModel = AppModel 8 8
     , [WR], [WN], [WB], [WQ], [WK], [WB], [WN], [WR]
     ]
 
-getPieceImagePath :: Piece -> Text
-getPieceImagePath BR = "assets/chess-pieces/bR.png"
-getPieceImagePath BN = "assets/chess-pieces/bN.png"
-getPieceImagePath BB = "assets/chess-pieces/bB.png"
-getPieceImagePath BQ = "assets/chess-pieces/bQ.png"
-getPieceImagePath BK = "assets/chess-pieces/bK.png"
-getPieceImagePath BP = "assets/chess-pieces/bP.png"
-getPieceImagePath WR = "assets/chess-pieces/wR.png"
-getPieceImagePath WN = "assets/chess-pieces/wN.png"
-getPieceImagePath WB = "assets/chess-pieces/wB.png"
-getPieceImagePath WQ = "assets/chess-pieces/wQ.png"
-getPieceImagePath WK = "assets/chess-pieces/wK.png"
-getPieceImagePath WP = "assets/chess-pieces/wP.png"
+getPathOrColor :: Piece -> Either Text Color
+getPathOrColor BR = Left "assets/chess-pieces/bR.png"
+getPathOrColor BN = Left "assets/chess-pieces/bN.png"
+getPathOrColor BB = Left "assets/chess-pieces/bB.png"
+getPathOrColor BQ = Left "assets/chess-pieces/bQ.png"
+getPathOrColor BK = Left "assets/chess-pieces/bK.png"
+getPathOrColor BP = Left "assets/chess-pieces/bP.png"
+getPathOrColor WR = Left "assets/chess-pieces/wR.png"
+getPathOrColor WN = Left "assets/chess-pieces/wN.png"
+getPathOrColor WB = Left "assets/chess-pieces/wB.png"
+getPathOrColor WQ = Left "assets/chess-pieces/wQ.png"
+getPathOrColor WK = Left "assets/chess-pieces/wK.png"
+getPathOrColor WP = Left "assets/chess-pieces/wP.png"

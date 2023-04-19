@@ -12,6 +12,7 @@ import Data.Default
 import Data.Text (Text)
 import Data.Typeable
 import Monomer.Core.Combinators
+import Monomer.Graphics.Types
 import Monomer.Widgets.Composite
 
 import Monomer.Dragboard.DragboardCfg
@@ -23,7 +24,7 @@ dragboard
     => Int
     -> Int
     -> ALens' s [[a]]
-    -> (a -> Text)
+    -> (a -> Either Text Color)
     -> WidgetNode s e
 dragboard c r field f = dragboard_ c r field f def
 
@@ -32,7 +33,7 @@ dragboard_
     => Int
     -> Int
     -> ALens' s [[a]]
-    -> (a -> Text)
+    -> (a -> Either Text Color)
     -> [DragboardCfg s e a]
     -> WidgetNode s e
 dragboard_ c r field f configs = node where
@@ -45,7 +46,7 @@ dragboardV
     -> Int
     -> [[a]]
     -> ([[a]] -> e)
-    -> (a -> Text)
+    -> (a -> Either Text Color)
     -> WidgetNode s e
 dragboardV c r v handler f = dragboardV_ c r v handler f def
 
@@ -55,7 +56,7 @@ dragboardV_
     -> Int
     -> [[a]]
     -> ([[a]] -> e)
-    -> (a -> Text)
+    -> (a -> Either Text Color)
     -> [DragboardCfg s e a]
     -> WidgetNode s e
 dragboardV_ c r v handler f configs = node where
@@ -67,7 +68,7 @@ dragboardD_
     => Int
     -> Int
     -> WidgetData s [[a]]
-    -> (a -> Text)
+    -> (a -> Either Text Color)
     -> [DragboardCfg s e a]
     -> [CompositeCfg [[a]] DragboardEvent s e]
     -> WidgetNode s e

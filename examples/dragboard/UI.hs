@@ -24,7 +24,7 @@ buildUI _ model = tree where
             , hslider boardCols 2 12
             ]
         ] `styleBasic` [padding 64]
-    gameBoard = dragboard_ c r boardState getPieceImagePath
+    gameBoard = dragboard_ c r boardState getPathOrColor
         [ checkerConfig [lightColor gray]
         ]
     c = model ^. boardCols
