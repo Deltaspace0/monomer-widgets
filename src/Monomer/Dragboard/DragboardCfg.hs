@@ -2,7 +2,9 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Monomer.Dragboard.DragboardCfg
-    ( module Monomer.Checkerboard.CheckerboardCfg
+    ( -- * Re-exported modules
+      module Monomer.Checkerboard.CheckerboardCfg
+      -- * Configuration
     , DragboardCfg(..)
     , moveValidator
     , checkerConfig
@@ -15,6 +17,18 @@ import Monomer.Widgets.Single
 
 type Info a = ([[a]], Int, Int)
 
+{-|
+Configuration options for dragboard:
+
+- 'moveValidator': function to check validity of a move.
+- 'checkerConfig': config options for checkerboard container.
+- 'onFocus': event to raise when focus is received.
+- 'onFocusReq': 'WidgetRequest' to generate when focus is received.
+- 'onBlur': event to raise when focus is lost.
+- 'onBlurReq': 'WidgetRequest' to generate when focus is lost.
+- 'onChange': event to raise when the board changes.
+- 'onChangeReq': 'WidgetRequest' to generate when the board changes.
+-}
 data DragboardCfg s e a = DragboardCfg
     { _dcMoveValidator :: Maybe (Info a -> Bool)
     , _dcCheckerCfg :: [CheckerboardCfg]
@@ -78,11 +92,21 @@ instance CmbOnChangeReq (DragboardCfg s e a) s e (Info a) where
         { _dcOnChangeReq = [req]
         }
 
+{-|
+Receives previous board, index of a square where item has been
+dragged to and index of a square where item has been dragged from
+and returns whether this move is valid or not. If move is not valid
+then the board state will not change.
+-}
 moveValidator :: (Info a -> Bool) -> DragboardCfg s e a
 moveValidator validateMove = def
     { _dcMoveValidator = Just validateMove
     }
 
+{-|
+Config options for checkerboard container which is used by
+dragboard.
+-}
 checkerConfig :: [CheckerboardCfg] -> DragboardCfg s e a
 checkerConfig config = def
     { _dcCheckerCfg = config
