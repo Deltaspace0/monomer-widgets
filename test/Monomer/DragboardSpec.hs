@@ -29,6 +29,7 @@ makeLensesWith abbreviatedFields 'TestModel
 spec :: Spec
 spec = describe "Dragboard" $ do
     dragging
+    validateMove
     handleEvent
     handleEventV
 
@@ -42,6 +43,18 @@ dragging = describe "dragging" $ do
         f (model (Point 5 30) (Point 400 30)) `shouldBe` [[], [42]]
     it "should do nothing when dragged from empty square" $
         f (model (Point 325 5) (Point 5 5)) `shouldBe` [[42], []]
+
+validateMove :: Spec
+validateMove = describe "validateMove" $ do
+    let wenv = mockWenvEvtUnit $ TestModel [[42], [34]]
+        node = dragboard_ 2 1 field getColor [moveValidator vm]
+        vm b ixTo ixFrom = (head $ b!!ixTo) <= (head $ b!!ixFrom)
+        model p1 p2 = nodeHandleEventModel wenv (evtDrag p1 p2) node
+        f = view field
+    it "should update the model if move is valid" $
+        f (model (Point 5 30) (Point 400 30)) `shouldBe` [[], [42]]
+    it "should not update the model if move is not valid" $
+        f (model (Point 325 5) (Point 5 5)) `shouldBe` [[42], [34]]
 
 handleEvent :: Spec
 handleEvent = describe "handleEvent" $ do

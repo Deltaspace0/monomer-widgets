@@ -3,6 +3,7 @@ module Monomer.Dragboard.DragboardEvent
     , handleEvent
     ) where
 
+import Data.Maybe
 import Monomer.Widgets.Composite
 
 import Monomer.Dragboard.DragboardCfg
@@ -28,7 +29,11 @@ handleEvent config _ node model event = case event of
 
 dropHandle :: Int -> Int -> EventHandle a sp ep
 dropHandle ixTo ixFrom config model = response where
-    response = [Model newModel] <> report
+    response = if validateMove model ixTo ixFrom
+        then [Model newModel] <> report
+        else []
+    validateMove = fromMaybe allowAllMoves $ _dcMoveValidator config
+    allowAllMoves _ _ _ = True
     newModel = zipWith f [0..] model
     f i xs = if i == ixTo
         then [dragged]

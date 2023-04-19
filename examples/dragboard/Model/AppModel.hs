@@ -12,6 +12,7 @@ module Model.AppModel
     , allPawns
     , initModel
     , getPathOrColor
+    , validateMove
     ) where
 
 import Control.Lens
@@ -72,3 +73,7 @@ getPathOrColor model piece = if model ^. allPawns
         WK -> Left "assets/chess-pieces/wK.png"
         WP -> Left "assets/chess-pieces/wP.png"
 
+validateMove :: [[Piece]] -> Int -> Int -> Bool
+validateMove board ixTo _ = emptyDestination || notKing where
+    emptyDestination = null $ board!!ixTo
+    notKing = not $ head (board!!ixTo) `elem` [WK, BK]
