@@ -42,5 +42,5 @@ When this button is clicked, the confirmation dialog is shown with `Remove` and 
 - `saveManager_ field [onSavesChange f]`, where type of `f` is `Saves a -> e`: event to raise when saves change (all actions except loading from the slot). For example, it could be used to synchronize saves with file.
 - `saveManager_ field [onChange f]`, where type of `f` is `a -> e`: `a` is loaded value and `e` is the event.
 - `saveManager_ field [onFocus f]`, where type of `f` is `Path -> e`: event to raise when the composite receives focus.
-- `saveManager_ field [onBlur f]`, where type of `f` is `Path -> e`: event to raise when the composite losts focus.
+- `saveManager_ field [onBlur f]`, where type of `f` is `Path -> e`: event to raise when the composite loses focus.
 - `saveManager_ field [noConfirm]`. Should be used when the confirmation dialog is not needed.

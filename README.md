@@ -5,6 +5,8 @@ This is a collection of custom widgets (composites) for [Monomer](https://github
 ## List of widgets
 - [Enhanced slider](readme/enhanced-slider/README.md)
 - [Save manager](readme/save-manager/README.md)
+- [Checkerboard](readme/checkerboard/README.md)
+- [Dragboard](readme/dragboard/README.md)
 
 ## How to use in your project (stack)
 - Add `monomer-widgets` to dependencies in `package.yaml`:

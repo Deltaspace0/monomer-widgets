@@ -8,6 +8,8 @@ This is a slider with a label, which shows current value, and buttons to increas
 - `enhancedSlider field min max`
 - `enhancedSlider_ field min max configs`
 
+Here is the [example](/examples/enhanced-slider/UI.hs).
+
 ## Configuration
 
 - `enhancedSlider_ field min max [titleCaption title]`. By default the label only shows current value. `titleCaption` can be used to provide title for the value.
@@ -20,3 +22,6 @@ or different formatting is needed.
 - `... [alignTop]`. Put vertical slider to the top of the buttons.
 - `... [alignMiddle]`. Put vertical slider between the buttons.
 - `... [alignBottom]`. Put vertical slider to the bottom of the buttons.
+- `... [onChange f]`, where type of `f` is `a -> e`: `a` is changed value and `e` is the event.
+- `... [onFocus f]`, where type of `f` is `Path -> e`: event to raise when the composite receives focus.
+- `... [onBlur f]`, where type of `f` is `Path -> e`: event to raise when the composite loses focus.
