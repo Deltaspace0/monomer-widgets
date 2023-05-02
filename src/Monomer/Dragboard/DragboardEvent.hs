@@ -1,5 +1,6 @@
 module Monomer.Dragboard.DragboardEvent
-    ( DragboardEvent(..)
+    ( DragId(..)
+    , DragboardEvent(..)
     , handleEvent
     ) where
 
@@ -7,8 +8,10 @@ import Monomer.Widgets.Composite
 
 import Monomer.Dragboard.DragboardCfg
 
+newtype DragId = DragId Int deriving Eq
+
 data DragboardEvent
-    = EventDrop Int Int
+    = EventDrop Int DragId
     | EventFocus Path
     | EventBlur Path
     deriving Eq
@@ -22,12 +25,12 @@ handleEvent
     :: (DragboardCfg sp ep a)
     -> EventHandler [[a]] DragboardEvent sp ep
 handleEvent config _ node model event = case event of
-    EventDrop ixTo ixFrom -> dropHandle ixTo ixFrom config model
+    EventDrop ixTo dragId -> dropHandle ixTo dragId config model
     EventFocus prev -> focusHandle node prev config model
     EventBlur next -> blurHandle node next config model
 
-dropHandle :: Int -> Int -> EventHandle a sp ep
-dropHandle ixTo ixFrom config model = response where
+dropHandle :: Int -> DragId -> EventHandle a sp ep
+dropHandle ixTo (DragId ixFrom) config model = response where
     response = if valid == Just False
         then []
         else [Model newModel] <> report

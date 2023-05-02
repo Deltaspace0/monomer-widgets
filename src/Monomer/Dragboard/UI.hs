@@ -32,6 +32,7 @@ buildUI config c r getPathOrColor _ model = node where
     cc = _dcCheckerCfg config
     f i xs = dropTarget (EventDrop i) $ if null xs
         then filler
-        else draggable i $ makeWidget $ getPathOrColor $ head xs
+        else draggable (DragId i) $ managed xs
+    managed = makeWidget . getPathOrColor . head
     makeWidget (Left path) = image_ path [fitEither]
     makeWidget (Right color) = filler `styleBasic` [bgColor color]
