@@ -138,6 +138,32 @@ executable enhanced-slider-example
     , time
   default-language: Haskell2010
 
+executable graph-example
+  main-is: Main.hs
+  other-modules:
+      Model
+      Model.AppEvent
+      Model.AppModel
+      UI
+      Paths_monomer_widgets
+  hs-source-dirs:
+      examples/graph
+  default-extensions:
+      OverloadedStrings
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , data-default
+    , lens
+    , monomer
+    , monomer-widgets
+    , split
+    , text
+    , text-show
+    , time
+  default-language: Haskell2010
+
 executable save-manager-example
   main-is: Main.hs
   other-modules:
