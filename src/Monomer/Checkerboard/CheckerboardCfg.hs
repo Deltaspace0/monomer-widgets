@@ -29,8 +29,8 @@ instance Default CheckerboardCfg where
 instance Semigroup CheckerboardCfg where
     (<>) a1 a2 = def
         { _ccBgLightColor =
-            _ccBgLightColor a1 <|> _ccBgLightColor a2
-        , _ccBgDarkColor = _ccBgDarkColor a1 <|> _ccBgDarkColor a2
+            _ccBgLightColor a2 <|> _ccBgLightColor a1
+        , _ccBgDarkColor = _ccBgDarkColor a2 <|> _ccBgDarkColor a1
         }
 
 instance Monoid CheckerboardCfg where

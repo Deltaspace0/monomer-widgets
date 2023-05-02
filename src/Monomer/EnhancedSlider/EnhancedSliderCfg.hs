@@ -62,13 +62,13 @@ instance Default (EnhancedSliderCfg s e a) where
 
 instance Semigroup (EnhancedSliderCfg s e a) where
     (<>) c1 c2 = EnhancedSliderCfg
-        { _escDragRate = _escDragRate c1 <|> _escDragRate c2
-        , _escHideLabel = _escHideLabel c1 <|> _escHideLabel c2
-        , _escTitle = _escTitle c1 <|> _escTitle c2
+        { _escDragRate = _escDragRate c2 <|> _escDragRate c1
+        , _escHideLabel = _escHideLabel c2 <|> _escHideLabel c1
+        , _escTitle = _escTitle c2 <|> _escTitle c1
         , _escTitleMethod =
-            _escTitleMethod c1 <|> _escTitleMethod c2
-        , _escAlignH = _escAlignH c1 <|> _escAlignH c2
-        , _escAlignV = _escAlignV c1 <|> _escAlignV c2
+            _escTitleMethod c2 <|> _escTitleMethod c1
+        , _escAlignH = _escAlignH c2 <|> _escAlignH c1
+        , _escAlignV = _escAlignV c2 <|> _escAlignV c1
         , _escOnFocusReq = _escOnFocusReq c1 <> _escOnFocusReq c2
         , _escOnBlurReq = _escOnBlurReq c1 <> _escOnBlurReq c2
         , _escOnChangeReq = _escOnChangeReq c1 <> _escOnChangeReq c2

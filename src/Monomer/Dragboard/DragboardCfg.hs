@@ -53,9 +53,9 @@ instance Default (DragboardCfg s e a) where
 instance Semigroup (DragboardCfg s e a) where
     (<>) a1 a2 = def
         { _dcMoveValidator =
-            _dcMoveValidator a1 <|> _dcMoveValidator a2
+            _dcMoveValidator a2 <|> _dcMoveValidator a1
         , _dcDragIdOffset =
-            _dcDragIdOffset a1 <|> _dcDragIdOffset a2
+            _dcDragIdOffset a2 <|> _dcDragIdOffset a1
         , _dcCheckerCfg = _dcCheckerCfg a1 <> _dcCheckerCfg a2
         , _dcOnFocusReq = _dcOnFocusReq a1 <> _dcOnFocusReq a2
         , _dcOnBlurReq = _dcOnBlurReq a1 <> _dcOnBlurReq a2

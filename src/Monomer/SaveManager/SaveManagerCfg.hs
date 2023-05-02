@@ -63,8 +63,8 @@ instance Semigroup (SaveManagerCfg s e a) where
         , _smcOnSavesChangeReq =
             _smcOnSavesChangeReq a1 <> _smcOnSavesChangeReq a2
         , _smcCaptionMethod =
-            _smcCaptionMethod a1 <|> _smcCaptionMethod a2
-        , _smcNoConfirm = _smcNoConfirm a1 <|> _smcNoConfirm a2
+            _smcCaptionMethod a2 <|> _smcCaptionMethod a1
+        , _smcNoConfirm = _smcNoConfirm a2 <|> _smcNoConfirm a1
         }
 
 instance Monoid (SaveManagerCfg s e a) where
