@@ -4,6 +4,8 @@ module Monomer.Dragboard.DragboardEvent
     , handleEvent
     ) where
 
+import Data.Maybe
+import Monomer.Main.UserUtil
 import Monomer.Widgets.Composite
 
 import Monomer.Dragboard.DragboardCfg
@@ -33,18 +35,19 @@ dropHandle :: Int -> DragId -> EventHandle a sp ep
 dropHandle ixTo (DragId ixFrom) config model = response where
     response = if valid == Just False
         then []
-        else [Model newModel] <> report
+        else [responseIf validFrom $ Model newModel] <> report
     valid = ($ changeInfo) <$> _dcMoveValidator config
     changeInfo = (model, ixTo, ixFrom)
-    newModel = zipWith f [0..] model
-    f i xs = if i == ixTo
-        then [dragged]
-        else if i == ixFrom
-            then tail xs
-            else xs
-    dragged = head $ model!!ixFrom
+    validFrom = ixFrom' >= 0 && ixFrom' < length model
+    newModel = zipWith f [offset..] model
+    f i xs
+        | i == ixTo = [head $ model!!ixFrom']
+        | i == ixFrom = tail xs
+        | otherwise = xs
+    ixFrom' = ixFrom-offset
     report = RequestParent <$> (($ changeInfo) <$> req)
     req = _dcOnChangeReq config
+    offset = fromMaybe 0 $ _dcDragIdOffset config
 
 focusHandle :: WidgetNode s e -> Path -> EventHandle a sp ep
 focusHandle node prev config _ = response where

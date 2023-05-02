@@ -2,6 +2,7 @@ module Monomer.Dragboard.UI
     ( buildUI
     ) where
 
+import Data.Maybe
 import Data.Text (Text)
 import Data.Typeable
 import Monomer.Checkerboard
@@ -28,8 +29,9 @@ buildUI config c r getPathOrColor _ model = node where
     node = box_
         [ onFocus EventFocus
         , onBlur EventBlur
-        ] $ checkerboard_ c r cc $ zipWith f [0..] model
+        ] $ checkerboard_ c r cc $ zipWith f [offset..] model
     cc = _dcCheckerCfg config
+    offset = fromMaybe 0 $ _dcDragIdOffset config
     f i xs = dropTarget (EventDrop i) $ if null xs
         then filler
         else draggable (DragId i) $ managed xs
