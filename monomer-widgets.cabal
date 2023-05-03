@@ -33,6 +33,7 @@ library
       Monomer.Dragboard.UI
       Monomer.EnhancedSlider
       Monomer.EnhancedSlider.EnhancedSliderCfg
+      Monomer.Graph
       Monomer.SaveManager
       Monomer.SaveManager.SaveManagerCfg
       Monomer.SaveManager.SaveManagerModel

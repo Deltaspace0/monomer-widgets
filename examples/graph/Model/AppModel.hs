@@ -1,19 +1,20 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE TemplateHaskell #-}
 
 module Model.AppModel
     ( AppModel(..)
-    , field
+    , points
     , initModel
     ) where
 
 import Control.Lens
 
 data AppModel = AppModel
-    { _amField :: Int
+    { _amPoints :: [(Double, Double)]
     } deriving (Eq, Show)
 
 makeLensesWith abbreviatedFields 'AppModel
 
 initModel :: AppModel
-initModel = AppModel 42
+initModel = AppModel [(0, 1), (2, 2)]
