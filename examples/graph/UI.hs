@@ -19,5 +19,5 @@ buildUI _ model = tree where
         , vstack_ [childSpacing_ 64]
             [ label "Graph"
             ]
-        ]
+        ] `styleBasic` [padding 64]
     plot = graph $ model ^. points

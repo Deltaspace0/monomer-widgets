@@ -17,4 +17,4 @@ data AppModel = AppModel
 makeLensesWith abbreviatedFields 'AppModel
 
 initModel :: AppModel
-initModel = AppModel [(0, 1), (2, 2)]
+initModel = AppModel $ (\x -> (x, x**2)) <$> [-10, -9.9..10]
