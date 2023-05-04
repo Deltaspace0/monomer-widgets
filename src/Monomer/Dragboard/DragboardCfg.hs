@@ -110,10 +110,10 @@ moveValidator validateMove = def
     }
 
 {-|
-When there are multiple dragboards, it possible to drag an item from
-one dragboard to another. In order to ignore drop events caused by
-foreign items or to process them properly, the dragboards should use
-different offsets (for example, if each dragboard has less than
+When there are multiple dragboards, it is possible to drag an item
+from one dragboard to another. In order to ignore drop events caused
+by foreign items or to process them properly, the dragboards should
+use different offsets (for example, if each dragboard has less than
 1000 squares, then multiples of 1000 can be used as offsets):
 
 @
