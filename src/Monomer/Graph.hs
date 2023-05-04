@@ -44,10 +44,10 @@ makeGraph points state = widget where
             ButtonAction p _ BtnPressed _ -> resultPoint p
             ButtonAction _ _ BtnReleased _ -> resultReleased
             Move p | isNodePressed wenv node -> resultPoint p
-            WheelScroll _ (Point _ wy) _ -> resultScroll wy
+            WheelScroll p (Point _ wy) _ -> resultScroll p wy
             _ -> Nothing
         resultPoint = resultRender . newPoint
-        resultScroll = resultRender . newScroll
+        resultScroll p = resultRender . newScroll p
         resultReleased = Just $ resultNode $ newNode $ state
             { _gsMousePosition = Nothing
             }
@@ -57,13 +57,19 @@ makeGraph points state = widget where
                 { _gsTranslation = Point (tx+mx-mx0) (ty+my-my0)
                 , _gsMousePosition = Just point
                 }
-        newScroll wy = newNode $ state
-            { _gsScale = Point cx' cy'
+        newScroll (Point mx my) wy = newNode $ state
+            { _gsTranslation = Point tx' ty'
+            , _gsScale = Point cx' cy'
             , _gsUnit = Point ux uy
             , _gsSections = Point (getSec cx') (getSec cy')
             } where
+                tx' = mx'-(mx'-tx)*cx'/cx
+                ty' = my'-(my'-ty)*cy'/cy
+                (mx', my') = (mx-gx-gw/2, my-gy-gh/2)
                 (ux, uy) = (getUnit cx', getUnit cy')
                 (cx', cy') = (cx*1.05**wy, cy*1.05**wy)
+        Rect gx gy gw gh = getContentArea node style
+        style = currentStyle wenv node
         getSec x = let l = 10**(mod' (logBase 10 x) 1) in
             if l >= 5 then 4 else 5
         getUnit x
