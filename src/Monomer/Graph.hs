@@ -1,7 +1,9 @@
 {-# LANGUAGE FlexibleContexts #-}
 
 module Monomer.Graph
-    ( graph
+    ( module Monomer.Graph.GraphCfg
+    , graph
+    , graph_
     ) where
 
 import Control.Lens
@@ -15,20 +17,29 @@ import Monomer.Widgets.Single
 import Numeric
 import qualified Monomer.Lens as L
 
+import Monomer.Graph.GraphCfg
 import Monomer.Graph.GraphState
 
 graph
     :: [[(Double, Double)]]
     -> WidgetNode s e
-graph points = node where
+graph points = graph_ points def
+
+graph_
+    :: [[(Double, Double)]]
+    -> [GraphCfg]
+    -> WidgetNode s e
+graph_ points configs = node where
     node = defaultWidgetNode (WidgetType "graph") widget
-    widget = makeGraph points def
+    widget = makeGraph points config def
+    config = mconcat configs
 
 makeGraph
     :: [[(Double, Double)]]
+    -> GraphCfg
     -> GraphState
     -> Widget s e
-makeGraph points state = widget where
+makeGraph points config state = widget where
     widget = createSingle state def
         { singleMerge = merge
         , singleHandleEvent = handleEvent
@@ -37,7 +48,8 @@ makeGraph points state = widget where
         }
 
     merge _ newNode _ oldState = resultNode resNode where
-        resNode = newNode & L.widget .~ makeGraph points oldState
+        resNode = newNode
+            & L.widget .~ makeGraph points config oldState
 
     handleEvent wenv node _ event = result where
         result = case event of
@@ -67,7 +79,14 @@ makeGraph points state = widget where
                 ty' = my'-(my'-ty)*cy'/cy
                 (mx', my') = (mx-gx-gw/2, my-gy-gh/2)
                 (ux, uy) = (getUnit cx', getUnit cy')
-                (cx', cy') = (cx*1.05**wy, cy*1.05**wy)
+                (cx', cy') = (cx*rateX**wy, cy*rateY**wy)
+                rateX = if _gcLockX config == Just True
+                    then 1
+                    else 1.05**wr
+                rateY = if _gcLockY config == Just True
+                    then 1
+                    else 1.05**wr
+                wr = fromMaybe 1 $ _gcWheelRate config
         Rect gx gy gw gh = getContentArea node style
         style = currentStyle wenv node
         getSec x = let l = 10**(mod' (logBase 10 x) 1) in
@@ -84,7 +103,7 @@ makeGraph points state = widget where
         Point mx0 my0 = fromJust mp
         mp = _gsMousePosition state
         resultRender n = Just $ resultReqs n [RenderOnce]
-        newNode s = node & L.widget .~ makeGraph points s
+        newNode s = node & L.widget .~ makeGraph points config s
 
     getSizeReq _ _ = (minSize 100 1, minSize 100 1)
 
@@ -139,8 +158,9 @@ makeGraph points state = widget where
             forM_ [ovy1, ovy1-sy..gy] horLine
             forM_ [ovy1, ovy1+sy..(gy+gh)] horLine
         let p (x, y) = Point (64*cx*x+ox) (64*cy*(-y)+oy)
-            colors = cycle [red, green, blue, violet, yellow]
-        forM_ (zip points colors) $ \(ps, c) -> do
+            colors = [red, green, blue, violet, yellow]
+            colors' = fromMaybe colors $ _gcGraphColors config
+        forM_ (zip points $ cycle colors') $ \(ps, c) -> do
             let l = length ps
                 connect (a, b) = line (p a) (p b) 2 c
             when (l > 1) $ forM_ (zip ps (tail ps)) connect

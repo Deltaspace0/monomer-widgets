@@ -19,4 +19,6 @@ buildUI _ model = tree where
             , hslider parameter (-2) 2
             ]
         ] `styleBasic` [padding 64]
-    plot = graph $ getPoints model
+    plot = graph_ (getPoints model)
+        [ wheelRate 2
+        ]
