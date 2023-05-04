@@ -3,6 +3,7 @@
 This is a collection of custom widgets (composites) for [Monomer](https://github.com/fjvallarino/monomer) library.
 
 ## List of widgets
+- [Graph](readme/graph/README.md)
 - [Enhanced slider](readme/enhanced-slider/README.md)
 - [Save manager](readme/save-manager/README.md)
 - [Checkerboard](readme/checkerboard/README.md)
