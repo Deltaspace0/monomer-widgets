@@ -18,14 +18,14 @@ import qualified Monomer.Lens as L
 import Monomer.Graph.GraphState
 
 graph
-    :: [(Double, Double)]
+    :: [[(Double, Double)]]
     -> WidgetNode s e
 graph points = node where
     node = defaultWidgetNode (WidgetType "graph") widget
     widget = makeGraph points def
 
 makeGraph
-    :: [(Double, Double)]
+    :: [[(Double, Double)]]
     -> GraphState
     -> Widget s e
 makeGraph points state = widget where
@@ -139,9 +139,11 @@ makeGraph points state = widget where
             forM_ [ovy1, ovy1-sy..gy] horLine
             forM_ [ovy1, ovy1+sy..(gy+gh)] horLine
         let p (x, y) = Point (64*cx*x+ox) (64*cy*(-y)+oy)
-            connect (a, b) = line (p a) (p b) 2 red
-            l = length points
-        when (l > 1) $ forM_ (zip points (tail points)) connect
+            colors = cycle [red, green, blue, violet, yellow]
+        forM_ (zip points colors) $ \(ps, c) -> do
+            let l = length ps
+                connect (a, b) = line (p a) (p b) 2 c
+            when (l > 1) $ forM_ (zip ps (tail ps)) connect
         setFillColor renderer black
         drawInAlpha renderer 0.62 $ do
             forM_ [fox..(fox+20)] verN
