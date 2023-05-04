@@ -1,7 +1,8 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Monomer.Graph.GraphCfg
-    ( GraphCfg(..)
+    ( -- * Configuration
+      GraphCfg(..)
     , lockX
     , lockX_
     , lockY
@@ -13,6 +14,14 @@ import Control.Applicative ((<|>))
 import Data.Default
 import Monomer.Widgets.Single
 
+{-|
+Configuration options for graph:
+
+- 'wheelRate': speed of scaling.
+- 'lockX': lock X-axis (scale only Y-axis).
+- 'lockY': lock Y-axis (scale only X-axis).
+- 'graphColors': which colors should be used to plot graphs.
+-}
 data GraphCfg = GraphCfg
     { _gcWheelRate :: Maybe Double
     , _gcLockX :: Maybe Bool
@@ -44,22 +53,39 @@ instance CmbWheelRate GraphCfg Double where
         _gcWheelRate = Just rate
     }
 
+{-|
+Lock X-axis (scale only Y-axis).
+-}
 lockX :: GraphCfg
 lockX = lockX_ True
 
+{-|
+Whether X-axis is locked and only Y-axis is scaled.
+-}
 lockX_ :: Bool -> GraphCfg
 lockX_ lock = def
     { _gcLockX = Just lock
     }
 
+{-|
+Lock Y-axis (scale only X-axis).
+-}
 lockY :: GraphCfg
 lockY = lockY_ True
 
+{-|
+Whether Y-axis is locked and only X-axis is scaled.
+-}
 lockY_ :: Bool -> GraphCfg
 lockY_ lock = def
     { _gcLockY = Just lock
     }
 
+{-|
+List of colors which are used to plot graphs. This list is then
+cycled when plotting graphs (in case there are more graphs than
+provided colors).
+-}
 graphColors :: [Color] -> GraphCfg
 graphColors colors = def
     { _gcGraphColors = Just colors

@@ -1,7 +1,19 @@
+{-|
+This widget renders a Cartesian coordinate system and plots function
+graphs by connecting provided points. Coordinate system can be
+dragged and scaled.
+
+@
+graph [[(1,2), (1,3)], [(0,0), (1,1)]]
+@
+-}
+
 {-# LANGUAGE FlexibleContexts #-}
 
 module Monomer.Graph
-    ( module Monomer.Graph.GraphCfg
+    ( -- * Re-exported modules
+      module Monomer.Graph.GraphCfg
+      -- * Constructors
     , graph
     , graph_
     ) where
@@ -20,15 +32,21 @@ import qualified Monomer.Lens as L
 import Monomer.Graph.GraphCfg
 import Monomer.Graph.GraphState
 
+{-|
+Creates a graph plotter using the list with points.
+-}
 graph
-    :: [[(Double, Double)]]
-    -> WidgetNode s e
+    :: [[(Double, Double)]]  -- ^ The list with points.
+    -> WidgetNode s e        -- ^ The created graph plotter.
 graph points = graph_ points def
 
+{-|
+Creates a graph plotter using the list with points. Accepts config.
+-}
 graph_
-    :: [[(Double, Double)]]
-    -> [GraphCfg]
-    -> WidgetNode s e
+    :: [[(Double, Double)]]  -- ^ The list with points.
+    -> [GraphCfg]            -- ^ The config options.
+    -> WidgetNode s e        -- ^ The created graph plotter.
 graph_ points configs = node where
     node = defaultWidgetNode (WidgetType "graph") widget
     widget = makeGraph points config def
