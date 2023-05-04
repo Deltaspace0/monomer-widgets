@@ -30,6 +30,7 @@ makeGraph points state = widget where
     widget = createSingle state def
         { singleMerge = merge
         , singleHandleEvent = handleEvent
+        , singleGetSizeReq = getSizeReq
         , singleRender = render
         }
 
@@ -77,6 +78,8 @@ makeGraph points state = widget where
         mp = _gsMousePosition state
         resultRender n = Just $ resultReqs n [RenderOnce]
         newNode s = node & L.widget .~ makeGraph points s
+
+    getSizeReq _ _ = (minSize 100 1, minSize 100 1)
 
     render wenv node renderer = do
         let style = currentStyle wenv node

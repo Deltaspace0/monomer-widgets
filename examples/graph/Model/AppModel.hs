@@ -4,17 +4,22 @@
 
 module Model.AppModel
     ( AppModel(..)
-    , points
+    , parameter
     , initModel
+    , getPoints
     ) where
 
 import Control.Lens
 
 data AppModel = AppModel
-    { _amPoints :: [(Double, Double)]
+    { _amParameter :: Double
     } deriving (Eq, Show)
 
 makeLensesWith abbreviatedFields 'AppModel
 
 initModel :: AppModel
-initModel = AppModel $ (\x -> (x, x**2)) <$> [-10, -9.9..10]
+initModel = AppModel 0
+
+getPoints :: AppModel -> [(Double, Double)]
+getPoints model = (\x -> (x, (x-p)**2)) <$> [-10, -9.9..10] where
+    p = model ^. parameter
