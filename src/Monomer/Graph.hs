@@ -122,26 +122,32 @@ makeGraph points state = widget where
             clampY = max (gy+16) $ min (gy+gh-16) $ oy+16
             verN x = printN (Point (ox+sx*x+4) clampY) $ ux*x
             horN x = printN (Point (clampX x) (oy-sy*x)) $ uy*x
-        drawInAlpha renderer 0.25 $ do
-            forM_ [ox, ox-sx/vs..gx] verLine
-            forM_ [ox, ox+sx/vs..(gx+gw)] verLine
-            forM_ [oy, oy-sy/hs..gy] horLine
-            forM_ [oy, oy+sy/hs..(gy+gh)] horLine
+            horN' x = when (x /= 0) $ horN x
+            (fox, foy) = (-(round' $ tx/sx), round' $ ty/sy)
+            ovx = ox-(round' $ tx*vs/sx)*sx/vs
+            ovy = oy-(round' $ ty*hs/sy)*sy/hs
+            ovx1 = ox+fox*sx
+            ovy1 = oy-foy*sy
+        drawInAlpha renderer 0.2 $ do
+            forM_ [ovx, ovx-sx/vs..gx] verLine
+            forM_ [ovx, ovx+sx/vs..(gx+gw)] verLine
+            forM_ [ovy, ovy-sy/hs..gy] horLine
+            forM_ [ovy, ovy+sy/hs..(gy+gh)] horLine
         drawInAlpha renderer 0.5 $ do
-            forM_ [ox, ox-sx..gx] verLine
-            forM_ [ox, ox+sx..(gx+gw)] verLine
-            forM_ [oy, oy-sy..gy] horLine
-            forM_ [oy, oy+sy..(gy+gh)] horLine
+            forM_ [ovx1, ovx1-sx..gx] verLine
+            forM_ [ovx1, ovx1+sx..(gx+gw)] verLine
+            forM_ [ovy1, ovy1-sy..gy] horLine
+            forM_ [ovy1, ovy1+sy..(gy+gh)] horLine
         let p (x, y) = Point (64*cx*x+ox) (64*cy*(-y)+oy)
             connect (a, b) = line (p a) (p b) 2 red
             l = length points
         when (l > 1) $ forM_ (zip points (tail points)) connect
         setFillColor renderer black
         drawInAlpha renderer 0.62 $ do
-            forM_ [0..100] verN
-            forM_ [-1,(-2)..(-100)] verN
-            forM_ [1..100] horN
-            forM_ [-1,(-2)..(-100)] horN
+            forM_ [fox..(fox+20)] verN
+            forM_ [(fox-1),(fox-2)..(fox-20)] verN
+            forM_ [foy..(foy+20)] horN'
+            forM_ [(foy-1),(foy-2)..(foy-20)] horN'
         restoreContext renderer
 
     floor' :: Double -> Double

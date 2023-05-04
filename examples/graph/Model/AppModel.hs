@@ -18,8 +18,8 @@ data AppModel = AppModel
 makeLensesWith abbreviatedFields 'AppModel
 
 initModel :: AppModel
-initModel = AppModel 0
+initModel = AppModel 1
 
 getPoints :: AppModel -> [(Double, Double)]
-getPoints model = (\x -> (x, (x-p)**2)) <$> [-10, -9.9..10] where
+getPoints model = (\x -> (x, cos $ p*x)) <$> [-10, -9.98..10] where
     p = model ^. parameter
