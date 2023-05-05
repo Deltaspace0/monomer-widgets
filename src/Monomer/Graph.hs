@@ -3,6 +3,11 @@ This widget renders a Cartesian coordinate system and plots function
 graphs by connecting provided points. Coordinate system can be
 dragged and scaled.
 
+This widget can receive 'GraphMsg' messages:
+- 'GraphSetTranslation' 'Point'
+- 'GraphSetScale' 'Point'
+- 'GraphReset'
+
 @
 graph [[(1,2), (1,3)], [(0,0), (1,1)]]
 @
