@@ -182,6 +182,10 @@ makeGraph points config state = widget where
             let l = length ps
                 connect (a, b) = line (p a) (p b) 2 c
             when (l > 1) $ forM_ (zip ps (tail ps)) connect
+            when (l == 1) $ do
+                let Point x y = p $ head ps
+                    el = Rect (x-4) (y-4) 8 8
+                drawEllipse renderer el $ Just c
         setFillColor renderer black
         drawInAlpha renderer 0.62 $ do
             forM_ [fox..(fox+20)] verN
