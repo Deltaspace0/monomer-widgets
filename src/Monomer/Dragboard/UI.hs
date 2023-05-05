@@ -2,6 +2,7 @@ module Monomer.Dragboard.UI
     ( buildUI
     ) where
 
+import Control.Lens
 import Data.Maybe
 import Data.Text (Text)
 import Data.Typeable
@@ -17,6 +18,7 @@ import Monomer.Widgets.Composite
 
 import Monomer.Dragboard.DragboardCfg
 import Monomer.Dragboard.DragboardEvent
+import Monomer.Dragboard.DragboardModel
 
 buildUI
     :: (Typeable a)
@@ -24,12 +26,12 @@ buildUI
     -> Int
     -> Int
     -> (a -> Either Text Color)
-    -> UIBuilder [[a]] DragboardEvent
+    -> UIBuilder (DragboardModel a) DragboardEvent
 buildUI config c r getPathOrColor _ model = node where
     node = box_
         [ onFocus EventFocus
         , onBlur EventBlur
-        ] $ checkerboard_ c r cc $ zipWith f [offset..] model
+        ] $ checkerboard_ c r cc $ zipWith f [offset..] boardState'
     cc = _dcCheckerCfg config
     offset = fromMaybe 0 $ _dcOffset config
     f i xs = dropTarget (EventDrop i) $ if null xs
@@ -38,3 +40,4 @@ buildUI config c r getPathOrColor _ model = node where
     managed = makeWidget . getPathOrColor . head
     makeWidget (Left path) = image_ path [fitEither]
     makeWidget (Right color) = filler `styleBasic` [bgColor color]
+    boardState' = model ^. boardState

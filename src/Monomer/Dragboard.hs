@@ -11,6 +11,8 @@ dragboard 3 3 boardState getPath
 @
 -}
 
+{-# LANGUAGE FlexibleContexts #-}
+
 module Monomer.Dragboard
     ( -- * Re-exported modules
       module Monomer.Dragboard.DragboardCfg
@@ -32,6 +34,7 @@ import Monomer.Widgets.Composite
 
 import Monomer.Dragboard.DragboardCfg
 import Monomer.Dragboard.DragboardEvent
+import Monomer.Dragboard.DragboardModel
 import Monomer.Dragboard.UI
 
 {-|
@@ -115,14 +118,19 @@ dragboardD_
     -- ^ The path or color function.
     -> [DragboardCfg s e a]
     -- ^ The config options.
-    -> [CompositeCfg [[a]] DragboardEvent s e]
+    -> [CompositeCfg (DragboardModel a) DragboardEvent s e]
     -- ^ The composite config options.
     -> WidgetNode s e
     -- ^ The created dragboard.
 dragboardD_ c r wdata f configs cmpConfigs = node where
-    node = compositeD_ wt wdata uiBuilder eventHandler cmpConfigs'
+    node = compositeD_ wt wdata' uiBuilder eventHandler cmpConfigs'
     wt = WidgetType "dragboard"
+    wdata' = WidgetValue initDragboardModel
     uiBuilder = buildUI config c r f
-    eventHandler = handleEvent config
+    eventHandler = handleEvent wdata config
     config = mconcat configs
-    cmpConfigs' = mergeRequired (\_ _ _ -> True) : cmpConfigs
+    cmpConfigs' =
+        [ mergeRequired (\_ _ _ -> True)
+        , compositeMergeModel mergeHandler
+        ] <> cmpConfigs
+    mergeHandler _ pm _ = boardState .~ widgetDataGet pm wdata

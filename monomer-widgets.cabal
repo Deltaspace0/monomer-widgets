@@ -30,6 +30,7 @@ library
       Monomer.Dragboard
       Monomer.Dragboard.DragboardCfg
       Monomer.Dragboard.DragboardEvent
+      Monomer.Dragboard.DragboardModel
       Monomer.Dragboard.UI
       Monomer.EnhancedSlider
       Monomer.EnhancedSlider.EnhancedSliderCfg
