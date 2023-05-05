@@ -14,11 +14,12 @@ buildUI _ model = tree where
     tree = hstack_ [childSpacing_ 64]
         [ box $ plot `styleBasic` [sizeReqW $ fixedSize 600]
         , separatorLine
-        , vstack_ [childSpacing_ 64]
+        , vstack_ [childSpacing_ 16]
             [ label $ "Parameter: " <> showt (model ^. parameter)
             , hslider parameter (-2) 2
+            , button "Reset" AppResetGraph
             ]
-        ] `styleBasic` [padding 64]
+        ] `styleBasic` [padding 16]
     plot = graph_ (getPoints model)
         [ wheelRate 2
-        ]
+        ] `nodeKey` "mainGraph"

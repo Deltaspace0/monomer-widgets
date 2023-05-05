@@ -13,6 +13,7 @@ graph [[(1,2), (1,3)], [(0,0), (1,1)]]
 module Monomer.Graph
     ( -- * Re-exported modules
       module Monomer.Graph.GraphCfg
+    , module Monomer.Graph.GraphMsg
       -- * Constructors
     , graph
     , graph_
@@ -24,12 +25,14 @@ import Data.Default
 import Data.Fixed
 import Data.Maybe
 import Data.Text (pack)
+import Data.Typeable
 import Monomer.Graphics.ColorTable
 import Monomer.Widgets.Single
 import Numeric
 import qualified Monomer.Lens as L
 
 import Monomer.Graph.GraphCfg
+import Monomer.Graph.GraphMsg
 import Monomer.Graph.GraphState
 
 {-|
@@ -61,6 +64,7 @@ makeGraph points config state = widget where
     widget = createSingle state def
         { singleMerge = merge
         , singleHandleEvent = handleEvent
+        , singleHandleMessage = handleMessage
         , singleGetSizeReq = getSizeReq
         , singleRender = render
         }
@@ -122,6 +126,15 @@ makeGraph points config state = widget where
         mp = _gsMousePosition state
         resultRender n = Just $ resultReqs n [RenderOnce]
         newNode s = node & L.widget .~ makeGraph points config s
+
+    handleMessage _ node _ message = do
+        s <- getNewState <$> cast message
+        let newNode = node & L.widget .~ makeGraph points config s
+        return $ resultReqs newNode [RenderOnce]
+
+    getNewState (GraphSetTranslation p) = state {_gsTranslation = p}
+    getNewState (GraphSetScale p) = state {_gsScale = p}
+    getNewState GraphReset = def
 
     getSizeReq _ _ = (minSize 100 1, minSize 100 1)
 

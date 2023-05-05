@@ -35,6 +35,7 @@ library
       Monomer.EnhancedSlider.EnhancedSliderCfg
       Monomer.Graph
       Monomer.Graph.GraphCfg
+      Monomer.Graph.GraphMsg
       Monomer.Graph.GraphState
       Monomer.SaveManager
       Monomer.SaveManager.SaveManagerCfg
