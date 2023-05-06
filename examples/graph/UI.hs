@@ -20,6 +20,6 @@ buildUI _ model = tree where
             , button "Reset" AppResetGraph
             ]
         ] `styleBasic` [padding 16]
-    plot = graph_ (getPoints model)
+    plot = graphWithColors_ (getPoints model)
         [ wheelRate 2
         ] `nodeKey` "mainGraph"

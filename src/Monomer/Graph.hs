@@ -22,6 +22,8 @@ module Monomer.Graph
       -- * Constructors
     , graph
     , graph_
+    , graphWithColors
+    , graphWithColors_
     ) where
 
 import Control.Lens
@@ -55,17 +57,44 @@ graph_
     :: [[(Double, Double)]]  -- ^ The list with points.
     -> [GraphCfg]            -- ^ The config options.
     -> WidgetNode s e        -- ^ The created graph plotter.
-graph_ points configs = node where
+graph_ points configs = graphWithColors_ colorPoints configs where
+    colorPoints = zip (cycle colors') points
+    colors' = fromMaybe colors $ _gcGraphColors config
+    colors = [red, green, blue, violet, yellow]
+    config = mconcat configs
+
+{-|
+Creates a graph plotter using the list with colors and points.
+-}
+graphWithColors
+    :: [(Color, [(Double, Double)])]
+    -- ^ The list with colors and points.
+    -> WidgetNode s e
+    -- ^ The created graph plotter.
+graphWithColors colorPoints = graphWithColors_ colorPoints def
+
+{-|
+Creates a graph plotter using the list with colors and points.
+Accepts config.
+-}
+graphWithColors_
+    :: [(Color, [(Double, Double)])]
+    -- ^ The list with colors and points.
+    -> [GraphCfg]
+    -- ^ The config options.
+    -> WidgetNode s e
+    -- ^ The created graph plotter.
+graphWithColors_ colorPoints configs = node where
     node = defaultWidgetNode (WidgetType "graph") widget
-    widget = makeGraph points config def
+    widget = makeGraph colorPoints config def
     config = mconcat configs
 
 makeGraph
-    :: [[(Double, Double)]]
+    :: [(Color, [(Double, Double)])]
     -> GraphCfg
     -> GraphState
     -> Widget s e
-makeGraph points config state = widget where
+makeGraph colorPoints config state = widget where
     widget = createSingle state def
         { singleMerge = merge
         , singleHandleEvent = handleEvent
@@ -75,8 +104,7 @@ makeGraph points config state = widget where
         }
 
     merge _ newNode _ oldState = resultNode resNode where
-        resNode = newNode
-            & L.widget .~ makeGraph points config oldState
+        resNode = newNode & L.widget .~ makeGraphWithState oldState
 
     handleEvent wenv node _ event = result where
         result = case event of
@@ -130,11 +158,11 @@ makeGraph points config state = widget where
         Point mx0 my0 = fromJust mp
         mp = _gsMousePosition state
         resultRender n = Just $ resultReqs n [RenderOnce]
-        newNode s = node & L.widget .~ makeGraph points config s
+        newNode s = node & L.widget .~ makeGraphWithState s
 
     handleMessage _ node _ message = do
         s <- getNewState <$> cast message
-        let newNode = node & L.widget .~ makeGraph points config s
+        let newNode = node & L.widget .~ makeGraphWithState s
         return $ resultReqs newNode [RenderOnce]
 
     getNewState (GraphSetTranslation p) = state {_gsTranslation = p}
@@ -194,9 +222,7 @@ makeGraph points config state = widget where
             forM_ [ovy1, ovy1-sy..gy] horLine
             forM_ [ovy1, ovy1+sy..(gy+gh)] horLine
         let p (x, y) = Point (64*cx*x+ox) (64*cy*(-y)+oy)
-            colors = [red, green, blue, violet, yellow]
-            colors' = fromMaybe colors $ _gcGraphColors config
-        forM_ (zip points $ cycle colors') $ \(ps, c) -> do
+        forM_ colorPoints $ \(c, ps) -> do
             let l = length ps
                 connect (a, b) = line (p a) (p b) 2 c
             when (l > 1) $ forM_ (zip ps (tail ps)) connect
@@ -217,3 +243,5 @@ makeGraph points config state = widget where
 
     round' :: Double -> Double
     round' x = fromIntegral $ (round x :: Int)
+
+    makeGraphWithState = makeGraph colorPoints config
