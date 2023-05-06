@@ -254,12 +254,15 @@ makeGraph graphDatas config state = widget where
                 c = _gdColor graphData
                 w = fromMaybe 2 $ _gdWidth graphData
                 connect (a, b) = drawLine renderer (p a) (p b) w c
-                l = length ps
-            when (l > 1) $ forM_ (zip ps (tail ps)) connect
-            when (l == 1) $ do
-                let Point x y = p $ head ps
+                drawDot point = drawEllipse renderer el c where
                     el = Rect (x-w*2) (y-w*2) (w*4) (w*4)
-                drawEllipse renderer el c
+                    Point x y = p point
+                l = length ps
+            if _gdSeparate graphData == Just True
+                then forM_ ps drawDot
+                else do
+                    when (l > 1) $ forM_ (zip ps (tail ps)) connect
+                    when (l == 1) $ drawDot $ head ps
         setFillColor renderer black
         drawInAlpha renderer 0.62 $ do
             forM_ [fox..(fox+20)] verN
