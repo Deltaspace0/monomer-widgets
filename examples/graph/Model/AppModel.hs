@@ -37,6 +37,7 @@ getPoints model = points where
             , graphColor blue
             , graphSeparate
             , graphFill
+            , graphFillAlpha 0.64
             ]
         ]
     xs = [-10, -9.98..10]

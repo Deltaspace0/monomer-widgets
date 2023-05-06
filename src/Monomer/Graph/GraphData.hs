@@ -8,6 +8,7 @@ module Monomer.Graph.GraphData
     , graphSeparate_
     , graphFill
     , graphFill_
+    , graphFillAlpha
     ) where
 
 import Control.Applicative ((<|>))
@@ -23,6 +24,7 @@ Options for graph data:
 - 'graphWidth': set the width of the line.
 - 'graphSeparate': whether the points should be rendered separately.
 - 'graphFill': whether to fill the area surrounded by points.
+- 'graphFillAlpha': transparency level of the filled area.
 -}
 data GraphData = GraphData
     { _gdPoints :: [(Double, Double)]
@@ -30,6 +32,7 @@ data GraphData = GraphData
     , _gdWidth :: Maybe Double
     , _gdSeparate :: Maybe Bool
     , _gdFill :: Maybe Bool
+    , _gdFillAlpha :: Maybe Double
     }
 
 instance Default GraphData where
@@ -39,6 +42,7 @@ instance Default GraphData where
         , _gdWidth = Nothing
         , _gdSeparate = Nothing
         , _gdFill = Nothing
+        , _gdFillAlpha = Nothing
         }
 
 instance Semigroup GraphData where
@@ -48,6 +52,7 @@ instance Semigroup GraphData where
         , _gdWidth = _gdWidth a2 <|> _gdWidth a1
         , _gdSeparate = _gdSeparate a2 <|> _gdSeparate a1
         , _gdFill = _gdFill a2 <|> _gdFill a1
+        , _gdFillAlpha = _gdFillAlpha a2 <|> _gdFillAlpha a1
         }
 
 instance Monoid GraphData where
@@ -112,4 +117,12 @@ Whether to fill the area surrounded by provided points.
 graphFill_ :: Bool -> GraphData
 graphFill_ v = def
     { _gdFill = Just v
+    }
+
+{-|
+Transparency level of the filled area.
+-}
+graphFillAlpha :: Double -> GraphData
+graphFillAlpha alpha = def
+    { _gdFillAlpha = Just alpha
     }

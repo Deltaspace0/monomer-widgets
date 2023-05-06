@@ -271,6 +271,7 @@ makeGraph graphDatas config state = widget where
         let ps = _gdPoints graphData
             c = _gdColor graphData
             w = fromMaybe 2 $ _gdWidth graphData
+            alpha = fromMaybe 0.32 $ _gdFillAlpha graphData
             p (x, y) = Point x y
             connect (a, b) = drawLine renderer (p a) (p b) w c
             drawDot (Point x y) = drawEllipse renderer el c where
@@ -286,7 +287,7 @@ makeGraph graphDatas config state = widget where
             moveTo renderer $ p $ head ps
             forM_ (tail ps) $ renderLineTo renderer . p
             saveContext renderer
-            setGlobalAlpha renderer 0.32
+            setGlobalAlpha renderer alpha
             setFillColor renderer $ fromJust c
             fill renderer
             restoreContext renderer
