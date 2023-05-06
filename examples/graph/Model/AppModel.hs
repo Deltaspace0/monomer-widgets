@@ -33,6 +33,11 @@ getPoints model = points where
             , graphColor yellow
             , graphWidth 10
             ]
+        ,   [ graphPoints [(-1, 4), (0, 5), (1, 4), (0, 3)]
+            , graphColor blue
+            , graphSeparate
+            , graphFill
+            ]
         ]
     xs = [-10, -9.98..10]
     p = model ^. parameter

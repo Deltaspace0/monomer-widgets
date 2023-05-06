@@ -6,6 +6,8 @@ module Monomer.Graph.GraphData
     , graphWidth
     , graphSeparate
     , graphSeparate_
+    , graphFill
+    , graphFill_
     ) where
 
 import Control.Applicative ((<|>))
@@ -17,6 +19,7 @@ data GraphData = GraphData
     , _gdColor :: Maybe Color
     , _gdWidth :: Maybe Double
     , _gdSeparate :: Maybe Bool
+    , _gdFill :: Maybe Bool
     }
 
 instance Default GraphData where
@@ -25,6 +28,7 @@ instance Default GraphData where
         , _gdColor = Nothing
         , _gdWidth = Nothing
         , _gdSeparate = Nothing
+        , _gdFill = Nothing
         }
 
 instance Semigroup GraphData where
@@ -33,6 +37,7 @@ instance Semigroup GraphData where
         , _gdColor = _gdColor a2 <|> _gdColor a1
         , _gdWidth = _gdWidth a2 <|> _gdWidth a1
         , _gdSeparate = _gdSeparate a2 <|> _gdSeparate a1
+        , _gdFill = _gdFill a2 <|> _gdFill a1
         }
 
 instance Monoid GraphData where
@@ -62,4 +67,12 @@ graphSeparate = graphSeparate_ True
 graphSeparate_ :: Bool -> GraphData
 graphSeparate_ separate = def
     { _gdSeparate = Just separate
+    }
+
+graphFill :: GraphData
+graphFill = graphFill_ True
+
+graphFill_ :: Bool -> GraphData
+graphFill_ v = def
+    { _gdFill = Just v
     }

@@ -248,21 +248,12 @@ makeGraph graphDatas config state = widget where
             forM_ [ovx1, ovx1+sx..(gx+gw)] verLine
             forM_ [ovy1, ovy1-sy..gy] horLine
             forM_ [ovy1, ovy1+sy..(gy+gh)] horLine
-        let p (x, y) = Point (64*cx*x+ox) (64*cy*(-y)+oy)
+        let p (x, y) = (64*cx*x+ox, 64*cy*(-y)+oy)
         forM_ graphDatas $ \graphData -> do
-            let ps = _gdPoints graphData
-                c = _gdColor graphData
-                w = fromMaybe 2 $ _gdWidth graphData
-                connect (a, b) = drawLine renderer (p a) (p b) w c
-                drawDot point = drawEllipse renderer el c where
-                    el = Rect (x-w*2) (y-w*2) (w*4) (w*4)
-                    Point x y = p point
-                l = length ps
-            if _gdSeparate graphData == Just True
-                then forM_ ps drawDot
-                else do
-                    when (l > 1) $ forM_ (zip ps (tail ps)) connect
-                    when (l == 1) $ drawDot $ head ps
+            let ps = p <$> _gdPoints graphData
+                newGraphData = graphData {_gdPoints = ps}
+            when (not $ null $ _gdColor graphData) $
+                renderGraphData renderer newGraphData
         setFillColor renderer black
         drawInAlpha renderer 0.62 $ do
             forM_ [fox..(fox+20)] verN
@@ -270,6 +261,30 @@ makeGraph graphDatas config state = widget where
             forM_ [foy..(foy+20)] horN'
             forM_ [(foy-1),(foy-2)..(foy-20)] horN'
         restoreContext renderer
+
+    renderGraphData renderer graphData = do
+        let ps = _gdPoints graphData
+            c = _gdColor graphData
+            w = fromMaybe 2 $ _gdWidth graphData
+            p (x, y) = Point x y
+            connect (a, b) = drawLine renderer (p a) (p b) w c
+            drawDot (Point x y) = drawEllipse renderer el c where
+                el = Rect (x-w*2) (y-w*2) (w*4) (w*4)
+            l = length ps
+        if _gdSeparate graphData == Just True
+            then forM_ ps $ drawDot . p
+            else do
+                when (l > 1) $ forM_ (zip ps (tail ps)) connect
+                when (l == 1) $ drawDot $ p $ head ps
+        when (_gdFill graphData == Just True && l > 2) $ do
+            beginPath renderer
+            moveTo renderer $ p $ head ps
+            forM_ (tail ps) $ renderLineTo renderer . p
+            saveContext renderer
+            setGlobalAlpha renderer 0.32
+            setFillColor renderer $ fromJust c
+            fill renderer
+            restoreContext renderer
 
     floor' :: Double -> Double
     floor' x = fromIntegral $ (floor x :: Int)
