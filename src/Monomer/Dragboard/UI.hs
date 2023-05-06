@@ -38,9 +38,10 @@ buildUI config c r getPathOrColor _ model = node where
     f i xs = clickBox i $ dropTarget (EventDrop i) $ if null xs
         then filler
         else draggable (DragId i) $ managed xs
-    clickBox i = paintSelected i . box_
-        [onBtnReleased $ \_ _ -> EventClick i]
-    paintSelected i x = if model ^. selectedSquare == Just i
+    clickBox i x = if _dcNoClick config == Just True
+        then x
+        else paint i $ box_ [onBtnReleased $ \_ _ -> EventClick i] x
+    paint i x = if model ^. selectedSquare == Just i
         then x `styleBasic` [bgColor selectedColor]
         else x
     selectedColor = fromMaybe yellow $ _dcSelectColor config

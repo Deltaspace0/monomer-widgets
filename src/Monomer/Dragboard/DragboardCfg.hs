@@ -9,6 +9,8 @@ module Monomer.Dragboard.DragboardCfg
     , moveValidator
     , dragIdOffset
     , selectColor
+    , disableClick
+    , disableClick_
     , checkerConfig
     ) where
 
@@ -25,6 +27,7 @@ Configuration options for dragboard:
 - 'moveValidator': function to check validity of a move.
 - 'dragIdOffset': offset for drag and drop event messages.
 - 'selectColor': color of selected square.
+- 'disableClick': whether items can be moved only by dragging.
 - 'checkerConfig': config options for checkerboard container.
 - 'onFocus': event to raise when focus is received.
 - 'onFocusReq': 'WidgetRequest' to generate when focus is received.
@@ -37,6 +40,7 @@ data DragboardCfg s e a = DragboardCfg
     { _dcValidator :: Maybe (Info a -> Bool)
     , _dcOffset :: Maybe Int
     , _dcSelectColor :: Maybe Color
+    , _dcNoClick :: Maybe Bool
     , _dcCheckerCfg :: [CheckerboardCfg]
     , _dcOnFocusReq :: [Path -> WidgetRequest s e]
     , _dcOnBlurReq :: [Path -> WidgetRequest s e]
@@ -48,6 +52,7 @@ instance Default (DragboardCfg s e a) where
         { _dcValidator = Nothing
         , _dcOffset = Nothing
         , _dcSelectColor = Nothing
+        , _dcNoClick = Nothing
         , _dcCheckerCfg = []
         , _dcOnFocusReq = []
         , _dcOnBlurReq = []
@@ -59,6 +64,7 @@ instance Semigroup (DragboardCfg s e a) where
         { _dcValidator = _dcValidator a2 <|> _dcValidator a1
         , _dcOffset = _dcOffset a2 <|> _dcOffset a1
         , _dcSelectColor = _dcSelectColor a2 <|> _dcSelectColor a1
+        , _dcNoClick = _dcNoClick a2 <|> _dcNoClick a1
         , _dcCheckerCfg = _dcCheckerCfg a1 <> _dcCheckerCfg a2
         , _dcOnFocusReq = _dcOnFocusReq a1 <> _dcOnFocusReq a2
         , _dcOnBlurReq = _dcOnBlurReq a1 <> _dcOnBlurReq a2
@@ -138,6 +144,20 @@ Color of selected square which is yellow by default.
 selectColor :: Color -> DragboardCfg s e a
 selectColor color = def
     { _dcSelectColor = Just color
+    }
+
+{-|
+Allows items to be moved only by dragging.
+-}
+disableClick :: DragboardCfg s e a
+disableClick = disableClick_ True
+
+{-|
+Whether items can be moved only by dragging.
+-}
+disableClick_ :: Bool -> DragboardCfg s e a
+disableClick_ v = def
+    { _dcNoClick = Just v
     }
 
 {-|
