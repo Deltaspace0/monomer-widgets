@@ -42,11 +42,12 @@ dropHandle
     -> (WidgetData sp [[a]])
     -> EventHandle a sp ep
 dropHandle ixTo (DragId ixFrom) wdata config model = response where
-    response = if valid == Just False || length sourceSquare == 0
+    response = if valid == Just False || emptySource
         then []
         else (responseIf validFrom <$> dataReq) <> report
     valid = ($ changeInfo) <$> _dcValidator config
     changeInfo = (boardState', ixTo, ixFrom)
+    emptySource = validFrom && length sourceSquare == 0
     validFrom = ixFrom' >= 0 && ixFrom' < length boardState'
     report = RequestParent <$> (($ changeInfo) <$> req)
     req = _dcOnChangeReq config
