@@ -18,12 +18,15 @@ graph [[(1,2), (1,3)], [(0,0), (1,1)]]
 module Monomer.Graph
     ( -- * Re-exported modules
       module Monomer.Graph.GraphCfg
+    , module Monomer.Graph.GraphData
     , module Monomer.Graph.GraphMsg
       -- * Constructors
     , graph
     , graph_
     , graphWithColors
     , graphWithColors_
+    , graphWithData
+    , graphWithData_
     ) where
 
 import Control.Lens
@@ -39,6 +42,7 @@ import Numeric
 import qualified Monomer.Lens as L
 
 import Monomer.Graph.GraphCfg
+import Monomer.Graph.GraphData
 import Monomer.Graph.GraphMsg
 import Monomer.Graph.GraphState
 
@@ -85,16 +89,39 @@ graphWithColors_
     -> WidgetNode s e
     -- ^ The created graph plotter.
 graphWithColors_ colorPoints configs = node where
+    node = graphWithData_ (makeData <$> colorPoints) configs
+    makeData (color, points) =
+        [ graphPoints points
+        , graphColor color
+        ]
+
+{-|
+Creates a graph plotter using the list with 'GraphData'.
+-}
+graphWithData
+    :: [[GraphData]]   -- ^ The list with 'GraphData'.
+    -> WidgetNode s e  -- ^ The created graph plotter.
+graphWithData dataList = graphWithData_ dataList def
+
+{-|
+Creates a graph plotter using the list with 'GraphData'. Accepts
+config.
+-}
+graphWithData_
+    :: [[GraphData]]   -- ^ The list with 'GraphData'.
+    -> [GraphCfg]      -- ^ The config options.
+    -> WidgetNode s e  -- ^ The created graph plotter.
+graphWithData_ dataList configs = node where
     node = defaultWidgetNode (WidgetType "graph") widget
-    widget = makeGraph colorPoints config def
+    widget = makeGraph (mconcat <$> dataList) config def
     config = mconcat configs
 
 makeGraph
-    :: [(Color, [(Double, Double)])]
+    :: [GraphData]
     -> GraphCfg
     -> GraphState
     -> Widget s e
-makeGraph colorPoints config state = widget where
+makeGraph graphDatas config state = widget where
     widget = createSingle state def
         { singleMerge = merge
         , singleHandleEvent = handleEvent
@@ -222,14 +249,17 @@ makeGraph colorPoints config state = widget where
             forM_ [ovy1, ovy1-sy..gy] horLine
             forM_ [ovy1, ovy1+sy..(gy+gh)] horLine
         let p (x, y) = Point (64*cx*x+ox) (64*cy*(-y)+oy)
-        forM_ colorPoints $ \(c, ps) -> do
-            let l = length ps
-                connect (a, b) = line (p a) (p b) 2 c
+        forM_ graphDatas $ \graphData -> do
+            let ps = _gdPoints graphData
+                c = _gdColor graphData
+                w = fromMaybe 2 $ _gdWidth graphData
+                connect (a, b) = drawLine renderer (p a) (p b) w c
+                l = length ps
             when (l > 1) $ forM_ (zip ps (tail ps)) connect
             when (l == 1) $ do
                 let Point x y = p $ head ps
-                    el = Rect (x-4) (y-4) 8 8
-                drawEllipse renderer el $ Just c
+                    el = Rect (x-w*2) (y-w*2) (w*4) (w*4)
+                drawEllipse renderer el c
         setFillColor renderer black
         drawInAlpha renderer 0.62 $ do
             forM_ [fox..(fox+20)] verN
@@ -244,4 +274,4 @@ makeGraph colorPoints config state = widget where
     round' :: Double -> Double
     round' x = fromIntegral $ (round x :: Int)
 
-    makeGraphWithState = makeGraph colorPoints config
+    makeGraphWithState = makeGraph graphDatas config
