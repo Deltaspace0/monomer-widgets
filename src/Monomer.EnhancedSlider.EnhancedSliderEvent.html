@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Monomer.EnhancedSlider.EnhancedSliderEvent</span><span>
+</span><span id="line-2"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#EnhancedSliderEvent"><span class="hs-identifier">EnhancedSliderEvent</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-3"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#handleEvent"><span class="hs-identifier">handleEvent</span></a></span><span>
+</span><span id="line-4"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Composite</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Singles.Slider</span></span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderCfg.html"><span class="hs-identifier">Monomer.EnhancedSlider.EnhancedSliderCfg</span></a></span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="hs-keyword">data</span><span> </span><span id="EnhancedSliderEvent"><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#EnhancedSliderEvent"><span class="hs-identifier hs-var">EnhancedSliderEvent</span></a></span></span><span> </span><span id="local-6989586621679170896"><span class="annot"><a href="#local-6989586621679170896"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-12"></span><span>    </span><span class="hs-glyph">=</span><span> </span><span id="EventSetField"><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#EventSetField"><span class="hs-identifier hs-var">EventSetField</span></a></span></span><span> </span><span class="annot"><a href="#local-6989586621679170896"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-13"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="EventFocus"><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#EventFocus"><span class="hs-identifier hs-var">EventFocus</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Path</span></span><span>
+</span><span id="line-14"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="EventBlur"><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#EventBlur"><span class="hs-identifier hs-var">EventBlur</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Path</span></span><span>
+</span><span id="line-15"></span><span>    </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679170815"><span id="local-6989586621679170822"><span class="annot"><span class="annottext">EnhancedSliderEvent a -&gt; EnhancedSliderEvent a -&gt; Bool
+(EnhancedSliderEvent a -&gt; EnhancedSliderEvent a -&gt; Bool)
+-&gt; (EnhancedSliderEvent a -&gt; EnhancedSliderEvent a -&gt; Bool)
+-&gt; Eq (EnhancedSliderEvent a)
+forall a.
+Eq a =&gt;
+EnhancedSliderEvent a -&gt; EnhancedSliderEvent a -&gt; Bool
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+/= :: EnhancedSliderEvent a -&gt; EnhancedSliderEvent a -&gt; Bool
+$c/= :: forall a.
+Eq a =&gt;
+EnhancedSliderEvent a -&gt; EnhancedSliderEvent a -&gt; Bool
+== :: EnhancedSliderEvent a -&gt; EnhancedSliderEvent a -&gt; Bool
+$c== :: forall a.
+Eq a =&gt;
+EnhancedSliderEvent a -&gt; EnhancedSliderEvent a -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span id="local-6989586621679170892"><span id="local-6989586621679170893"><span id="local-6989586621679170895"><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#handleEvent"><span class="hs-identifier hs-type">handleEvent</span></a></span><span>
+</span><span id="line-18"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">SliderValue</span></span><span> </span><span class="annot"><a href="#local-6989586621679170895"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-19"></span><span>    </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderCfg.html#EnhancedSliderCfg"><span class="hs-identifier hs-type">EnhancedSliderCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170893"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170892"><span class="hs-identifier hs-type">ep</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170895"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-20"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679170895"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-21"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679170895"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-22"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">EventHandler</span></span><span> </span><span class="annot"><a href="#local-6989586621679170895"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#EnhancedSliderEvent"><span class="hs-identifier hs-type">EnhancedSliderEvent</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170895"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="#local-6989586621679170893"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170892"><span class="hs-identifier hs-type">ep</span></a></span></span></span></span><span>
+</span><span id="line-23"></span><span id="handleEvent"><span class="annot"><span class="annottext">handleEvent :: forall a sp ep.
+SliderValue a =&gt;
+EnhancedSliderCfg sp ep a
+-&gt; a -&gt; a -&gt; EventHandler a (EnhancedSliderEvent a) sp ep
+</span><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#handleEvent"><span class="hs-identifier hs-var hs-var">handleEvent</span></a></span></span><span> </span><span id="local-6989586621679170810"><span class="annot"><span class="annottext">EnhancedSliderCfg sp ep a
+</span><a href="#local-6989586621679170810"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span id="local-6989586621679170809"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679170809"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679170808"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679170808"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="annot"><span class="annottext">WidgetEnv a (EnhancedSliderEvent a)
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679170807"><span class="annot"><span class="annottext">WidgetNode a (EnhancedSliderEvent a)
+</span><a href="#local-6989586621679170807"><span class="hs-identifier hs-var">node</span></a></span></span><span> </span><span class="annot"><span class="annottext">a
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679170806"><span class="annot"><span class="annottext">EnhancedSliderEvent a
+</span><a href="#local-6989586621679170806"><span class="hs-identifier hs-var">event</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">EnhancedSliderEvent a
+</span><a href="#local-6989586621679170806"><span class="hs-identifier hs-var">event</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-24"></span><span>    </span><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#EventSetField"><span class="hs-identifier hs-type">EventSetField</span></a></span><span> </span><span id="local-6989586621679170805"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679170805"><span class="hs-identifier hs-var">value</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">EnhancedSliderCfg sp ep a
+-&gt; a -&gt; a -&gt; a -&gt; [EventResponse a (EnhancedSliderEvent a) sp ep]
+forall a sp ep.
+SliderValue a =&gt;
+EnhancedSliderCfg sp ep a
+-&gt; a -&gt; a -&gt; a -&gt; [EventResponse a (EnhancedSliderEvent a) sp ep]
+</span><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#setFieldHandle"><span class="hs-identifier hs-var">setFieldHandle</span></a></span><span> </span><span class="annot"><span class="annottext">EnhancedSliderCfg sp ep a
+</span><a href="#local-6989586621679170810"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679170809"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679170808"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679170805"><span class="hs-identifier hs-var">value</span></a></span><span>
+</span><span id="line-25"></span><span>    </span><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#EventFocus"><span class="hs-identifier hs-type">EventFocus</span></a></span><span> </span><span id="local-6989586621679170803"><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679170803"><span class="hs-identifier hs-var">prev</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">WidgetNode a (EnhancedSliderEvent a)
+-&gt; Path
+-&gt; EnhancedSliderCfg sp ep a
+-&gt; [EventResponse a (EnhancedSliderEvent a) sp ep]
+forall s e sp ep a.
+WidgetNode s e
+-&gt; Path
+-&gt; EnhancedSliderCfg sp ep a
+-&gt; [EventResponse a (EnhancedSliderEvent a) sp ep]
+</span><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#focusHandle"><span class="hs-identifier hs-var">focusHandle</span></a></span><span> </span><span class="annot"><span class="annottext">WidgetNode a (EnhancedSliderEvent a)
+</span><a href="#local-6989586621679170807"><span class="hs-identifier hs-var">node</span></a></span><span> </span><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679170803"><span class="hs-identifier hs-var">prev</span></a></span><span> </span><span class="annot"><span class="annottext">EnhancedSliderCfg sp ep a
+</span><a href="#local-6989586621679170810"><span class="hs-identifier hs-var">config</span></a></span><span>
+</span><span id="line-26"></span><span>    </span><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#EventBlur"><span class="hs-identifier hs-type">EventBlur</span></a></span><span> </span><span id="local-6989586621679170801"><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679170801"><span class="hs-identifier hs-var">next</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">WidgetNode a (EnhancedSliderEvent a)
+-&gt; Path
+-&gt; EnhancedSliderCfg sp ep a
+-&gt; [EventResponse a (EnhancedSliderEvent a) sp ep]
+forall s e sp ep a.
+WidgetNode s e
+-&gt; Path
+-&gt; EnhancedSliderCfg sp ep a
+-&gt; [EventResponse a (EnhancedSliderEvent a) sp ep]
+</span><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#blurHandle"><span class="hs-identifier hs-var">blurHandle</span></a></span><span> </span><span class="annot"><span class="annottext">WidgetNode a (EnhancedSliderEvent a)
+</span><a href="#local-6989586621679170807"><span class="hs-identifier hs-var">node</span></a></span><span> </span><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679170801"><span class="hs-identifier hs-var">next</span></a></span><span> </span><span class="annot"><span class="annottext">EnhancedSliderCfg sp ep a
+</span><a href="#local-6989586621679170810"><span class="hs-identifier hs-var">config</span></a></span><span>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span id="local-6989586621679170881"><span id="local-6989586621679170882"><span id="local-6989586621679170883"><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#setFieldHandle"><span class="hs-identifier hs-type">setFieldHandle</span></a></span><span>
+</span><span id="line-29"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">SliderValue</span></span><span> </span><span class="annot"><a href="#local-6989586621679170883"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-30"></span><span>    </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderCfg.html#EnhancedSliderCfg"><span class="hs-identifier hs-type">EnhancedSliderCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170882"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170881"><span class="hs-identifier hs-type">ep</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170883"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-31"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679170883"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-32"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679170883"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-33"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679170883"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-34"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">EventResponse</span></span><span> </span><span class="annot"><a href="#local-6989586621679170883"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#EnhancedSliderEvent"><span class="hs-identifier hs-type">EnhancedSliderEvent</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170883"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="#local-6989586621679170882"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170881"><span class="hs-identifier hs-type">ep</span></a></span><span class="hs-special">]</span></span></span></span><span>
+</span><span id="line-35"></span><span id="setFieldHandle"><span class="annot"><span class="annottext">setFieldHandle :: forall a sp ep.
+SliderValue a =&gt;
+EnhancedSliderCfg sp ep a
+-&gt; a -&gt; a -&gt; a -&gt; [EventResponse a (EnhancedSliderEvent a) sp ep]
+</span><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#setFieldHandle"><span class="hs-identifier hs-var hs-var">setFieldHandle</span></a></span></span><span> </span><span id="local-6989586621679170792"><span class="annot"><span class="annottext">EnhancedSliderCfg sp ep a
+</span><a href="#local-6989586621679170792"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span id="local-6989586621679170791"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679170791"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679170790"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679170790"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span id="local-6989586621679170789"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679170789"><span class="hs-identifier hs-var">value</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">a -&gt; EventResponse a (EnhancedSliderEvent a) sp ep
+forall s e sp ep. s -&gt; EventResponse s e sp ep
+</span><span class="hs-identifier hs-var">Model</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679170787"><span class="hs-identifier hs-var">newValue</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[EventResponse a (EnhancedSliderEvent a) sp ep]
+-&gt; [EventResponse a (EnhancedSliderEvent a) sp ep]
+-&gt; [EventResponse a (EnhancedSliderEvent a) sp ep]
+forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">[EventResponse a (EnhancedSliderEvent a) sp ep]
+forall {s} {e}. [EventResponse s e sp ep]
+</span><a href="#local-6989586621679170786"><span class="hs-identifier hs-var">report</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-36"></span><span>    </span><span id="local-6989586621679170786"><span class="annot"><span class="annottext">report :: [EventResponse s e sp ep]
+</span><a href="#local-6989586621679170786"><span class="hs-identifier hs-var hs-var">report</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">WidgetRequest sp ep -&gt; EventResponse s e sp ep
+forall s e sp ep. WidgetRequest sp ep -&gt; EventResponse s e sp ep
+</span><span class="hs-identifier hs-var">RequestParent</span></span><span> </span><span class="annot"><span class="annottext">(WidgetRequest sp ep -&gt; EventResponse s e sp ep)
+-&gt; [WidgetRequest sp ep] -&gt; [EventResponse s e sp ep]
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">(a -&gt; WidgetRequest sp ep) -&gt; a -&gt; WidgetRequest sp ep
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679170787"><span class="hs-identifier hs-var">newValue</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">((a -&gt; WidgetRequest sp ep) -&gt; WidgetRequest sp ep)
+-&gt; [a -&gt; WidgetRequest sp ep] -&gt; [WidgetRequest sp ep]
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">[a -&gt; WidgetRequest sp ep]
+</span><a href="#local-6989586621679170780"><span class="hs-identifier hs-var">req</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-37"></span><span>    </span><span id="local-6989586621679170787"><span class="annot"><span class="annottext">newValue :: a
+</span><a href="#local-6989586621679170787"><span class="hs-identifier hs-var hs-var">newValue</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Ord a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-identifier hs-var">min</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679170790"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">(a -&gt; a) -&gt; a -&gt; a
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
+forall a. Ord a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-identifier hs-var">max</span></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679170791"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679170789"><span class="hs-identifier hs-var">value</span></a></span><span>
+</span><span id="line-38"></span><span>    </span><span id="local-6989586621679170780"><span class="annot"><span class="annottext">req :: [a -&gt; WidgetRequest sp ep]
+</span><a href="#local-6989586621679170780"><span class="hs-identifier hs-var hs-var">req</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">EnhancedSliderCfg sp ep a -&gt; [a -&gt; WidgetRequest sp ep]
+forall s e a. EnhancedSliderCfg s e a -&gt; [a -&gt; WidgetRequest s e]
+</span><a href="Monomer.EnhancedSlider.EnhancedSliderCfg.html#_escOnChangeReq"><span class="hs-identifier hs-var hs-var">_escOnChangeReq</span></a></span><span> </span><span class="annot"><span class="annottext">EnhancedSliderCfg sp ep a
+</span><a href="#local-6989586621679170792"><span class="hs-identifier hs-var">config</span></a></span><span>
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span id="local-6989586621679170876"><span id="local-6989586621679170877"><span id="local-6989586621679170878"><span id="local-6989586621679170879"><span id="local-6989586621679170880"><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#focusHandle"><span class="hs-identifier hs-type">focusHandle</span></a></span><span>
+</span><span id="line-41"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetNode</span></span><span> </span><span class="annot"><a href="#local-6989586621679170880"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170879"><span class="hs-identifier hs-type">e</span></a></span><span>
+</span><span id="line-42"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Path</span></span><span>
+</span><span id="line-43"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderCfg.html#EnhancedSliderCfg"><span class="hs-identifier hs-type">EnhancedSliderCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170878"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170877"><span class="hs-identifier hs-type">ep</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170876"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-44"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">EventResponse</span></span><span> </span><span class="annot"><a href="#local-6989586621679170876"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#EnhancedSliderEvent"><span class="hs-identifier hs-type">EnhancedSliderEvent</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170876"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="#local-6989586621679170878"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170877"><span class="hs-identifier hs-type">ep</span></a></span><span class="hs-special">]</span></span></span></span></span></span><span>
+</span><span id="line-45"></span><span id="focusHandle"><span class="annot"><span class="annottext">focusHandle :: forall s e sp ep a.
+WidgetNode s e
+-&gt; Path
+-&gt; EnhancedSliderCfg sp ep a
+-&gt; [EventResponse a (EnhancedSliderEvent a) sp ep]
+</span><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#focusHandle"><span class="hs-identifier hs-var hs-var">focusHandle</span></a></span></span><span> </span><span id="local-6989586621679170774"><span class="annot"><span class="annottext">WidgetNode s e
+</span><a href="#local-6989586621679170774"><span class="hs-identifier hs-var">node</span></a></span></span><span> </span><span id="local-6989586621679170773"><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679170773"><span class="hs-identifier hs-var">prev</span></a></span></span><span> </span><span id="local-6989586621679170772"><span class="annot"><span class="annottext">EnhancedSliderCfg sp ep a
+</span><a href="#local-6989586621679170772"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[EventResponse a (EnhancedSliderEvent a) sp ep]
+forall {s} {e}. [EventResponse s e sp ep]
+</span><a href="#local-6989586621679170771"><span class="hs-identifier hs-var">response</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-46"></span><span>    </span><span id="local-6989586621679170771"><span class="annot"><span class="annottext">response :: [EventResponse s e sp ep]
+</span><a href="#local-6989586621679170771"><span class="hs-identifier hs-var hs-var">response</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679170768"><span class="hs-identifier hs-var">valid</span></a></span><span>
+</span><span id="line-47"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">WidgetRequest sp ep -&gt; EventResponse s e sp ep
+forall s e sp ep. WidgetRequest sp ep -&gt; EventResponse s e sp ep
+</span><span class="hs-identifier hs-var">RequestParent</span></span><span> </span><span class="annot"><span class="annottext">(WidgetRequest sp ep -&gt; EventResponse s e sp ep)
+-&gt; [WidgetRequest sp ep] -&gt; [EventResponse s e sp ep]
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Path -&gt; WidgetRequest sp ep) -&gt; Path -&gt; WidgetRequest sp ep
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679170773"><span class="hs-identifier hs-var">prev</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">((Path -&gt; WidgetRequest sp ep) -&gt; WidgetRequest sp ep)
+-&gt; [Path -&gt; WidgetRequest sp ep] -&gt; [WidgetRequest sp ep]
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">EnhancedSliderCfg sp ep a -&gt; [Path -&gt; WidgetRequest sp ep]
+forall s e a.
+EnhancedSliderCfg s e a -&gt; [Path -&gt; WidgetRequest s e]
+</span><a href="Monomer.EnhancedSlider.EnhancedSliderCfg.html#_escOnFocusReq"><span class="hs-identifier hs-var hs-var">_escOnFocusReq</span></a></span><span> </span><span class="annot"><span class="annottext">EnhancedSliderCfg sp ep a
+</span><a href="#local-6989586621679170772"><span class="hs-identifier hs-var">config</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-48"></span><span>        </span><span class="hs-keyword">else</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-49"></span><span>    </span><span id="local-6989586621679170768"><span class="annot"><span class="annottext">valid :: Bool
+</span><a href="#local-6989586621679170768"><span class="hs-identifier hs-var hs-var">valid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; Bool -&gt; Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">WidgetNode s e -&gt; Path -&gt; Bool
+forall s e. WidgetNode s e -&gt; Path -&gt; Bool
+</span><span class="hs-identifier hs-var">isNodeParentOfPath</span></span><span> </span><span class="annot"><span class="annottext">WidgetNode s e
+</span><a href="#local-6989586621679170774"><span class="hs-identifier hs-var">node</span></a></span><span> </span><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679170773"><span class="hs-identifier hs-var">prev</span></a></span><span>
+</span><span id="line-50"></span><span>
+</span><span id="line-51"></span><span id="local-6989586621679170760"><span id="local-6989586621679170761"><span id="local-6989586621679170762"><span id="local-6989586621679170763"><span id="local-6989586621679170764"><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#blurHandle"><span class="hs-identifier hs-type">blurHandle</span></a></span><span>
+</span><span id="line-52"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetNode</span></span><span> </span><span class="annot"><a href="#local-6989586621679170764"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170763"><span class="hs-identifier hs-type">e</span></a></span><span>
+</span><span id="line-53"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Path</span></span><span>
+</span><span id="line-54"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderCfg.html#EnhancedSliderCfg"><span class="hs-identifier hs-type">EnhancedSliderCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170762"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170761"><span class="hs-identifier hs-type">ep</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170760"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-55"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">EventResponse</span></span><span> </span><span class="annot"><a href="#local-6989586621679170760"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#EnhancedSliderEvent"><span class="hs-identifier hs-type">EnhancedSliderEvent</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170760"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="#local-6989586621679170762"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170761"><span class="hs-identifier hs-type">ep</span></a></span><span class="hs-special">]</span></span></span></span></span></span><span>
+</span><span id="line-56"></span><span id="blurHandle"><span class="annot"><span class="annottext">blurHandle :: forall s e sp ep a.
+WidgetNode s e
+-&gt; Path
+-&gt; EnhancedSliderCfg sp ep a
+-&gt; [EventResponse a (EnhancedSliderEvent a) sp ep]
+</span><a href="Monomer.EnhancedSlider.EnhancedSliderEvent.html#blurHandle"><span class="hs-identifier hs-var hs-var">blurHandle</span></a></span></span><span> </span><span id="local-6989586621679170759"><span class="annot"><span class="annottext">WidgetNode s e
+</span><a href="#local-6989586621679170759"><span class="hs-identifier hs-var">node</span></a></span></span><span> </span><span id="local-6989586621679170758"><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679170758"><span class="hs-identifier hs-var">next</span></a></span></span><span> </span><span id="local-6989586621679170757"><span class="annot"><span class="annottext">EnhancedSliderCfg sp ep a
+</span><a href="#local-6989586621679170757"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[EventResponse a (EnhancedSliderEvent a) sp ep]
+forall {s} {e}. [EventResponse s e sp ep]
+</span><a href="#local-6989586621679170756"><span class="hs-identifier hs-var">response</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-57"></span><span>    </span><span id="local-6989586621679170756"><span class="annot"><span class="annottext">response :: [EventResponse s e sp ep]
+</span><a href="#local-6989586621679170756"><span class="hs-identifier hs-var hs-var">response</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679170753"><span class="hs-identifier hs-var">valid</span></a></span><span>
+</span><span id="line-58"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">WidgetRequest sp ep -&gt; EventResponse s e sp ep
+forall s e sp ep. WidgetRequest sp ep -&gt; EventResponse s e sp ep
+</span><span class="hs-identifier hs-var">RequestParent</span></span><span> </span><span class="annot"><span class="annottext">(WidgetRequest sp ep -&gt; EventResponse s e sp ep)
+-&gt; [WidgetRequest sp ep] -&gt; [EventResponse s e sp ep]
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Path -&gt; WidgetRequest sp ep) -&gt; Path -&gt; WidgetRequest sp ep
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679170758"><span class="hs-identifier hs-var">next</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">((Path -&gt; WidgetRequest sp ep) -&gt; WidgetRequest sp ep)
+-&gt; [Path -&gt; WidgetRequest sp ep] -&gt; [WidgetRequest sp ep]
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">EnhancedSliderCfg sp ep a -&gt; [Path -&gt; WidgetRequest sp ep]
+forall s e a.
+EnhancedSliderCfg s e a -&gt; [Path -&gt; WidgetRequest s e]
+</span><a href="Monomer.EnhancedSlider.EnhancedSliderCfg.html#_escOnBlurReq"><span class="hs-identifier hs-var hs-var">_escOnBlurReq</span></a></span><span> </span><span class="annot"><span class="annottext">EnhancedSliderCfg sp ep a
+</span><a href="#local-6989586621679170757"><span class="hs-identifier hs-var">config</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-59"></span><span>        </span><span class="hs-keyword">else</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-60"></span><span>    </span><span id="local-6989586621679170753"><span class="annot"><span class="annottext">valid :: Bool
+</span><a href="#local-6989586621679170753"><span class="hs-identifier hs-var hs-var">valid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; Bool -&gt; Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">WidgetNode s e -&gt; Path -&gt; Bool
+forall s e. WidgetNode s e -&gt; Path -&gt; Bool
+</span><span class="hs-identifier hs-var">isNodeParentOfPath</span></span><span> </span><span class="annot"><span class="annottext">WidgetNode s e
+</span><a href="#local-6989586621679170759"><span class="hs-identifier hs-var">node</span></a></span><span> </span><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679170758"><span class="hs-identifier hs-var">next</span></a></span><span>
+</span><span id="line-61"></span></pre></body></html>

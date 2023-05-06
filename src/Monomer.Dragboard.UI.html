@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Monomer.Dragboard.UI</span><span>
+</span><span id="line-2"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Monomer.Dragboard.UI.html#buildUI"><span class="hs-identifier">buildUI</span></a></span><span>
+</span><span id="line-3"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Maybe</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Text</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Typeable</span></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.Checkerboard.html"><span class="hs-identifier">Monomer.Checkerboard</span></a></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Core.Combinators</span></span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Graphics.ColorTable</span></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Graphics.Types</span></span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Containers.Box</span></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Containers.Draggable</span></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Containers.DropTarget</span></span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Singles.Image</span></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Singles.Spacer</span></span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Composite</span></span><span>
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardCfg.html"><span class="hs-identifier">Monomer.Dragboard.DragboardCfg</span></a></span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html"><span class="hs-identifier">Monomer.Dragboard.DragboardEvent</span></a></span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardModel.html"><span class="hs-identifier">Monomer.Dragboard.DragboardModel</span></a></span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span id="local-6989586621679170083"><span id="local-6989586621679170084"><span id="local-6989586621679170085"><span class="annot"><a href="Monomer.Dragboard.UI.html#buildUI"><span class="hs-identifier hs-type">buildUI</span></a></span><span>
+</span><span id="line-25"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Typeable</span></span><span> </span><span class="annot"><a href="#local-6989586621679170085"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-26"></span><span>    </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardCfg.html#DragboardCfg"><span class="hs-identifier hs-type">DragboardCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170084"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170083"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170085"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-27"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-28"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-29"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679170085"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Either</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Color</span></span><span class="hs-special">)</span><span>
+</span><span id="line-30"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UIBuilder</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Dragboard.DragboardModel.html#DragboardModel"><span class="hs-identifier hs-type">DragboardModel</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679170085"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragboardEvent"><span class="hs-identifier hs-type">DragboardEvent</span></a></span></span></span></span><span>
+</span><span id="line-31"></span><span id="buildUI"><span class="annot"><span class="annottext">buildUI :: forall a s e.
+Typeable a =&gt;
+DragboardCfg s e a
+-&gt; Int
+-&gt; Int
+-&gt; (a -&gt; Either Text Color)
+-&gt; UIBuilder (DragboardModel a) DragboardEvent
+</span><a href="Monomer.Dragboard.UI.html#buildUI"><span class="hs-identifier hs-var hs-var">buildUI</span></a></span></span><span> </span><span id="local-6989586621679169979"><span class="annot"><span class="annottext">DragboardCfg s e a
+</span><a href="#local-6989586621679169979"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span id="local-6989586621679169978"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679169978"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679169977"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679169977"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679169976"><span class="annot"><span class="annottext">a -&gt; Either Text Color
+</span><a href="#local-6989586621679169976"><span class="hs-identifier hs-var">getPathOrColor</span></a></span></span><span> </span><span class="annot"><span class="annottext">WidgetEnv (DragboardModel a) DragboardEvent
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679169975"><span class="annot"><span class="annottext">DragboardModel a
+</span><a href="#local-6989586621679169975"><span class="hs-identifier hs-var">model</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">WidgetNode (DragboardModel a) DragboardEvent
+</span><a href="#local-6989586621679169974"><span class="hs-identifier hs-var">node</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-32"></span><span>    </span><span id="local-6989586621679169974"><span class="annot"><span class="annottext">node :: WidgetNode (DragboardModel a) DragboardEvent
+</span><a href="#local-6989586621679169974"><span class="hs-identifier hs-var hs-var">node</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[BoxCfg (DragboardModel a) DragboardEvent]
+-&gt; WidgetNode (DragboardModel a) DragboardEvent
+-&gt; WidgetNode (DragboardModel a) DragboardEvent
+forall s e.
+(WidgetModel s, WidgetEvent e) =&gt;
+[BoxCfg s e] -&gt; WidgetNode s e -&gt; WidgetNode s e
+</span><span class="hs-identifier hs-var">box_</span></span><span>
+</span><span id="line-33"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">(Path -&gt; DragboardEvent)
+-&gt; BoxCfg (DragboardModel a) DragboardEvent
+forall t e a. CmbOnFocus t e a =&gt; (a -&gt; e) -&gt; t
+</span><span class="hs-identifier hs-var">onFocus</span></span><span> </span><span class="annot"><span class="annottext">Path -&gt; DragboardEvent
+</span><a href="Monomer.Dragboard.DragboardEvent.html#EventFocus"><span class="hs-identifier hs-var">EventFocus</span></a></span><span>
+</span><span id="line-34"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Path -&gt; DragboardEvent)
+-&gt; BoxCfg (DragboardModel a) DragboardEvent
+forall t e a. CmbOnBlur t e a =&gt; (a -&gt; e) -&gt; t
+</span><span class="hs-identifier hs-var">onBlur</span></span><span> </span><span class="annot"><span class="annottext">Path -&gt; DragboardEvent
+</span><a href="Monomer.Dragboard.DragboardEvent.html#EventBlur"><span class="hs-identifier hs-var">EventBlur</span></a></span><span>
+</span><span id="line-35"></span><span>        </span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">(WidgetNode (DragboardModel a) DragboardEvent
+ -&gt; WidgetNode (DragboardModel a) DragboardEvent)
+-&gt; WidgetNode (DragboardModel a) DragboardEvent
+-&gt; WidgetNode (DragboardModel a) DragboardEvent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Int
+-&gt; Int
+-&gt; [CheckerboardCfg]
+-&gt; [WidgetNode (DragboardModel a) DragboardEvent]
+-&gt; WidgetNode (DragboardModel a) DragboardEvent
+forall s e (t :: * -&gt; *).
+(WidgetModel s, WidgetEvent e, Traversable t) =&gt;
+Int
+-&gt; Int -&gt; [CheckerboardCfg] -&gt; t (WidgetNode s e) -&gt; WidgetNode s e
+</span><a href="Monomer.Checkerboard.html#checkerboard_"><span class="hs-identifier hs-var">checkerboard_</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679169978"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679169977"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">[CheckerboardCfg]
+</span><a href="#local-6989586621679169953"><span class="hs-identifier hs-var">cc</span></a></span><span> </span><span class="annot"><span class="annottext">([WidgetNode (DragboardModel a) DragboardEvent]
+ -&gt; WidgetNode (DragboardModel a) DragboardEvent)
+-&gt; [WidgetNode (DragboardModel a) DragboardEvent]
+-&gt; WidgetNode (DragboardModel a) DragboardEvent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Int -&gt; [a] -&gt; WidgetNode (DragboardModel a) DragboardEvent)
+-&gt; [Int] -&gt; [[a]] -&gt; [WidgetNode (DragboardModel a) DragboardEvent]
+forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
+</span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; [a] -&gt; WidgetNode (DragboardModel a) DragboardEvent
+forall {s}. Typeable s =&gt; Int -&gt; [a] -&gt; WidgetNode s DragboardEvent
+</span><a href="#local-6989586621679169951"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679169950"><span class="hs-identifier hs-var">offset</span></a></span><span class="hs-glyph">..</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[[a]]
+</span><a href="#local-6989586621679169949"><span class="hs-identifier hs-var">boardState'</span></a></span><span>
+</span><span id="line-36"></span><span>    </span><span id="local-6989586621679169953"><span class="annot"><span class="annottext">cc :: [CheckerboardCfg]
+</span><a href="#local-6989586621679169953"><span class="hs-identifier hs-var hs-var">cc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DragboardCfg s e a -&gt; [CheckerboardCfg]
+forall s e a. DragboardCfg s e a -&gt; [CheckerboardCfg]
+</span><a href="Monomer.Dragboard.DragboardCfg.html#_dcCheckerCfg"><span class="hs-identifier hs-var hs-var">_dcCheckerCfg</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg s e a
+</span><a href="#local-6989586621679169979"><span class="hs-identifier hs-var">config</span></a></span><span>
+</span><span id="line-37"></span><span>    </span><span id="local-6989586621679169950"><span class="annot"><span class="annottext">offset :: Int
+</span><a href="#local-6989586621679169950"><span class="hs-identifier hs-var hs-var">offset</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Maybe Int -&gt; Int
+forall a. a -&gt; Maybe a -&gt; a
+</span><span class="hs-identifier hs-var">fromMaybe</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">(Maybe Int -&gt; Int) -&gt; Maybe Int -&gt; Int
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DragboardCfg s e a -&gt; Maybe Int
+forall s e a. DragboardCfg s e a -&gt; Maybe Int
+</span><a href="Monomer.Dragboard.DragboardCfg.html#_dcOffset"><span class="hs-identifier hs-var hs-var">_dcOffset</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg s e a
+</span><a href="#local-6989586621679169979"><span class="hs-identifier hs-var">config</span></a></span><span>
+</span><span id="line-38"></span><span>    </span><span id="local-6989586621679169951"><span class="annot"><span class="annottext">f :: Int -&gt; [a] -&gt; WidgetNode s DragboardEvent
+</span><a href="#local-6989586621679169951"><span class="hs-identifier hs-var hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679169933"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679169933"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679169932"><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679169932"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent
+forall {s}.
+Typeable s =&gt;
+Int -&gt; WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent
+</span><a href="#local-6989586621679169931"><span class="hs-identifier hs-var">clickBox</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679169933"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">(WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent)
+-&gt; WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(DragId -&gt; DragboardEvent)
+-&gt; WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent
+forall a e s.
+(DragMsg a, WidgetEvent e) =&gt;
+(a -&gt; e) -&gt; WidgetNode s e -&gt; WidgetNode s e
+</span><span class="hs-identifier hs-var">dropTarget</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; DragId -&gt; DragboardEvent
+</span><a href="Monomer.Dragboard.DragboardEvent.html#EventDrop"><span class="hs-identifier hs-var">EventDrop</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679169933"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent)
+-&gt; WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">[a] -&gt; Bool
+forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
+</span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679169932"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-39"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">WidgetNode s DragboardEvent
+forall s e. WidgetNode s e
+</span><span class="hs-identifier hs-var">filler</span></span><span>
+</span><span id="line-40"></span><span>        </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">DragId
+-&gt; WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent
+forall a s e. DragMsg a =&gt; a -&gt; WidgetNode s e -&gt; WidgetNode s e
+</span><span class="hs-identifier hs-var">draggable</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; DragId
+</span><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier hs-var">DragId</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679169933"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent)
+-&gt; WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[a] -&gt; WidgetNode s DragboardEvent
+forall {s}. [a] -&gt; WidgetNode s DragboardEvent
+</span><a href="#local-6989586621679169924"><span class="hs-identifier hs-var">managed</span></a></span><span> </span><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679169932"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-41"></span><span>    </span><span id="local-6989586621679169931"><span class="annot"><span class="annottext">clickBox :: Int -&gt; WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent
+</span><a href="#local-6989586621679169931"><span class="hs-identifier hs-var hs-var">clickBox</span></a></span></span><span> </span><span id="local-6989586621679169912"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679169912"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679169911"><span class="annot"><span class="annottext">WidgetNode s DragboardEvent
+</span><a href="#local-6989586621679169911"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">DragboardCfg s e a -&gt; Maybe Bool
+forall s e a. DragboardCfg s e a -&gt; Maybe Bool
+</span><a href="Monomer.Dragboard.DragboardCfg.html#_dcNoClick"><span class="hs-identifier hs-var hs-var">_dcNoClick</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg s e a
+</span><a href="#local-6989586621679169979"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Bool -&gt; Maybe Bool -&gt; Bool
+forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Maybe Bool
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span>
+</span><span id="line-42"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">WidgetNode s DragboardEvent
+</span><a href="#local-6989586621679169911"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-43"></span><span>        </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">Int -&gt; WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent
+forall {t}. CmbStyleBasic t =&gt; Int -&gt; t -&gt; t
+</span><a href="#local-6989586621679169909"><span class="hs-identifier hs-var">paint</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679169912"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">(WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent)
+-&gt; WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[BoxCfg s DragboardEvent]
+-&gt; WidgetNode s DragboardEvent -&gt; WidgetNode s DragboardEvent
+forall s e.
+(WidgetModel s, WidgetEvent e) =&gt;
+[BoxCfg s e] -&gt; WidgetNode s e -&gt; WidgetNode s e
+</span><span class="hs-identifier hs-var">box_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Button -&gt; Int -&gt; DragboardEvent) -&gt; BoxCfg s DragboardEvent
+forall t e. CmbOnBtnReleased t e =&gt; (Button -&gt; Int -&gt; e) -&gt; t
+</span><span class="hs-identifier hs-var">onBtnReleased</span></span><span> </span><span class="annot"><span class="annottext">((Button -&gt; Int -&gt; DragboardEvent) -&gt; BoxCfg s DragboardEvent)
+-&gt; (Button -&gt; Int -&gt; DragboardEvent) -&gt; BoxCfg s DragboardEvent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="hs-glyph">\</span><span class="annot"><span class="annottext">Button
+</span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Int -&gt; DragboardEvent
+</span><a href="Monomer.Dragboard.DragboardEvent.html#EventClick"><span class="hs-identifier hs-var">EventClick</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679169912"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">WidgetNode s DragboardEvent
+</span><a href="#local-6989586621679169911"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-44"></span><span>    </span><span id="local-6989586621679169909"><span class="annot"><span class="annottext">paint :: Int -&gt; t -&gt; t
+</span><a href="#local-6989586621679169909"><span class="hs-identifier hs-var hs-var">paint</span></a></span></span><span> </span><span id="local-6989586621679169895"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679169895"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679169894"><span class="annot"><span class="annottext">t
+</span><a href="#local-6989586621679169894"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">DragboardModel a
+</span><a href="#local-6989586621679169975"><span class="hs-identifier hs-var">model</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
+-&gt; Getting (Maybe Int) (DragboardModel a) (Maybe Int) -&gt; Maybe Int
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Maybe Int) (DragboardModel a) (Maybe Int)
+forall s a. HasSelectedSquare s a =&gt; Lens' s a
+</span><a href="Monomer.Dragboard.DragboardModel.html#selectedSquare"><span class="hs-identifier hs-var">selectedSquare</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Int -&gt; Maybe Int -&gt; Bool
+forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Maybe Int
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679169895"><span class="hs-identifier hs-var">i</span></a></span><span>
+</span><span id="line-45"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">t
+</span><a href="#local-6989586621679169894"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">t -&gt; [StyleState] -&gt; t
+forall t. CmbStyleBasic t =&gt; t -&gt; [StyleState] -&gt; t
+</span><span class="hs-operator hs-var">`styleBasic`</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Color -&gt; StyleState
+forall t. CmbBgColor t =&gt; Color -&gt; t
+</span><span class="hs-identifier hs-var">bgColor</span></span><span> </span><span class="annot"><span class="annottext">Color
+</span><a href="#local-6989586621679169889"><span class="hs-identifier hs-var">selectedColor</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-46"></span><span>        </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">t
+</span><a href="#local-6989586621679169894"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-47"></span><span>    </span><span id="local-6989586621679169889"><span class="annot"><span class="annottext">selectedColor :: Color
+</span><a href="#local-6989586621679169889"><span class="hs-identifier hs-var hs-var">selectedColor</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Color -&gt; Maybe Color -&gt; Color
+forall a. a -&gt; Maybe a -&gt; a
+</span><span class="hs-identifier hs-var">fromMaybe</span></span><span> </span><span class="annot"><span class="annottext">Color
+</span><span class="hs-identifier hs-var">yellow</span></span><span> </span><span class="annot"><span class="annottext">(Maybe Color -&gt; Color) -&gt; Maybe Color -&gt; Color
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DragboardCfg s e a -&gt; Maybe Color
+forall s e a. DragboardCfg s e a -&gt; Maybe Color
+</span><a href="Monomer.Dragboard.DragboardCfg.html#_dcSelectColor"><span class="hs-identifier hs-var hs-var">_dcSelectColor</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg s e a
+</span><a href="#local-6989586621679169979"><span class="hs-identifier hs-var">config</span></a></span><span>
+</span><span id="line-48"></span><span>    </span><span id="local-6989586621679169924"><span class="annot"><span class="annottext">managed :: [a] -&gt; WidgetNode s DragboardEvent
+</span><a href="#local-6989586621679169924"><span class="hs-identifier hs-var hs-var">managed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Either Text Color -&gt; WidgetNode s DragboardEvent
+forall {e} {s}. Typeable e =&gt; Either Text Color -&gt; WidgetNode s e
+</span><a href="#local-6989586621679169885"><span class="hs-identifier hs-var">makeWidget</span></a></span><span> </span><span class="annot"><span class="annottext">(Either Text Color -&gt; WidgetNode s DragboardEvent)
+-&gt; ([a] -&gt; Either Text Color) -&gt; [a] -&gt; WidgetNode s DragboardEvent
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; Either Text Color
+</span><a href="#local-6989586621679169976"><span class="hs-identifier hs-var">getPathOrColor</span></a></span><span> </span><span class="annot"><span class="annottext">(a -&gt; Either Text Color) -&gt; ([a] -&gt; a) -&gt; [a] -&gt; Either Text Color
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">[a] -&gt; a
+forall a. [a] -&gt; a
+</span><span class="hs-identifier hs-var">head</span></span><span>
+</span><span id="line-49"></span><span>    </span><span id="local-6989586621679169885"><span class="annot"><span class="annottext">makeWidget :: Either Text Color -&gt; WidgetNode s e
+</span><a href="#local-6989586621679169885"><span class="hs-identifier hs-var hs-var">makeWidget</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Left</span></span><span> </span><span id="local-6989586621679169876"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679169876"><span class="hs-identifier hs-var">path</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text -&gt; [ImageCfg e] -&gt; WidgetNode s e
+forall e s. WidgetEvent e =&gt; Text -&gt; [ImageCfg e] -&gt; WidgetNode s e
+</span><span class="hs-identifier hs-var">image_</span></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679169876"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ImageCfg e
+forall t. CmbFitEither t =&gt; t
+</span><span class="hs-identifier hs-var">fitEither</span></span><span class="hs-special">]</span><span>
+</span><span id="line-50"></span><span>    </span><span class="annot"><a href="#local-6989586621679169885"><span class="hs-identifier hs-var">makeWidget</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Right</span></span><span> </span><span id="local-6989586621679169873"><span class="annot"><span class="annottext">Color
+</span><a href="#local-6989586621679169873"><span class="hs-identifier hs-var">color</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">WidgetNode s e
+forall s e. WidgetNode s e
+</span><span class="hs-identifier hs-var">filler</span></span><span> </span><span class="annot"><span class="annottext">WidgetNode s e -&gt; [StyleState] -&gt; WidgetNode s e
+forall t. CmbStyleBasic t =&gt; t -&gt; [StyleState] -&gt; t
+</span><span class="hs-operator hs-var">`styleBasic`</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Color -&gt; StyleState
+forall t. CmbBgColor t =&gt; Color -&gt; t
+</span><span class="hs-identifier hs-var">bgColor</span></span><span> </span><span class="annot"><span class="annottext">Color
+</span><a href="#local-6989586621679169873"><span class="hs-identifier hs-var">color</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-51"></span><span>    </span><span id="local-6989586621679169949"><span class="annot"><span class="annottext">boardState' :: [[a]]
+</span><a href="#local-6989586621679169949"><span class="hs-identifier hs-var hs-var">boardState'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DragboardModel a
+</span><a href="#local-6989586621679169975"><span class="hs-identifier hs-var">model</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a -&gt; Getting [[a]] (DragboardModel a) [[a]] -&gt; [[a]]
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [[a]] (DragboardModel a) [[a]]
+forall s a. HasBoardState s a =&gt; Lens' s a
+</span><a href="Monomer.Dragboard.DragboardModel.html#boardState"><span class="hs-identifier hs-var">boardState</span></a></span><span>
+</span><span id="line-52"></span></pre></body></html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">{-|
+The composite works with the field of type 'SaveManagerModel' 'a'.
+This structure contains four fields:
+
+- Saved data - sequence of saved objects: 'Seq' ('a', 'Text').
+- Current data - the active value 'a'.
+- Selected data - 'Maybe' 'Int' position of the selected slot.
+When there are no slots, it is 'Nothing'.
+- Whether confirmation dialog is currently shown. Used internally.
+
+It should be initialized with 'initSaveManagerModel' 'a' if there is
+no need to initialize slots (e.g. from file). Otherwise
+'initSaveManagerModel_' should be used.
+-}</span><span>
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span class="hs-pragma">{-# LANGUAGE FlexibleInstances #-}</span><span>
+</span><span id="line-17"></span><span class="hs-pragma">{-# LANGUAGE FunctionalDependencies #-}</span><span>
+</span><span id="line-18"></span><span class="hs-pragma">{-# LANGUAGE TemplateHaskell #-}</span><span>
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Monomer.SaveManager.SaveManagerModel</span><span>
+</span><span id="line-21"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#SaveManagerModel"><span class="hs-identifier">SaveManagerModel</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#savedData"><span class="hs-identifier">savedData</span></a></span><span>
+</span><span id="line-23"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#currentData"><span class="hs-identifier">currentData</span></a></span><span>
+</span><span id="line-24"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#selectedData"><span class="hs-identifier">selectedData</span></a></span><span>
+</span><span id="line-25"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#showConfirmRemove"><span class="hs-identifier">showConfirmRemove</span></a></span><span>
+</span><span id="line-26"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#initSaveManagerModel"><span class="hs-identifier">initSaveManagerModel</span></a></span><span>
+</span><span id="line-27"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#initSaveManagerModel_"><span class="hs-identifier">initSaveManagerModel_</span></a></span><span>
+</span><span id="line-28"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span>
+</span><span id="line-31"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Sequence</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Seq</span></span><span class="hs-special">)</span><span>
+</span><span id="line-32"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Text</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Text</span></span><span class="hs-special">)</span><span>
+</span><span id="line-33"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Sequence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Seq</span></span><span>
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span class="hs-keyword">data</span><span> </span><span id="SaveManagerModel"><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#SaveManagerModel"><span class="hs-identifier hs-var">SaveManagerModel</span></a></span></span><span> </span><span id="local-6989586621679172982"><span class="annot"><a href="#local-6989586621679172982"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="SaveManagerModel"><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#SaveManagerModel"><span class="hs-identifier hs-var">SaveManagerModel</span></a></span></span><span>
+</span><span id="line-36"></span><span>    </span><span class="hs-special">{</span><span> </span><span id="_smmSavedData"><span class="annot"><span class="annottext">forall a. SaveManagerModel a -&gt; Seq (a, Text)
+</span><a href="Monomer.SaveManager.SaveManagerModel.html#_smmSavedData"><span class="hs-identifier hs-var hs-var">_smmSavedData</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Seq</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679172982"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span class="hs-special">)</span><span>
+</span><span id="line-37"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_smmCurrentData"><span class="annot"><span class="annottext">forall a. SaveManagerModel a -&gt; a
+</span><a href="Monomer.SaveManager.SaveManagerModel.html#_smmCurrentData"><span class="hs-identifier hs-var hs-var">_smmCurrentData</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679172982"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-38"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_smmSelectedData"><span class="annot"><span class="annottext">forall a. SaveManagerModel a -&gt; Maybe Int
+</span><a href="Monomer.SaveManager.SaveManagerModel.html#_smmSelectedData"><span class="hs-identifier hs-var hs-var">_smmSelectedData</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-39"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_smmShowConfirmRemove"><span class="annot"><span class="annottext">forall a. SaveManagerModel a -&gt; Bool
+</span><a href="Monomer.SaveManager.SaveManagerModel.html#_smmShowConfirmRemove"><span class="hs-identifier hs-var hs-var">_smmShowConfirmRemove</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
+</span><span id="line-40"></span><span>    </span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679172914"><span id="local-6989586621679172925"><span class="annot"><span class="annottext">SaveManagerModel a -&gt; SaveManagerModel a -&gt; Bool
+(SaveManagerModel a -&gt; SaveManagerModel a -&gt; Bool)
+-&gt; (SaveManagerModel a -&gt; SaveManagerModel a -&gt; Bool)
+-&gt; Eq (SaveManagerModel a)
+forall a. Eq a =&gt; SaveManagerModel a -&gt; SaveManagerModel a -&gt; Bool
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+/= :: SaveManagerModel a -&gt; SaveManagerModel a -&gt; Bool
+$c/= :: forall a. Eq a =&gt; SaveManagerModel a -&gt; SaveManagerModel a -&gt; Bool
+== :: SaveManagerModel a -&gt; SaveManagerModel a -&gt; Bool
+$c== :: forall a. Eq a =&gt; SaveManagerModel a -&gt; SaveManagerModel a -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span>
+</span><span id="line-41"></span><span>
+</span><span id="line-42"></span><span id="local-6989586621679172895"><span id="local-6989586621679172899"><span id="local-6989586621679172903"><span id="local-6989586621679172907"><span id="showConfirmRemove"><span id="selectedData"><span id="currentData"><span id="savedData"><span id="local-6989586621679172954"><span id="local-6989586621679172955"><span id="local-6989586621679172956"><span id="local-6989586621679172957"><span id="local-6989586621679172958"><span id="local-6989586621679172959"><span id="local-6989586621679172960"><span id="local-6989586621679172961"><span id="HasSavedData"><span id="HasSelectedData"><span id="HasShowConfirmRemove"><span id="HasCurrentData"><span id="local-6989586621679172982"><span class="hs-identifier">makeLensesWith</span><span> </span><span class="hs-identifier">abbreviatedFields</span><span> </span><span class="hs-special">'</span><span class="hs-identifier">SaveManagerModel</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><span>
+</span><span id="line-43"></span><span>
+</span><span id="line-44"></span><span class="hs-comment">{-|
+Receives a value and returns composite model with no slots.
+-}</span><span>
+</span><span id="line-47"></span><span id="local-6989586621679172946"><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#initSaveManagerModel"><span class="hs-identifier hs-type">initSaveManagerModel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679172946"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#SaveManagerModel"><span class="hs-identifier hs-type">SaveManagerModel</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679172946"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span><span>
+</span><span id="line-48"></span><span id="initSaveManagerModel"><span class="annot"><span class="annottext">initSaveManagerModel :: forall a. a -&gt; SaveManagerModel a
+</span><a href="Monomer.SaveManager.SaveManagerModel.html#initSaveManagerModel"><span class="hs-identifier hs-var hs-var">initSaveManagerModel</span></a></span></span><span> </span><span id="local-6989586621679172860"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679172860"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; Seq (a, Text) -&gt; SaveManagerModel a
+forall a. a -&gt; Seq (a, Text) -&gt; SaveManagerModel a
+</span><a href="Monomer.SaveManager.SaveManagerModel.html#initSaveManagerModel_"><span class="hs-identifier hs-var">initSaveManagerModel_</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679172860"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">Seq (a, Text)
+forall a. Seq a
+</span><span class="hs-identifier hs-var">Seq.empty</span></span><span>
+</span><span id="line-49"></span><span>
+</span><span id="line-50"></span><span class="hs-comment">{-|
+Receives a value with slots and returns composite model.
+-}</span><span>
+</span><span id="line-53"></span><span id="local-6989586621679172944"><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#initSaveManagerModel_"><span class="hs-identifier hs-type">initSaveManagerModel_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679172944"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Seq</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679172944"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Text</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#SaveManagerModel"><span class="hs-identifier hs-type">SaveManagerModel</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679172944"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span><span>
+</span><span id="line-54"></span><span id="initSaveManagerModel_"><span class="annot"><span class="annottext">initSaveManagerModel_ :: forall a. a -&gt; Seq (a, Text) -&gt; SaveManagerModel a
+</span><a href="Monomer.SaveManager.SaveManagerModel.html#initSaveManagerModel_"><span class="hs-identifier hs-var hs-var">initSaveManagerModel_</span></a></span></span><span> </span><span id="local-6989586621679172858"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679172858"><span class="hs-identifier hs-var">initData</span></a></span></span><span> </span><span id="local-6989586621679172857"><span class="annot"><span class="annottext">Seq (a, Text)
+</span><a href="#local-6989586621679172857"><span class="hs-identifier hs-var">slots</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SaveManagerModel :: forall a.
+Seq (a, Text) -&gt; a -&gt; Maybe Int -&gt; Bool -&gt; SaveManagerModel a
+</span><a href="Monomer.SaveManager.SaveManagerModel.html#SaveManagerModel"><span class="hs-identifier hs-type">SaveManagerModel</span></a></span><span>
+</span><span id="line-55"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_smmSavedData :: Seq (a, Text)
+</span><a href="Monomer.SaveManager.SaveManagerModel.html#_smmSavedData"><span class="hs-identifier hs-var">_smmSavedData</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Seq (a, Text)
+</span><a href="#local-6989586621679172857"><span class="hs-identifier hs-var">slots</span></a></span><span>
+</span><span id="line-56"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_smmCurrentData :: a
+</span><a href="Monomer.SaveManager.SaveManagerModel.html#_smmCurrentData"><span class="hs-identifier hs-var">_smmCurrentData</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679172858"><span class="hs-identifier hs-var">initData</span></a></span><span>
+</span><span id="line-57"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_smmSelectedData :: Maybe Int
+</span><a href="Monomer.SaveManager.SaveManagerModel.html#_smmSelectedData"><span class="hs-identifier hs-var">_smmSelectedData</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Int
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-58"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_smmShowConfirmRemove :: Bool
+</span><a href="Monomer.SaveManager.SaveManagerModel.html#_smmShowConfirmRemove"><span class="hs-identifier hs-var">_smmShowConfirmRemove</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span>
+</span><span id="line-59"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-60"></span></pre></body></html>

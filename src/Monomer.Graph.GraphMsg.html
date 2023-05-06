@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Monomer.Graph.GraphMsg</span><span>
+</span><span id="line-2"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphMsg"><span class="hs-identifier">GraphMsg</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-3"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Common.BasicTypes</span></span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">data</span><span> </span><span id="GraphMsg"><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphMsg"><span class="hs-identifier hs-var">GraphMsg</span></a></span></span><span>
+</span><span id="line-8"></span><span>    </span><span class="hs-glyph">=</span><span> </span><span id="GraphSetTranslation"><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphSetTranslation"><span class="hs-identifier hs-var">GraphSetTranslation</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Point</span></span><span>
+</span><span id="line-9"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="GraphSetScale"><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphSetScale"><span class="hs-identifier hs-var">GraphSetScale</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Point</span></span><span>
+</span><span id="line-10"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="GraphReset"><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphReset"><span class="hs-identifier hs-var">GraphReset</span></a></span></span><span>
+</span><span id="line-11"></span><span>    </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679171629"><span id="local-6989586621679171634"><span class="annot"><span class="annottext">GraphMsg -&gt; GraphMsg -&gt; Bool
+(GraphMsg -&gt; GraphMsg -&gt; Bool)
+-&gt; (GraphMsg -&gt; GraphMsg -&gt; Bool) -&gt; Eq GraphMsg
+forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
+/= :: GraphMsg -&gt; GraphMsg -&gt; Bool
+$c/= :: GraphMsg -&gt; GraphMsg -&gt; Bool
+== :: GraphMsg -&gt; GraphMsg -&gt; Bool
+$c== :: GraphMsg -&gt; GraphMsg -&gt; Bool
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679171616"><span id="local-6989586621679171618"><span id="local-6989586621679171626"><span class="annot"><span class="annottext">Int -&gt; GraphMsg -&gt; ShowS
+[GraphMsg] -&gt; ShowS
+GraphMsg -&gt; String
+(Int -&gt; GraphMsg -&gt; ShowS)
+-&gt; (GraphMsg -&gt; String) -&gt; ([GraphMsg] -&gt; ShowS) -&gt; Show GraphMsg
+forall a.
+(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; String) -&gt; ([a] -&gt; ShowS) -&gt; Show a
+showList :: [GraphMsg] -&gt; ShowS
+$cshowList :: [GraphMsg] -&gt; ShowS
+show :: GraphMsg -&gt; String
+$cshow :: GraphMsg -&gt; String
+showsPrec :: Int -&gt; GraphMsg -&gt; ShowS
+$cshowsPrec :: Int -&gt; GraphMsg -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span></pre></body></html>
