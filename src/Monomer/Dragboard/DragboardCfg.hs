@@ -8,6 +8,7 @@ module Monomer.Dragboard.DragboardCfg
     , DragboardCfg(..)
     , moveValidator
     , dragIdOffset
+    , selectColor
     , checkerConfig
     ) where
 
@@ -23,6 +24,7 @@ Configuration options for dragboard:
 
 - 'moveValidator': function to check validity of a move.
 - 'dragIdOffset': offset for drag and drop event messages.
+- 'selectColor': color of selected square.
 - 'checkerConfig': config options for checkerboard container.
 - 'onFocus': event to raise when focus is received.
 - 'onFocusReq': 'WidgetRequest' to generate when focus is received.
@@ -34,6 +36,7 @@ Configuration options for dragboard:
 data DragboardCfg s e a = DragboardCfg
     { _dcValidator :: Maybe (Info a -> Bool)
     , _dcOffset :: Maybe Int
+    , _dcSelectColor :: Maybe Color
     , _dcCheckerCfg :: [CheckerboardCfg]
     , _dcOnFocusReq :: [Path -> WidgetRequest s e]
     , _dcOnBlurReq :: [Path -> WidgetRequest s e]
@@ -44,6 +47,7 @@ instance Default (DragboardCfg s e a) where
     def = DragboardCfg
         { _dcValidator = Nothing
         , _dcOffset = Nothing
+        , _dcSelectColor = Nothing
         , _dcCheckerCfg = []
         , _dcOnFocusReq = []
         , _dcOnBlurReq = []
@@ -54,6 +58,7 @@ instance Semigroup (DragboardCfg s e a) where
     (<>) a1 a2 = def
         { _dcValidator = _dcValidator a2 <|> _dcValidator a1
         , _dcOffset = _dcOffset a2 <|> _dcOffset a1
+        , _dcSelectColor = _dcSelectColor a2 <|> _dcSelectColor a1
         , _dcCheckerCfg = _dcCheckerCfg a1 <> _dcCheckerCfg a2
         , _dcOnFocusReq = _dcOnFocusReq a1 <> _dcOnFocusReq a2
         , _dcOnBlurReq = _dcOnBlurReq a1 <> _dcOnBlurReq a2
@@ -125,6 +130,14 @@ vgrid
 dragIdOffset :: Int -> DragboardCfg s e a
 dragIdOffset offset = def
     { _dcOffset = Just offset
+    }
+
+{-|
+Color of selected square which is yellow by default.
+-}
+selectColor :: Color -> DragboardCfg s e a
+selectColor color = def
+    { _dcSelectColor = Just color
     }
 
 {-|

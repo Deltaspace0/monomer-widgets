@@ -41,8 +41,9 @@ buildUI config c r getPathOrColor _ model = node where
     clickBox i = paintSelected i . box_
         [onBtnReleased $ \_ _ -> EventClick i]
     paintSelected i x = if model ^. selectedSquare == Just i
-        then x `styleBasic` [bgColor yellow]
+        then x `styleBasic` [bgColor selectedColor]
         else x
+    selectedColor = fromMaybe yellow $ _dcSelectColor config
     managed = makeWidget . getPathOrColor . head
     makeWidget (Left path) = image_ path [fitEither]
     makeWidget (Right color) = filler `styleBasic` [bgColor color]
