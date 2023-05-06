@@ -16,6 +16,7 @@ newtype DragId = DragId Int deriving Eq
 
 data DragboardEvent
     = EventDrop Int DragId
+    | EventClick Int
     | EventFocus Path
     | EventBlur Path
     deriving Eq
@@ -31,6 +32,7 @@ handleEvent
     -> EventHandler (DragboardModel a) DragboardEvent sp ep
 handleEvent wdata config _ node model event = case event of
     EventDrop i d -> dropHandle i d wdata config model
+    EventClick i -> clickHandle i config model
     EventFocus prev -> focusHandle node prev config model
     EventBlur next -> blurHandle node next config model
 
@@ -40,7 +42,7 @@ dropHandle
     -> (WidgetData sp [[a]])
     -> EventHandle a sp ep
 dropHandle ixTo (DragId ixFrom) wdata config model = response where
-    response = if valid == Just False
+    response = if valid == Just False || length sourceSquare == 0
         then []
         else (responseIf validFrom <$> dataReq) <> report
     valid = ($ changeInfo) <$> _dcValidator config
@@ -51,12 +53,30 @@ dropHandle ixTo (DragId ixFrom) wdata config model = response where
     dataReq = RequestParent <$> (widgetDataSet wdata newBoardState)
     newBoardState = zipWith f [offset..] boardState'
     f i xs
-        | i == ixTo = [head $ boardState'!!ixFrom']
+        | i == ixTo = [head sourceSquare]
         | i == ixFrom = tail xs
         | otherwise = xs
+    sourceSquare = boardState'!!ixFrom'
     ixFrom' = ixFrom-offset
     offset = fromMaybe 0 $ _dcOffset config
     boardState' = model ^. boardState
+
+clickHandle :: Int -> EventHandle a sp ep
+clickHandle i config model = response where
+    response
+        | null selected = setSelectedSquare $ Just i
+        | selected == Just i = setSelectedSquare Nothing
+        | otherwise =
+            [ Model $ model & selectedSquare .~ newSelected
+            , Event $ EventDrop i d
+            ]
+    newSelected = if null dropResponses
+        then Just i
+        else Nothing
+    dropResponses = dropHandle i d (WidgetValue []) config model
+    d = DragId $ fromJust selected
+    selected = model ^. selectedSquare
+    setSelectedSquare v = [Model $ model & selectedSquare .~ v]
 
 focusHandle :: WidgetNode s e -> Path -> EventHandle a sp ep
 focusHandle node prev config _ = response where

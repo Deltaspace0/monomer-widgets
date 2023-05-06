@@ -8,6 +8,7 @@ import Data.Text (Text)
 import Data.Typeable
 import Monomer.Checkerboard
 import Monomer.Core.Combinators
+import Monomer.Graphics.ColorTable
 import Monomer.Graphics.Types
 import Monomer.Widgets.Containers.Box
 import Monomer.Widgets.Containers.Draggable
@@ -34,9 +35,14 @@ buildUI config c r getPathOrColor _ model = node where
         ] $ checkerboard_ c r cc $ zipWith f [offset..] boardState'
     cc = _dcCheckerCfg config
     offset = fromMaybe 0 $ _dcOffset config
-    f i xs = dropTarget (EventDrop i) $ if null xs
+    f i xs = clickBox i $ dropTarget (EventDrop i) $ if null xs
         then filler
         else draggable (DragId i) $ managed xs
+    clickBox i = paintSelected i . box_
+        [onBtnReleased $ \_ _ -> EventClick i]
+    paintSelected i x = if model ^. selectedSquare == Just i
+        then x `styleBasic` [bgColor yellow]
+        else x
     managed = makeWidget . getPathOrColor . head
     makeWidget (Left path) = image_ path [fitEither]
     makeWidget (Right color) = filler `styleBasic` [bgColor color]
