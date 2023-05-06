@@ -12,6 +12,8 @@ This widget can receive `GraphMsg` messages:
 
 - `graph points`
 - `graph_ points configs`
+- `graphWithColors colorPoints`
+- `graphWithColors_ colorPoints configs`
 
 Here is the [example](/examples/graph/UI.hs).
 
@@ -20,4 +22,4 @@ Here is the [example](/examples/graph/UI.hs).
 - `[wheelRate r]`. Speed of scaling.
 - `[lockX]`. Lock X-axis (scale only Y-axis).
 - `[lockY]`. Lock Y-axis (scale only X-axis).
-- `[graphColors colors]`. List of colors which are used to plot graphs. This list is then cycled when plotting graphs (in case there are more graphs than provided colors).
+- `[graphColors colors]`. List of colors which are used to plot graphs. This list is then cycled when plotting graphs (in case there are more graphs than provided colors). It is ignored when using `graphWithColors`.
