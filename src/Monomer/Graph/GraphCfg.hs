@@ -9,6 +9,8 @@ module Monomer.Graph.GraphCfg
     , lockY_
     , hideMinorGridlines
     , hideMinorGridlines_
+    , hideAxisNumbers
+    , hideAxisNumbers_
     , graphColors
     ) where
 
@@ -23,6 +25,7 @@ Configuration options for graph:
 - 'lockX': lock X-axis (scale only Y-axis).
 - 'lockY': lock Y-axis (scale only X-axis).
 - 'hideMinorGridlines': whether to hide minor gridlines.
+- 'hideAxisNumbers': whether to hide axis numbers.
 - 'graphColors': which colors should be used to plot graphs.
 -}
 data GraphCfg = GraphCfg
@@ -30,6 +33,7 @@ data GraphCfg = GraphCfg
     , _gcLockX :: Maybe Bool
     , _gcLockY :: Maybe Bool
     , _gcHideMinor :: Maybe Bool
+    , _gcHideNumbers :: Maybe Bool
     , _gcGraphColors :: Maybe [Color]
     }
 
@@ -39,6 +43,7 @@ instance Default GraphCfg where
         , _gcLockX = Nothing
         , _gcLockY = Nothing
         , _gcHideMinor = Nothing
+        , _gcHideNumbers = Nothing
         , _gcGraphColors = Nothing
         }
 
@@ -48,6 +53,7 @@ instance Semigroup GraphCfg where
         , _gcLockX = _gcLockX a2 <|> _gcLockX a1
         , _gcLockY = _gcLockY a2 <|> _gcLockY a1
         , _gcHideMinor = _gcHideMinor a2 <|> _gcHideMinor a1
+        , _gcHideNumbers = _gcHideNumbers a2 <|> _gcHideNumbers a1
         , _gcGraphColors = _gcGraphColors a2 <|> _gcGraphColors a1
         }
 
@@ -99,6 +105,20 @@ Whether to hide minor gridlines.
 hideMinorGridlines_ :: Bool -> GraphCfg
 hideMinorGridlines_ hide = def
     { _gcHideMinor = Just hide
+    }
+
+{-|
+Hide axis numbers.
+-}
+hideAxisNumbers :: GraphCfg
+hideAxisNumbers = hideAxisNumbers_ True
+
+{-|
+Whether to hide axis numbers.
+-}
+hideAxisNumbers_ :: Bool -> GraphCfg
+hideAxisNumbers_ hide = def
+    { _gcHideNumbers = Just hide
     }
 
 {-|

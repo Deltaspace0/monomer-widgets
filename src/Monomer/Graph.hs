@@ -255,12 +255,13 @@ makeGraph graphDatas config state = widget where
                 newGraphData = graphData {_gdPoints = ps}
             when (not $ null $ _gdColor graphData) $
                 renderGraphData renderer newGraphData
-        setFillColor renderer black
-        drawInAlpha renderer 0.62 $ do
-            forM_ [fox..(fox+20)] verN
-            forM_ [(fox-1),(fox-2)..(fox-20)] verN
-            forM_ [foy..(foy+20)] horN'
-            forM_ [(foy-1),(foy-2)..(foy-20)] horN'
+        when (_gcHideNumbers config /= Just True) $ do
+            setFillColor renderer black
+            drawInAlpha renderer 0.62 $ do
+                forM_ [fox..(fox+20)] verN
+                forM_ [(fox-1),(fox-2)..(fox-20)] verN
+                forM_ [foy..(foy+20)] horN'
+                forM_ [(foy-1),(foy-2)..(foy-20)] horN'
         restoreContext renderer
 
     renderGraphData renderer graphData = do
