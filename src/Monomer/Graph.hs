@@ -238,11 +238,12 @@ makeGraph graphDatas config state = widget where
             ovy = oy-(round' $ ty*hs/sy)*sy/hs
             ovx1 = ox+fox*sx
             ovy1 = oy-foy*sy
-        drawInAlpha renderer 0.2 $ do
-            forM_ [ovx, ovx-sx/vs..gx] verLine
-            forM_ [ovx, ovx+sx/vs..(gx+gw)] verLine
-            forM_ [ovy, ovy-sy/hs..gy] horLine
-            forM_ [ovy, ovy+sy/hs..(gy+gh)] horLine
+        when (_gcHideMinor config /= Just True) $
+            drawInAlpha renderer 0.2 $ do
+                forM_ [ovx, ovx-sx/vs..gx] verLine
+                forM_ [ovx, ovx+sx/vs..(gx+gw)] verLine
+                forM_ [ovy, ovy-sy/hs..gy] horLine
+                forM_ [ovy, ovy+sy/hs..(gy+gh)] horLine
         drawInAlpha renderer 0.5 $ do
             forM_ [ovx1, ovx1-sx..gx] verLine
             forM_ [ovx1, ovx1+sx..(gx+gw)] verLine
