@@ -31,7 +31,7 @@ buildUI config c r getPathOrColor _ model = node where
         , onBlur EventBlur
         ] $ checkerboard_ c r cc $ zipWith f [offset..] model
     cc = _dcCheckerCfg config
-    offset = fromMaybe 0 $ _dcDragIdOffset config
+    offset = fromMaybe 0 $ _dcOffset config
     f i xs = dropTarget (EventDrop i) $ if null xs
         then filler
         else draggable (DragId i) $ managed xs

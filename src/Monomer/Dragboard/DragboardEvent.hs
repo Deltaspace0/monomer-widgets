@@ -36,7 +36,7 @@ dropHandle ixTo (DragId ixFrom) config model = response where
     response = if valid == Just False
         then []
         else [responseIf validFrom $ Model newModel] <> report
-    valid = ($ changeInfo) <$> _dcMoveValidator config
+    valid = ($ changeInfo) <$> _dcValidator config
     changeInfo = (model, ixTo, ixFrom)
     validFrom = ixFrom' >= 0 && ixFrom' < length model
     newModel = zipWith f [offset..] model
@@ -47,7 +47,7 @@ dropHandle ixTo (DragId ixFrom) config model = response where
     ixFrom' = ixFrom-offset
     report = RequestParent <$> (($ changeInfo) <$> req)
     req = _dcOnChangeReq config
-    offset = fromMaybe 0 $ _dcDragIdOffset config
+    offset = fromMaybe 0 $ _dcOffset config
 
 focusHandle :: WidgetNode s e -> Path -> EventHandle a sp ep
 focusHandle node prev config _ = response where

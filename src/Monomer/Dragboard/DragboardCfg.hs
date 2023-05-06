@@ -32,8 +32,8 @@ Configuration options for dragboard:
 - 'onChangeReq': 'WidgetRequest' to generate when the board changes.
 -}
 data DragboardCfg s e a = DragboardCfg
-    { _dcMoveValidator :: Maybe (Info a -> Bool)
-    , _dcDragIdOffset :: Maybe Int
+    { _dcValidator :: Maybe (Info a -> Bool)
+    , _dcOffset :: Maybe Int
     , _dcCheckerCfg :: [CheckerboardCfg]
     , _dcOnFocusReq :: [Path -> WidgetRequest s e]
     , _dcOnBlurReq :: [Path -> WidgetRequest s e]
@@ -42,8 +42,8 @@ data DragboardCfg s e a = DragboardCfg
 
 instance Default (DragboardCfg s e a) where
     def = DragboardCfg
-        { _dcMoveValidator = Nothing
-        , _dcDragIdOffset = Nothing
+        { _dcValidator = Nothing
+        , _dcOffset = Nothing
         , _dcCheckerCfg = []
         , _dcOnFocusReq = []
         , _dcOnBlurReq = []
@@ -52,10 +52,8 @@ instance Default (DragboardCfg s e a) where
 
 instance Semigroup (DragboardCfg s e a) where
     (<>) a1 a2 = def
-        { _dcMoveValidator =
-            _dcMoveValidator a2 <|> _dcMoveValidator a1
-        , _dcDragIdOffset =
-            _dcDragIdOffset a2 <|> _dcDragIdOffset a1
+        { _dcValidator = _dcValidator a2 <|> _dcValidator a1
+        , _dcOffset = _dcOffset a2 <|> _dcOffset a1
         , _dcCheckerCfg = _dcCheckerCfg a1 <> _dcCheckerCfg a2
         , _dcOnFocusReq = _dcOnFocusReq a1 <> _dcOnFocusReq a2
         , _dcOnBlurReq = _dcOnBlurReq a1 <> _dcOnBlurReq a2
@@ -106,7 +104,7 @@ then the board state will not change.
 -}
 moveValidator :: (Info a -> Bool) -> DragboardCfg s e a
 moveValidator validateMove = def
-    { _dcMoveValidator = Just validateMove
+    { _dcValidator = Just validateMove
     }
 
 {-|
@@ -126,7 +124,7 @@ vgrid
 -}
 dragIdOffset :: Int -> DragboardCfg s e a
 dragIdOffset offset = def
-    { _dcDragIdOffset = Just offset
+    { _dcOffset = Just offset
     }
 
 {-|
