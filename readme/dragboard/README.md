@@ -24,6 +24,7 @@ then the board state will not change.
 - `[dragIdOffset i]`. When there are multiple dragboards, it is possible to drag an item from one dragboard to another. In order to ignore drop events caused by foreign items or to process them properly, the dragboards should use different offsets (for example, if each dragboard has less than 1000 squares, then multiples of 1000 can be used as offsets).
 - `[selectColor color]`. Color of selected square.
 - `[disableClick]`. Whether items can be moved only by dragging.
+- `[renderSource]`. Whether to render the source widget when dragging.
 - `[checkerConfig configs]`. Config options for checkerboard container which is used by dragboard.
 - `[onChange f]`, where type of `f` is `([[a]], Int, Int) -> e`: `[[a]]` is the board state before change, the first `Int` is destination square, the second `Int` is source square and `e` is the event.
 - `[onFocus f]`, where type of `f` is `Path -> e`: event to raise when the composite receives focus.
