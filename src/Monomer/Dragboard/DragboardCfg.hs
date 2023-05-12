@@ -11,6 +11,8 @@ module Monomer.Dragboard.DragboardCfg
     , selectColor
     , disableClick
     , disableClick_
+    , renderSource
+    , renderSource_
     , checkerConfig
     ) where
 
@@ -28,6 +30,7 @@ Configuration options for dragboard:
 - 'dragIdOffset': offset for drag and drop event messages.
 - 'selectColor': color of selected square.
 - 'disableClick': whether items can be moved only by dragging.
+- 'renderSource': whether to render the source widget when dragging.
 - 'checkerConfig': config options for checkerboard container.
 - 'onFocus': event to raise when focus is received.
 - 'onFocusReq': 'WidgetRequest' to generate when focus is received.
@@ -41,6 +44,7 @@ data DragboardCfg s e a = DragboardCfg
     , _dcOffset :: Maybe Int
     , _dcSelectColor :: Maybe Color
     , _dcNoClick :: Maybe Bool
+    , _dcRenderS :: Maybe Bool
     , _dcCheckerCfg :: [CheckerboardCfg]
     , _dcOnFocusReq :: [Path -> WidgetRequest s e]
     , _dcOnBlurReq :: [Path -> WidgetRequest s e]
@@ -53,6 +57,7 @@ instance Default (DragboardCfg s e a) where
         , _dcOffset = Nothing
         , _dcSelectColor = Nothing
         , _dcNoClick = Nothing
+        , _dcRenderS = Nothing
         , _dcCheckerCfg = []
         , _dcOnFocusReq = []
         , _dcOnBlurReq = []
@@ -65,6 +70,7 @@ instance Semigroup (DragboardCfg s e a) where
         , _dcOffset = _dcOffset a2 <|> _dcOffset a1
         , _dcSelectColor = _dcSelectColor a2 <|> _dcSelectColor a1
         , _dcNoClick = _dcNoClick a2 <|> _dcNoClick a1
+        , _dcRenderS = _dcRenderS a2 <|> _dcRenderS a1
         , _dcCheckerCfg = _dcCheckerCfg a1 <> _dcCheckerCfg a2
         , _dcOnFocusReq = _dcOnFocusReq a1 <> _dcOnFocusReq a2
         , _dcOnBlurReq = _dcOnBlurReq a1 <> _dcOnBlurReq a2
@@ -158,6 +164,20 @@ Whether items can be moved only by dragging.
 disableClick_ :: Bool -> DragboardCfg s e a
 disableClick_ v = def
     { _dcNoClick = Just v
+    }
+
+{-|
+Renders the source widget when dragging.
+-}
+renderSource :: DragboardCfg s e a
+renderSource = renderSource_ True
+
+{-|
+Whether to render the source widget when dragging.
+-}
+renderSource_ :: Bool -> DragboardCfg s e a
+renderSource_ v = def
+    { _dcRenderS = Just v
     }
 
 {-|

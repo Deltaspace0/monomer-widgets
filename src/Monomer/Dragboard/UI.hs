@@ -37,13 +37,15 @@ buildUI config c r getPathOrColor _ model = node where
     offset = fromMaybe 0 $ _dcOffset config
     f i xs = clickBox i $ dropTarget (EventDrop i) $ if null xs
         then filler
-        else draggable (DragId i) $ managed xs
+        else draggable_ (DragId i) draggableConfigs $ managed xs
     clickBox i x = if _dcNoClick config == Just True
         then x
         else paint i $ box_ [onBtnReleased $ \_ _ -> EventClick i] x
     paint i x = if model ^. selectedSquare == Just i
         then x `styleBasic` [bgColor selectedColor]
         else x
+    draggableConfigs = [draggableRenderSource_ renderS]
+    renderS = fromMaybe False $ _dcRenderS config
     selectedColor = fromMaybe yellow $ _dcSelectColor config
     managed = makeWidget . getPathOrColor . head
     makeWidget (Left path) = image_ path [fitEither]
