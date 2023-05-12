@@ -6,6 +6,7 @@ License     : BSD-3-Clause (see the LICENSE file)
 Maintainer  : fjvallarino@gmail.com
 Stability   : experimental
 Portability : non-portable
+
 Helper functions for testing Monomer widgets.
 -}
 {-# LANGUAGE FlexibleContexts #-}
@@ -151,6 +152,7 @@ mockRenderer = Renderer {
   renderRoundedRect = \rect r1 r2 r3 r4 -> return (),
   renderArc = \center radius angleStart angleEnd winding -> return (),
   renderQuadTo = \p1 p2 -> return (),
+  renderBezierTo = \p1 p2 p3 -> return (),
   renderEllipse = \rect -> return (),
   -- Text
   renderText = mockRenderText,
@@ -176,6 +178,7 @@ mockWenv :: s -> WidgetEnv s e
 mockWenv model = WidgetEnv {
   _weOs = "Mac OS X",
   _weDpr = 2,
+  _weIsGhci = False,
   _weAppStartTs = 0,
   _weFontManager = mockFontManager,
   _weFindBranchByPath = const Seq.empty,
