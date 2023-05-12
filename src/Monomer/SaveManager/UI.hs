@@ -22,7 +22,7 @@ import Monomer.SaveManager.SaveManagerEvent
 import Monomer.SaveManager.SaveManagerModel
 
 buildUI
-    :: (Typeable a)
+    :: (Typeable a, Eq a)
     => (SaveManagerCfg s e a)
     -> UIBuilder (SaveManagerModel a) (SaveManagerEvent a)
 buildUI config _ model = widgetTree where

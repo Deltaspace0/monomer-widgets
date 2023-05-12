@@ -5,12 +5,16 @@
 
 packages:
 - completed:
-    hackage: monomer-1.5.1.0@sha256:18e3ce60c7f5d3fae74bf5ace7515f0e252b12ccc4b71030f948e6fdc1f49a99,16741
+    commit: fdb3b086e91c30b2a5b9db68fe133929959573e0
+    git: https://github.com/Deltaspace0/monomer.git
+    name: monomer
     pantry-tree:
-      sha256: 3dde2b635d1298c3b734c0b28bae8fa4956bc2ad9ef89f81bbb04ec1eeb09d0c
-      size: 14513
+      sha256: ac6cd39b4350418b7cfbff49978b9920de583f3315e9c5b24964a562c536c1f5
+      size: 18557
+    version: 1.5.1.0
   original:
-    hackage: monomer-1.5.1.0
+    commit: fdb3b086e91c30b2a5b9db68fe133929959573e0
+    git: https://github.com/Deltaspace0/monomer.git
 - completed:
     hackage: nanovg-0.8.1.0@sha256:9131db15822c6593aa73946b56593eb0a14a0d044395bcdfd4fe2d3e6edb6759,4742
     pantry-tree:
@@ -20,8 +24,7 @@ packages:
     hackage: nanovg-0.8.1.0
 snapshots:
 - completed:
-    sha256: e5f56f619132209b826084cacd6374d7f0344cc88a9d1d305878190e4204ae1f
-    size: 619205
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/19/31.yaml
-  original:
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/19/31.yaml
+    sha256: 126fa33ceb11f5e85ceb4e86d434756bd9a8439e2e5776d306a15fbc63b01e89
+    size: 650041
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/20/20.yaml
+  original: lts-20.20
