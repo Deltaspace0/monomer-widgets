@@ -1,3 +1,5 @@
+{-# LANGUAGE RecordWildCards #-}
+
 module Monomer.EnhancedSlider.UI
     ( buildUI
     , makeTitle
@@ -25,22 +27,21 @@ buildUI
     -> a
     -> a
     -> UIBuilder a (EnhancedSliderEvent a)
-buildUI config a b _ model = tree where
-    tree = if labelVisible
+buildUI config@(EnhancedSliderCfg{..}) a b _ model = tree where
+    tree = if _escHideLabel /= Just True
         then vstack_ [childSpacing_ 16]
             [ box_ [alignLeft] $ label $ makeTitle config model
             , box_ [alignLeft] mainStack
             ]
         else mainStack
-    labelVisible = not $ fromMaybe False $ _escHideLabel config
-    mainStack = if null (_escAlignV config)
+    mainStack = if null _escAlignV
         then hstack_ [childSpacing_ 32] arrangementH
         else vstack_ [childSpacing_ 24] arrangementV
-    arrangementH = case fromMaybe ALeft (_escAlignH config) of
+    arrangementH = case fromMaybe ALeft _escAlignH of
         ALeft -> [hsliderWidget, minusButton, plusButton]
         ACenter -> [minusButton, hsliderWidget, plusButton]
         ARight -> [minusButton, plusButton, hsliderWidget]
-    arrangementV = case fromMaybe ABottom (_escAlignV config) of
+    arrangementV = case fromMaybe ABottom _escAlignV of
         ATop -> [vsliderWidget, plusButton, minusButton]
         AMiddle -> [plusButton, vsliderWidget, minusButton]
         ABottom -> [plusButton, minusButton, vsliderWidget]
@@ -63,15 +64,15 @@ buildUI config a b _ model = tree where
         [ onFocus EventFocus
         , onBlur EventBlur
         ]
-    changeRate = fromFractional $ fromMaybe 1 $ _escDragRate config
+    changeRate = fromFractional $ fromMaybe 1 _escDragRate
 
 makeTitle
     :: (SliderValue a)
     => (EnhancedSliderCfg s e a)
     -> a
     -> Text
-makeTitle config value = fromMaybe showValue customTitle where
-    customTitle = withMethod <|> titleValue
-    withMethod = ($ value) <$> _escTitleMethod config
-    titleValue = (<> ": " <> showValue) <$> _escTitle config
+makeTitle EnhancedSliderCfg{..} value = result where
+    result = fromMaybe showValue $ withMethod <|> titleValue
+    withMethod = ($ value) <$> _escTitleMethod
+    titleValue = (<> ": " <> showValue) <$> _escTitle
     showValue = T.pack $ show value

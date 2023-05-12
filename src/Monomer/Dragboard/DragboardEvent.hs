@@ -1,3 +1,5 @@
+{-# LANGUAGE RecordWildCards #-}
+
 module Monomer.Dragboard.DragboardEvent
     ( DragId(..)
     , DragboardEvent(..)
@@ -45,28 +47,28 @@ dropHandle ixTo (DragId ixFrom) wdata config model = response where
     response = if valid == Just False || emptySource
         then []
         else (responseIf validFrom <$> dataReq) <> report
-    valid = ($ changeInfo) <$> _dcValidator config
-    changeInfo = (boardState', ixTo, ixFrom)
+    valid = ($ changeInfo) <$> _dcValidator
+    changeInfo = (_dmBoardState, ixTo, ixFrom)
     emptySource = validFrom && length sourceSquare == 0
-    validFrom = ixFrom' >= 0 && ixFrom' < length boardState'
-    report = RequestParent <$> (($ changeInfo) <$> req)
-    req = _dcOnChangeReq config
+    validFrom = ixFrom' >= 0 && ixFrom' < length _dmBoardState
+    report = RequestParent <$> (($ changeInfo) <$> _dcOnChangeReq)
     dataReq = RequestParent <$> (widgetDataSet wdata newBoardState)
-    newBoardState = zipWith f [offset..] boardState'
+    newBoardState = zipWith f [offset..] _dmBoardState
     f i xs
         | i == ixTo = [head sourceSquare]
         | i == ixFrom = tail xs
         | otherwise = xs
-    sourceSquare = boardState'!!ixFrom'
+    sourceSquare = _dmBoardState!!ixFrom'
     ixFrom' = ixFrom-offset
-    offset = fromMaybe 0 $ _dcOffset config
-    boardState' = model ^. boardState
+    offset = fromMaybe 0 _dcOffset
+    DragboardCfg{..} = config
+    DragboardModel{..} = model
 
 clickHandle :: Int -> EventHandle a sp ep
-clickHandle i config model = response where
+clickHandle i config model@(DragboardModel{..}) = response where
     response
-        | null selected = setSelectedSquare $ Just i
-        | selected == Just i = setSelectedSquare Nothing
+        | null _dmSelectedSquare = setSelectedSquare $ Just i
+        | _dmSelectedSquare == Just i = setSelectedSquare Nothing
         | otherwise =
             [ Model $ model & selectedSquare .~ newSelected
             , Event $ EventDrop i d
@@ -75,20 +77,19 @@ clickHandle i config model = response where
         then Just i
         else Nothing
     dropResponses = dropHandle i d (WidgetValue []) config model
-    d = DragId $ fromJust selected
-    selected = model ^. selectedSquare
+    d = DragId $ fromJust _dmSelectedSquare
     setSelectedSquare v = [Model $ model & selectedSquare .~ v]
 
 focusHandle :: WidgetNode s e -> Path -> EventHandle a sp ep
-focusHandle node prev config _ = response where
+focusHandle node prev DragboardCfg{..} _ = response where
     response = if valid
-        then RequestParent <$> (($ prev) <$> _dcOnFocusReq config)
+        then RequestParent <$> (($ prev) <$> _dcOnFocusReq)
         else []
     valid = not $ isNodeParentOfPath node prev
 
 blurHandle :: WidgetNode s e -> Path -> EventHandle a sp ep
-blurHandle node next config _ = response where
+blurHandle node next DragboardCfg{..} _ = response where
     response = if valid
-        then RequestParent <$> (($ next) <$> _dcOnBlurReq config)
+        then RequestParent <$> (($ next) <$> _dcOnBlurReq)
         else []
     valid = not $ isNodeParentOfPath node next

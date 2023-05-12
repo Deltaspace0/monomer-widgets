@@ -1,3 +1,5 @@
+{-# LANGUAGE RecordWildCards #-}
+
 module Monomer.EnhancedSlider.EnhancedSliderEvent
     ( EnhancedSliderEvent(..)
     , handleEvent
@@ -32,19 +34,19 @@ setFieldHandle
     -> a
     -> a
     -> [EventResponse a (EnhancedSliderEvent a) sp ep]
-setFieldHandle config a b value = [Model newValue] <> report where
-    report = RequestParent <$> (($ newValue) <$> req)
+setFieldHandle EnhancedSliderCfg{..} a b value = response where
+    response = [Model newValue] <> report
+    report = RequestParent <$> (($ newValue) <$> _escOnChangeReq)
     newValue = min b $ max a value
-    req = _escOnChangeReq config
 
 focusHandle
     :: WidgetNode s e
     -> Path
     -> EnhancedSliderCfg sp ep a
     -> [EventResponse a (EnhancedSliderEvent a) sp ep]
-focusHandle node prev config = response where
+focusHandle node prev EnhancedSliderCfg{..} = response where
     response = if valid
-        then RequestParent <$> (($ prev) <$> _escOnFocusReq config)
+        then RequestParent <$> (($ prev) <$> _escOnFocusReq)
         else []
     valid = not $ isNodeParentOfPath node prev
 
@@ -53,8 +55,8 @@ blurHandle
     -> Path
     -> EnhancedSliderCfg sp ep a
     -> [EventResponse a (EnhancedSliderEvent a) sp ep]
-blurHandle node next config = response where
+blurHandle node next EnhancedSliderCfg{..} = response where
     response = if valid
-        then RequestParent <$> (($ next) <$> _escOnBlurReq config)
+        then RequestParent <$> (($ next) <$> _escOnBlurReq)
         else []
     valid = not $ isNodeParentOfPath node next

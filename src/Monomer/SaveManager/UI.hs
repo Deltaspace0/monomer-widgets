@@ -1,8 +1,9 @@
+{-# LANGUAGE RecordWildCards #-}
+
 module Monomer.SaveManager.UI
     ( buildUI
     ) where
 
-import Control.Lens
 import Data.Maybe
 import Data.Typeable
 import Monomer.Core.Combinators
@@ -25,10 +26,10 @@ buildUI
     :: (Typeable a, Eq a)
     => (SaveManagerCfg s e a)
     -> UIBuilder (SaveManagerModel a) (SaveManagerEvent a)
-buildUI config _ model = widgetTree where
+buildUI SaveManagerCfg{..} _ SaveManagerModel{..} = widgetTree where
     widgetTree = zstack
         [ mainTree
-        , widgetIf (model ^. showConfirmRemove) $
+        , widgetIf _smmShowConfirmRemove $
             confirmMsg_ "Are you sure?" EventRemove EventCancel
                 [acceptCaption "Remove"]
         ]
@@ -37,7 +38,7 @@ buildUI config _ model = widgetTree where
             [ button' "New slot" EventNewSlot
             , buttonIfSelected "Save" EventSave
             , buttonIfSelected "Load" EventLoad
-            , if fromMaybe False (_smcNoConfirm config)
+            , if _smcNoConfirm == Just True
                 then buttonIfSelected "Remove" EventRemove
                 else buttonIfSelected "Remove" EventConfirmRemove
             ]
@@ -51,9 +52,8 @@ buildUI config _ model = widgetTree where
         [ onFocus EventFocus
         , onBlur EventBlur
         ]
-    selected = not $ null selectedData'
-    selectedCaption = selectedData' >>= Seq.index savedDataList
+    selected = not $ null _smmSelectedData
+    selectedCaption = _smmSelectedData >>= Seq.index savedDataList
     f i _ = EventSetSelectedData $ Just i
-    savedDataList = Just . snd <$> model ^. savedData
-    selectedData' = model ^. selectedData
+    savedDataList = Just . snd <$> _smmSavedData
     makeRow = label . fromJust

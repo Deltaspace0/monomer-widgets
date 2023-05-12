@@ -17,6 +17,7 @@ graphWithData [[graphPoint (0, 0), graphColor red]]
 -}
 
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE RecordWildCards #-}
 
 module Monomer.Graph
     ( -- * Re-exported modules
@@ -66,9 +67,9 @@ graph_
     -> WidgetNode s e        -- ^ The created graph plotter.
 graph_ points configs = graphWithColors_ colorPoints configs where
     colorPoints = zip (cycle colors') points
-    colors' = fromMaybe colors $ _gcGraphColors config
+    colors' = fromMaybe colors _gcGraphColors
     colors = [red, green, blue, violet, yellow]
-    config = mconcat configs
+    GraphCfg{..} = mconcat configs
 
 {-|
 Creates a graph plotter using the list with colors and points.
@@ -124,7 +125,7 @@ makeGraph
     -> GraphCfg
     -> GraphState
     -> Widget s e
-makeGraph graphDatas config state = widget where
+makeGraph graphDatas config@(GraphCfg{..}) state = widget where
     widget = createSingle state def
         { singleMerge = merge
         , singleHandleEvent = handleEvent
@@ -165,13 +166,13 @@ makeGraph graphDatas config state = widget where
                 (mx', my') = (mx-gx-gw/2, my-gy-gh/2)
                 (ux, uy) = (getUnit cx', getUnit cy')
                 (cx', cy') = (cx*rateX**wy, cy*rateY**wy)
-                rateX = if _gcLockX config == Just True
+                rateX = if _gcLockX == Just True
                     then 1
                     else 1.05**wr
-                rateY = if _gcLockY config == Just True
+                rateY = if _gcLockY == Just True
                     then 1
                     else 1.05**wr
-                wr = fromMaybe 1 $ _gcWheelRate config
+                wr = fromMaybe 1 _gcWheelRate
         Rect gx gy gw gh = getContentArea node style
         style = currentStyle wenv node
         getSec x = let l = 10**(mod' (logBase 10 x) 1) in
@@ -241,7 +242,7 @@ makeGraph graphDatas config state = widget where
             ovy = oy-(round' $ ty*hs/sy)*sy/hs
             ovx1 = ox+fox*sx
             ovy1 = oy-foy*sy
-        when (_gcHideMinor config /= Just True) $
+        when (_gcHideMinor /= Just True) $
             drawInAlpha renderer 0.2 $ do
                 forM_ [ovx, ovx-sx/vs..gx] verLine
                 forM_ [ovx, ovx+sx/vs..(gx+gw)] verLine
@@ -258,7 +259,7 @@ makeGraph graphDatas config state = widget where
                 newGraphData = graphData {_gdPoints = ps}
             when (not $ null $ _gdColor graphData) $
                 renderGraphData renderer newGraphData
-        when (_gcHideNumbers config /= Just True) $ do
+        when (_gcHideNumbers /= Just True) $ do
             setFillColor renderer black
             drawInAlpha renderer 0.62 $ do
                 forM_ [fox..(fox+20)] verN

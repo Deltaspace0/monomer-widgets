@@ -1,3 +1,5 @@
+{-# LANGUAGE RecordWildCards #-}
+
 module Monomer.Dragboard.UI
     ( buildUI
     ) where
@@ -28,25 +30,25 @@ buildUI
     -> Int
     -> (a -> Either Text Color)
     -> UIBuilder (DragboardModel a) DragboardEvent
-buildUI config c r getPathOrColor _ model = node where
+buildUI DragboardCfg{..} c r getPathOrColor _ model = node where
     node = box_
         [ onFocus EventFocus
         , onBlur EventBlur
         ] $ checkerboard_ c r cc $ zipWith f [offset..] boardState'
-    cc = _dcCheckerCfg config
-    offset = fromMaybe 0 $ _dcOffset config
+    cc = _dcCheckerCfg
+    offset = fromMaybe 0 _dcOffset
     f i xs = clickBox i $ dropTarget (EventDrop i) $ if null xs
         then filler
         else draggable_ (DragId i) draggableConfigs $ managed xs
-    clickBox i x = if _dcNoClick config == Just True
+    clickBox i x = if _dcNoClick == Just True
         then x
         else paint i $ box_ [onBtnReleased $ \_ _ -> EventClick i] x
     paint i x = if model ^. selectedSquare == Just i
         then x `styleBasic` [bgColor selectedColor]
         else x
     draggableConfigs = [draggableRenderSource_ renderS]
-    renderS = fromMaybe False $ _dcRenderS config
-    selectedColor = fromMaybe yellow $ _dcSelectColor config
+    renderS = fromMaybe False _dcRenderS
+    selectedColor = fromMaybe yellow _dcSelectColor
     managed = makeWidget . getPathOrColor . head
     makeWidget (Left path) = image_ path [fitEither]
     makeWidget (Right color) = filler `styleBasic` [bgColor color]
