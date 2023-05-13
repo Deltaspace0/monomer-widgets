@@ -1,481 +1,426 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Monomer.Dragboard.DragboardEvent</span><span>
-</span><span id="line-2"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier">DragId</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
-</span><span id="line-3"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragboardEvent"><span class="hs-identifier">DragboardEvent</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
-</span><span id="line-4"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#handleEvent"><span class="hs-identifier">handleEvent</span></a></span><span>
-</span><span id="line-5"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-6"></span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Maybe</span></span><span>
-</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Main.UserUtil</span></span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Composite</span></span><span>
-</span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardCfg.html"><span class="hs-identifier">Monomer.Dragboard.DragboardCfg</span></a></span><span>
-</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardModel.html"><span class="hs-identifier">Monomer.Dragboard.DragboardModel</span></a></span><span>
-</span><span id="line-14"></span><span>
-</span><span id="line-15"></span><span class="hs-keyword">newtype</span><span> </span><span id="DragId"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier hs-var">DragId</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="DragId"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier hs-var">DragId</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679169729"><span id="local-6989586621679169734"><span class="annot"><span class="annottext">DragId -&gt; DragId -&gt; Bool
-(DragId -&gt; DragId -&gt; Bool)
--&gt; (DragId -&gt; DragId -&gt; Bool) -&gt; Eq DragId
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE RecordWildCards #-}</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Monomer.Dragboard.DragboardEvent</span><span>
+</span><span id="line-4"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier">DragId</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragboardEvent"><span class="hs-identifier">DragboardEvent</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#handleEvent"><span class="hs-identifier">handleEvent</span></a></span><span>
+</span><span id="line-7"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Maybe</span></span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Main.UserUtil</span></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Composite</span></span><span>
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardCfg.html"><span class="hs-identifier">Monomer.Dragboard.DragboardCfg</span></a></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardModel.html"><span class="hs-identifier">Monomer.Dragboard.DragboardModel</span></a></span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">newtype</span><span> </span><span id="DragId"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier hs-var">DragId</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="DragId"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier hs-var">DragId</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679132857"><span id="local-6989586621679132862"><span class="annot"><span class="annottext">DragId -&gt; DragId -&gt; Bool
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 /= :: DragId -&gt; DragId -&gt; Bool
 $c/= :: DragId -&gt; DragId -&gt; Bool
 == :: DragId -&gt; DragId -&gt; Bool
 $c== :: DragId -&gt; DragId -&gt; Bool
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span>
-</span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span class="hs-keyword">data</span><span> </span><span id="DragboardEvent"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragboardEvent"><span class="hs-identifier hs-var">DragboardEvent</span></a></span></span><span>
-</span><span id="line-18"></span><span>    </span><span class="hs-glyph">=</span><span> </span><span id="EventDrop"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventDrop"><span class="hs-identifier hs-var">EventDrop</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier hs-type">DragId</span></a></span><span>
-</span><span id="line-19"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="EventClick"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventClick"><span class="hs-identifier hs-var">EventClick</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
-</span><span id="line-20"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="EventFocus"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventFocus"><span class="hs-identifier hs-var">EventFocus</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Path</span></span><span>
-</span><span id="line-21"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="EventBlur"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventBlur"><span class="hs-identifier hs-var">EventBlur</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Path</span></span><span>
-</span><span id="line-22"></span><span>    </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679169711"><span id="local-6989586621679169719"><span class="annot"><span class="annottext">DragboardEvent -&gt; DragboardEvent -&gt; Bool
-(DragboardEvent -&gt; DragboardEvent -&gt; Bool)
--&gt; (DragboardEvent -&gt; DragboardEvent -&gt; Bool) -&gt; Eq DragboardEvent
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="hs-keyword">data</span><span> </span><span id="DragboardEvent"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragboardEvent"><span class="hs-identifier hs-var">DragboardEvent</span></a></span></span><span>
+</span><span id="line-20"></span><span>    </span><span class="hs-glyph">=</span><span> </span><span id="EventDrop"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventDrop"><span class="hs-identifier hs-var">EventDrop</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier hs-type">DragId</span></a></span><span>
+</span><span id="line-21"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="EventClick"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventClick"><span class="hs-identifier hs-var">EventClick</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-22"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="EventFocus"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventFocus"><span class="hs-identifier hs-var">EventFocus</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Path</span></span><span>
+</span><span id="line-23"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="EventBlur"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventBlur"><span class="hs-identifier hs-var">EventBlur</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Path</span></span><span>
+</span><span id="line-24"></span><span>    </span><span class="hs-keyword">deriving</span><span> </span><span id="local-6989586621679132839"><span id="local-6989586621679132847"><span class="annot"><span class="annottext">DragboardEvent -&gt; DragboardEvent -&gt; Bool
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 /= :: DragboardEvent -&gt; DragboardEvent -&gt; Bool
 $c/= :: DragboardEvent -&gt; DragboardEvent -&gt; Bool
 == :: DragboardEvent -&gt; DragboardEvent -&gt; Bool
 $c== :: DragboardEvent -&gt; DragboardEvent -&gt; Bool
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span>
-</span><span id="line-23"></span><span>
-</span><span id="line-24"></span><span class="hs-keyword">type</span><span> </span><span id="EventHandle"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventHandle"><span class="hs-identifier hs-var">EventHandle</span></a></span></span><span> </span><span id="local-6989586621679169710"><span class="annot"><a href="#local-6989586621679169710"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span id="local-6989586621679169709"><span class="annot"><a href="#local-6989586621679169709"><span class="hs-identifier hs-type">sp</span></a></span></span><span> </span><span id="local-6989586621679169708"><span class="annot"><a href="#local-6989586621679169708"><span class="hs-identifier hs-type">ep</span></a></span></span><span>
-</span><span id="line-25"></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Dragboard.DragboardCfg.html#DragboardCfg"><span class="hs-identifier hs-type">DragboardCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169709"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169708"><span class="hs-identifier hs-type">ep</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169710"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-26"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Dragboard.DragboardModel.html#DragboardModel"><span class="hs-identifier hs-type">DragboardModel</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169710"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-27"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">EventResponse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Dragboard.DragboardModel.html#DragboardModel"><span class="hs-identifier hs-type">DragboardModel</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169710"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragboardEvent"><span class="hs-identifier hs-type">DragboardEvent</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169709"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169708"><span class="hs-identifier hs-type">ep</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-28"></span><span>
-</span><span id="line-29"></span><span id="local-6989586621679169859"><span id="local-6989586621679169861"><span id="local-6989586621679169862"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#handleEvent"><span class="hs-identifier hs-type">handleEvent</span></a></span><span>
-</span><span id="line-30"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">WidgetData</span></span><span> </span><span class="annot"><a href="#local-6989586621679169862"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679169861"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-31"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Dragboard.DragboardCfg.html#DragboardCfg"><span class="hs-identifier hs-type">DragboardCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169862"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169859"><span class="hs-identifier hs-type">ep</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169861"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-32"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">EventHandler</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Dragboard.DragboardModel.html#DragboardModel"><span class="hs-identifier hs-type">DragboardModel</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169861"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragboardEvent"><span class="hs-identifier hs-type">DragboardEvent</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169862"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169859"><span class="hs-identifier hs-type">ep</span></a></span></span></span></span><span>
-</span><span id="line-33"></span><span id="handleEvent"><span class="annot"><span class="annottext">handleEvent :: forall sp a ep.
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="hs-keyword">type</span><span> </span><span id="EventHandle"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventHandle"><span class="hs-identifier hs-var">EventHandle</span></a></span></span><span> </span><span id="local-6989586621679132838"><span class="annot"><a href="#local-6989586621679132838"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span id="local-6989586621679132837"><span class="annot"><a href="#local-6989586621679132837"><span class="hs-identifier hs-type">sp</span></a></span></span><span> </span><span id="local-6989586621679132836"><span class="annot"><a href="#local-6989586621679132836"><span class="hs-identifier hs-type">ep</span></a></span></span><span>
+</span><span id="line-27"></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Dragboard.DragboardCfg.html#DragboardCfg"><span class="hs-identifier hs-type">DragboardCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132837"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132836"><span class="hs-identifier hs-type">ep</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132838"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Dragboard.DragboardModel.html#DragboardModel"><span class="hs-identifier hs-type">DragboardModel</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132838"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-29"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">EventResponse</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Dragboard.DragboardModel.html#DragboardModel"><span class="hs-identifier hs-type">DragboardModel</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132838"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragboardEvent"><span class="hs-identifier hs-type">DragboardEvent</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132837"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132836"><span class="hs-identifier hs-type">ep</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-30"></span><span>
+</span><span id="line-31"></span><span id="local-6989586621679132982"><span id="local-6989586621679132984"><span id="local-6989586621679132985"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#handleEvent"><span class="hs-identifier hs-type">handleEvent</span></a></span><span>
+</span><span id="line-32"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">WidgetData</span></span><span> </span><span class="annot"><a href="#local-6989586621679132985"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679132984"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-33"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Dragboard.DragboardCfg.html#DragboardCfg"><span class="hs-identifier hs-type">DragboardCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132985"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132982"><span class="hs-identifier hs-type">ep</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132984"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-34"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">EventHandler</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Dragboard.DragboardModel.html#DragboardModel"><span class="hs-identifier hs-type">DragboardModel</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132984"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragboardEvent"><span class="hs-identifier hs-type">DragboardEvent</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132985"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132982"><span class="hs-identifier hs-type">ep</span></a></span></span></span></span><span>
+</span><span id="line-35"></span><span id="handleEvent"><span class="annot"><span class="annottext">handleEvent :: forall sp a ep.
 WidgetData sp [[a]]
 -&gt; DragboardCfg sp ep a
 -&gt; EventHandler (DragboardModel a) DragboardEvent sp ep
-</span><a href="Monomer.Dragboard.DragboardEvent.html#handleEvent"><span class="hs-identifier hs-var hs-var">handleEvent</span></a></span></span><span> </span><span id="local-6989586621679169707"><span class="annot"><span class="annottext">WidgetData sp [[a]]
-</span><a href="#local-6989586621679169707"><span class="hs-identifier hs-var">wdata</span></a></span></span><span> </span><span id="local-6989586621679169706"><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169706"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span class="annot"><span class="annottext">WidgetEnv (DragboardModel a) DragboardEvent
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679169705"><span class="annot"><span class="annottext">WidgetNode (DragboardModel a) DragboardEvent
-</span><a href="#local-6989586621679169705"><span class="hs-identifier hs-var">node</span></a></span></span><span> </span><span id="local-6989586621679169704"><span class="annot"><span class="annottext">DragboardModel a
-</span><a href="#local-6989586621679169704"><span class="hs-identifier hs-var">model</span></a></span></span><span> </span><span id="local-6989586621679169703"><span class="annot"><span class="annottext">DragboardEvent
-</span><a href="#local-6989586621679169703"><span class="hs-identifier hs-var">event</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">DragboardEvent
-</span><a href="#local-6989586621679169703"><span class="hs-identifier hs-var">event</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-34"></span><span>    </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventDrop"><span class="hs-identifier hs-type">EventDrop</span></a></span><span> </span><span id="local-6989586621679169702"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169702"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679169701"><span class="annot"><span class="annottext">DragId
-</span><a href="#local-6989586621679169701"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Int -&gt; DragId -&gt; WidgetData sp [[a]] -&gt; EventHandle a sp ep
-forall sp a ep.
+</span><a href="Monomer.Dragboard.DragboardEvent.html#handleEvent"><span class="hs-identifier hs-var hs-var">handleEvent</span></a></span></span><span> </span><span id="local-6989586621679132835"><span class="annot"><span class="annottext">WidgetData sp [[a]]
+</span><a href="#local-6989586621679132835"><span class="hs-identifier hs-var">wdata</span></a></span></span><span> </span><span id="local-6989586621679132834"><span class="annot"><span class="annottext">DragboardCfg sp ep a
+</span><a href="#local-6989586621679132834"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span class="annot"><span class="annottext">WidgetEnv (DragboardModel a) DragboardEvent
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679132833"><span class="annot"><span class="annottext">WidgetNode (DragboardModel a) DragboardEvent
+</span><a href="#local-6989586621679132833"><span class="hs-identifier hs-var">node</span></a></span></span><span> </span><span id="local-6989586621679132832"><span class="annot"><span class="annottext">DragboardModel a
+</span><a href="#local-6989586621679132832"><span class="hs-identifier hs-var">model</span></a></span></span><span> </span><span id="local-6989586621679132831"><span class="annot"><span class="annottext">DragboardEvent
+</span><a href="#local-6989586621679132831"><span class="hs-identifier hs-var">event</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">DragboardEvent
+</span><a href="#local-6989586621679132831"><span class="hs-identifier hs-var">event</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-36"></span><span>    </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventDrop"><span class="hs-identifier hs-type">EventDrop</span></a></span><span> </span><span id="local-6989586621679132830"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679132830"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679132829"><span class="annot"><span class="annottext">DragId
+</span><a href="#local-6989586621679132829"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall sp a ep.
 Int -&gt; DragId -&gt; WidgetData sp [[a]] -&gt; EventHandle a sp ep
 </span><a href="Monomer.Dragboard.DragboardEvent.html#dropHandle"><span class="hs-identifier hs-var">dropHandle</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169702"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">DragId
-</span><a href="#local-6989586621679169701"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">WidgetData sp [[a]]
-</span><a href="#local-6989586621679169707"><span class="hs-identifier hs-var">wdata</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169706"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
-</span><a href="#local-6989586621679169704"><span class="hs-identifier hs-var">model</span></a></span><span>
-</span><span id="line-35"></span><span>    </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventClick"><span class="hs-identifier hs-type">EventClick</span></a></span><span> </span><span id="local-6989586621679169699"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169699"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Int -&gt; EventHandle a sp ep
-forall a sp ep. Int -&gt; EventHandle a sp ep
+</span><a href="#local-6989586621679132830"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">DragId
+</span><a href="#local-6989586621679132829"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">WidgetData sp [[a]]
+</span><a href="#local-6989586621679132835"><span class="hs-identifier hs-var">wdata</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
+</span><a href="#local-6989586621679132834"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
+</span><a href="#local-6989586621679132832"><span class="hs-identifier hs-var">model</span></a></span><span>
+</span><span id="line-37"></span><span>    </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventClick"><span class="hs-identifier hs-type">EventClick</span></a></span><span> </span><span id="local-6989586621679132827"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679132827"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall a sp ep. Int -&gt; EventHandle a sp ep
 </span><a href="Monomer.Dragboard.DragboardEvent.html#clickHandle"><span class="hs-identifier hs-var">clickHandle</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169699"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169706"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
-</span><a href="#local-6989586621679169704"><span class="hs-identifier hs-var">model</span></a></span><span>
-</span><span id="line-36"></span><span>    </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventFocus"><span class="hs-identifier hs-type">EventFocus</span></a></span><span> </span><span id="local-6989586621679169697"><span class="annot"><span class="annottext">Path
-</span><a href="#local-6989586621679169697"><span class="hs-identifier hs-var">prev</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">WidgetNode (DragboardModel a) DragboardEvent
--&gt; Path -&gt; EventHandle a sp ep
-forall s e a sp ep. WidgetNode s e -&gt; Path -&gt; EventHandle a sp ep
+</span><a href="#local-6989586621679132827"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
+</span><a href="#local-6989586621679132834"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
+</span><a href="#local-6989586621679132832"><span class="hs-identifier hs-var">model</span></a></span><span>
+</span><span id="line-38"></span><span>    </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventFocus"><span class="hs-identifier hs-type">EventFocus</span></a></span><span> </span><span id="local-6989586621679132825"><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679132825"><span class="hs-identifier hs-var">prev</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall s e a sp ep. WidgetNode s e -&gt; Path -&gt; EventHandle a sp ep
 </span><a href="Monomer.Dragboard.DragboardEvent.html#focusHandle"><span class="hs-identifier hs-var">focusHandle</span></a></span><span> </span><span class="annot"><span class="annottext">WidgetNode (DragboardModel a) DragboardEvent
-</span><a href="#local-6989586621679169705"><span class="hs-identifier hs-var">node</span></a></span><span> </span><span class="annot"><span class="annottext">Path
-</span><a href="#local-6989586621679169697"><span class="hs-identifier hs-var">prev</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169706"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
-</span><a href="#local-6989586621679169704"><span class="hs-identifier hs-var">model</span></a></span><span>
-</span><span id="line-37"></span><span>    </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventBlur"><span class="hs-identifier hs-type">EventBlur</span></a></span><span> </span><span id="local-6989586621679169695"><span class="annot"><span class="annottext">Path
-</span><a href="#local-6989586621679169695"><span class="hs-identifier hs-var">next</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">WidgetNode (DragboardModel a) DragboardEvent
--&gt; Path -&gt; EventHandle a sp ep
-forall s e a sp ep. WidgetNode s e -&gt; Path -&gt; EventHandle a sp ep
+</span><a href="#local-6989586621679132833"><span class="hs-identifier hs-var">node</span></a></span><span> </span><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679132825"><span class="hs-identifier hs-var">prev</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
+</span><a href="#local-6989586621679132834"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
+</span><a href="#local-6989586621679132832"><span class="hs-identifier hs-var">model</span></a></span><span>
+</span><span id="line-39"></span><span>    </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventBlur"><span class="hs-identifier hs-type">EventBlur</span></a></span><span> </span><span id="local-6989586621679132823"><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679132823"><span class="hs-identifier hs-var">next</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">forall s e a sp ep. WidgetNode s e -&gt; Path -&gt; EventHandle a sp ep
 </span><a href="Monomer.Dragboard.DragboardEvent.html#blurHandle"><span class="hs-identifier hs-var">blurHandle</span></a></span><span> </span><span class="annot"><span class="annottext">WidgetNode (DragboardModel a) DragboardEvent
-</span><a href="#local-6989586621679169705"><span class="hs-identifier hs-var">node</span></a></span><span> </span><span class="annot"><span class="annottext">Path
-</span><a href="#local-6989586621679169695"><span class="hs-identifier hs-var">next</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169706"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
-</span><a href="#local-6989586621679169704"><span class="hs-identifier hs-var">model</span></a></span><span>
-</span><span id="line-38"></span><span>
-</span><span id="line-39"></span><span id="local-6989586621679169846"><span id="local-6989586621679169847"><span id="local-6989586621679169848"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#dropHandle"><span class="hs-identifier hs-type">dropHandle</span></a></span><span>
-</span><span id="line-40"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
-</span><span id="line-41"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier hs-type">DragId</span></a></span><span>
-</span><span id="line-42"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">WidgetData</span></span><span> </span><span class="annot"><a href="#local-6989586621679169848"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679169847"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-43"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventHandle"><span class="hs-identifier hs-type">EventHandle</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169847"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169848"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169846"><span class="hs-identifier hs-type">ep</span></a></span></span></span></span><span>
-</span><span id="line-44"></span><span id="dropHandle"><span class="annot"><span class="annottext">dropHandle :: forall sp a ep.
+</span><a href="#local-6989586621679132833"><span class="hs-identifier hs-var">node</span></a></span><span> </span><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679132823"><span class="hs-identifier hs-var">next</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
+</span><a href="#local-6989586621679132834"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
+</span><a href="#local-6989586621679132832"><span class="hs-identifier hs-var">model</span></a></span><span>
+</span><span id="line-40"></span><span>
+</span><span id="line-41"></span><span id="local-6989586621679132970"><span id="local-6989586621679132971"><span id="local-6989586621679132972"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#dropHandle"><span class="hs-identifier hs-type">dropHandle</span></a></span><span>
+</span><span id="line-42"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-43"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier hs-type">DragId</span></a></span><span>
+</span><span id="line-44"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">WidgetData</span></span><span> </span><span class="annot"><a href="#local-6989586621679132972"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679132971"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-45"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventHandle"><span class="hs-identifier hs-type">EventHandle</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132971"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132972"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132970"><span class="hs-identifier hs-type">ep</span></a></span></span></span></span><span>
+</span><span id="line-46"></span><span id="dropHandle"><span class="annot"><span class="annottext">dropHandle :: forall sp a ep.
 Int -&gt; DragId -&gt; WidgetData sp [[a]] -&gt; EventHandle a sp ep
-</span><a href="Monomer.Dragboard.DragboardEvent.html#dropHandle"><span class="hs-identifier hs-var hs-var">dropHandle</span></a></span></span><span> </span><span id="local-6989586621679169693"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169693"><span class="hs-identifier hs-var">ixTo</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier hs-type">DragId</span></a></span><span> </span><span id="local-6989586621679169692"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169692"><span class="hs-identifier hs-var">ixFrom</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679169691"><span class="annot"><span class="annottext">WidgetData sp [[a]]
-</span><a href="#local-6989586621679169691"><span class="hs-identifier hs-var">wdata</span></a></span></span><span> </span><span id="local-6989586621679169690"><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169690"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span id="local-6989586621679169689"><span class="annot"><span class="annottext">DragboardModel a
-</span><a href="#local-6989586621679169689"><span class="hs-identifier hs-var">model</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[EventResponse (DragboardModel a) DragboardEvent sp ep]
-forall {s} {e}. [EventResponse s e sp ep]
-</span><a href="#local-6989586621679169688"><span class="hs-identifier hs-var">response</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-45"></span><span>    </span><span id="local-6989586621679169688"><span class="annot"><span class="annottext">response :: [EventResponse s e sp ep]
-</span><a href="#local-6989586621679169688"><span class="hs-identifier hs-var hs-var">response</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Maybe Bool
-</span><a href="#local-6989586621679169679"><span class="hs-identifier hs-var">valid</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Bool -&gt; Maybe Bool -&gt; Bool
-forall a. Eq a =&gt; a -&gt; a -&gt; Bool
-</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Maybe Bool
-forall a. a -&gt; Maybe a
+</span><a href="Monomer.Dragboard.DragboardEvent.html#dropHandle"><span class="hs-identifier hs-var hs-var">dropHandle</span></a></span></span><span> </span><span id="local-6989586621679132821"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679132821"><span class="hs-identifier hs-var">ixTo</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier hs-type">DragId</span></a></span><span> </span><span id="local-6989586621679132820"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679132820"><span class="hs-identifier hs-var">ixFrom</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679132819"><span class="annot"><span class="annottext">WidgetData sp [[a]]
+</span><a href="#local-6989586621679132819"><span class="hs-identifier hs-var">wdata</span></a></span></span><span> </span><span id="local-6989586621679132818"><span class="annot"><span class="annottext">DragboardCfg sp ep a
+</span><a href="#local-6989586621679132818"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span id="local-6989586621679132817"><span class="annot"><span class="annottext">DragboardModel a
+</span><a href="#local-6989586621679132817"><span class="hs-identifier hs-var">model</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall {s} {e}. [EventResponse s e sp ep]
+</span><a href="#local-6989586621679132816"><span class="hs-identifier hs-var">response</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-47"></span><span>    </span><span id="local-6989586621679132816"><span class="annot"><span class="annottext">response :: [EventResponse s e sp ep]
+</span><a href="#local-6989586621679132816"><span class="hs-identifier hs-var hs-var">response</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Maybe Bool
+</span><a href="#local-6989586621679132807"><span class="hs-identifier hs-var">valid</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">||</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679169677"><span class="hs-identifier hs-var">emptySource</span></a></span><span>
-</span><span id="line-46"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-47"></span><span>        </span><span class="hs-keyword">else</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; EventResponse s e sp ep -&gt; EventResponse s e sp ep
-forall s e sp ep.
+</span><a href="#local-6989586621679132805"><span class="hs-identifier hs-var">emptySource</span></a></span><span>
+</span><span id="line-48"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-49"></span><span>        </span><span class="hs-keyword">else</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall s e sp ep.
 Bool -&gt; EventResponse s e sp ep -&gt; EventResponse s e sp ep
 </span><span class="hs-identifier hs-var">responseIf</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679169675"><span class="hs-identifier hs-var">validFrom</span></a></span><span> </span><span class="annot"><span class="annottext">(EventResponse s e sp ep -&gt; EventResponse s e sp ep)
--&gt; [EventResponse s e sp ep] -&gt; [EventResponse s e sp ep]
-forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">[EventResponse s e sp ep]
-forall {s} {e} {ep}. [EventResponse s e sp ep]
-</span><a href="#local-6989586621679169673"><span class="hs-identifier hs-var">dataReq</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[EventResponse s e sp ep]
--&gt; [EventResponse s e sp ep] -&gt; [EventResponse s e sp ep]
-forall a. Semigroup a =&gt; a -&gt; a -&gt; a
-</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">[EventResponse s e sp ep]
-forall {s} {e}. [EventResponse s e sp ep]
-</span><a href="#local-6989586621679169672"><span class="hs-identifier hs-var">report</span></a></span><span>
-</span><span id="line-48"></span><span>    </span><span id="local-6989586621679169679"><span class="annot"><span class="annottext">valid :: Maybe Bool
-</span><a href="#local-6989586621679169679"><span class="hs-identifier hs-var hs-var">valid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(([[a]], Int, Int) -&gt; Bool) -&gt; ([[a]], Int, Int) -&gt; Bool
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679132803"><span class="hs-identifier hs-var">validFrom</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall {s} {e} {ep}. [EventResponse s e sp ep]
+</span><a href="#local-6989586621679132801"><span class="hs-identifier hs-var">dataReq</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall {s} {e}. [EventResponse s e sp ep]
+</span><a href="#local-6989586621679132800"><span class="hs-identifier hs-var">report</span></a></span><span>
+</span><span id="line-50"></span><span>    </span><span id="local-6989586621679132807"><span class="annot"><span class="annottext">valid :: Maybe Bool
+</span><a href="#local-6989586621679132807"><span class="hs-identifier hs-var hs-var">valid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">([[a]], Int, Int)
-</span><a href="#local-6989586621679169669"><span class="hs-identifier hs-var">changeInfo</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">((([[a]], Int, Int) -&gt; Bool) -&gt; Bool)
--&gt; Maybe (([[a]], Int, Int) -&gt; Bool) -&gt; Maybe Bool
-forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a -&gt; Maybe (([[a]], Int, Int) -&gt; Bool)
-forall s e a. DragboardCfg s e a -&gt; Maybe (Info a -&gt; Bool)
-</span><a href="Monomer.Dragboard.DragboardCfg.html#_dcValidator"><span class="hs-identifier hs-var hs-var">_dcValidator</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169690"><span class="hs-identifier hs-var">config</span></a></span><span>
-</span><span id="line-49"></span><span>    </span><span id="local-6989586621679169669"><span class="annot"><span class="annottext">changeInfo :: ([[a]], Int, Int)
-</span><a href="#local-6989586621679169669"><span class="hs-identifier hs-var hs-var">changeInfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[a]]
-</span><a href="#local-6989586621679169667"><span class="hs-identifier hs-var">boardState'</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169693"><span class="hs-identifier hs-var">ixTo</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169692"><span class="hs-identifier hs-var">ixFrom</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-50"></span><span>    </span><span id="local-6989586621679169677"><span class="annot"><span class="annottext">emptySource :: Bool
-</span><a href="#local-6989586621679169677"><span class="hs-identifier hs-var hs-var">emptySource</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679169675"><span class="hs-identifier hs-var">validFrom</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
-</span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">[a] -&gt; Int
-forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
+</span><a href="#local-6989586621679132797"><span class="hs-identifier hs-var">changeInfo</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Maybe (([[a]], Int, Int) -&gt; Bool)
+</span><a href="#local-6989586621679132796"><span class="hs-identifier hs-var">_dcValidator</span></a></span><span>
+</span><span id="line-51"></span><span>    </span><span id="local-6989586621679132797"><span class="annot"><span class="annottext">changeInfo :: ([[a]], Int, Int)
+</span><a href="#local-6989586621679132797"><span class="hs-identifier hs-var hs-var">changeInfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[a]]
+</span><a href="#local-6989586621679132795"><span class="hs-identifier hs-var">_dmBoardState</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679132821"><span class="hs-identifier hs-var">ixTo</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679132820"><span class="hs-identifier hs-var">ixFrom</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-52"></span><span>    </span><span id="local-6989586621679132805"><span class="annot"><span class="annottext">emptySource :: Bool
+</span><a href="#local-6989586621679132805"><span class="hs-identifier hs-var hs-var">emptySource</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679132803"><span class="hs-identifier hs-var">validFrom</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[a]
-</span><a href="#local-6989586621679169659"><span class="hs-identifier hs-var">sourceSquare</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
-forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679132787"><span class="hs-identifier hs-var">sourceSquare</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span>
-</span><span id="line-51"></span><span>    </span><span id="local-6989586621679169675"><span class="annot"><span class="annottext">validFrom :: Bool
-</span><a href="#local-6989586621679169675"><span class="hs-identifier hs-var hs-var">validFrom</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169653"><span class="hs-identifier hs-var">ixFrom'</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
-forall a. Ord a =&gt; a -&gt; a -&gt; Bool
+</span><span id="line-53"></span><span>    </span><span id="local-6989586621679132803"><span class="annot"><span class="annottext">validFrom :: Bool
+</span><a href="#local-6989586621679132803"><span class="hs-identifier hs-var hs-var">validFrom</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679132781"><span class="hs-identifier hs-var">ixFrom'</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">&gt;=</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169653"><span class="hs-identifier hs-var">ixFrom'</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
-forall a. Ord a =&gt; a -&gt; a -&gt; Bool
-</span><span class="hs-operator hs-var">&lt;</span></span><span> </span><span class="annot"><span class="annottext">[[a]] -&gt; Int
-forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
+</span><a href="#local-6989586621679132781"><span class="hs-identifier hs-var">ixFrom'</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Ord a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">&lt;</span></span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[[a]]
-</span><a href="#local-6989586621679169667"><span class="hs-identifier hs-var">boardState'</span></a></span><span>
-</span><span id="line-52"></span><span>    </span><span id="local-6989586621679169672"><span class="annot"><span class="annottext">report :: [EventResponse s e sp ep]
-</span><a href="#local-6989586621679169672"><span class="hs-identifier hs-var hs-var">report</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">WidgetRequest sp ep -&gt; EventResponse s e sp ep
-forall s e sp ep. WidgetRequest sp ep -&gt; EventResponse s e sp ep
-</span><span class="hs-identifier hs-var">RequestParent</span></span><span> </span><span class="annot"><span class="annottext">(WidgetRequest sp ep -&gt; EventResponse s e sp ep)
--&gt; [WidgetRequest sp ep] -&gt; [EventResponse s e sp ep]
-forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">(([[a]], Int, Int) -&gt; WidgetRequest sp ep)
--&gt; ([[a]], Int, Int) -&gt; WidgetRequest sp ep
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679132795"><span class="hs-identifier hs-var">_dmBoardState</span></a></span><span>
+</span><span id="line-54"></span><span>    </span><span id="local-6989586621679132800"><span class="annot"><span class="annottext">report :: [EventResponse s e sp ep]
+</span><a href="#local-6989586621679132800"><span class="hs-identifier hs-var hs-var">report</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e sp ep. WidgetRequest sp ep -&gt; EventResponse s e sp ep
+</span><span class="hs-identifier hs-var">RequestParent</span></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">([[a]], Int, Int)
-</span><a href="#local-6989586621679169669"><span class="hs-identifier hs-var">changeInfo</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">((([[a]], Int, Int) -&gt; WidgetRequest sp ep) -&gt; WidgetRequest sp ep)
--&gt; [([[a]], Int, Int) -&gt; WidgetRequest sp ep]
--&gt; [WidgetRequest sp ep]
-forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><a href="#local-6989586621679132797"><span class="hs-identifier hs-var">changeInfo</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
 </span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">[([[a]], Int, Int) -&gt; WidgetRequest sp ep]
-</span><a href="#local-6989586621679169648"><span class="hs-identifier hs-var">req</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-53"></span><span>    </span><span id="local-6989586621679169648"><span class="annot"><span class="annottext">req :: [([[a]], Int, Int) -&gt; WidgetRequest sp ep]
-</span><a href="#local-6989586621679169648"><span class="hs-identifier hs-var hs-var">req</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a -&gt; [([[a]], Int, Int) -&gt; WidgetRequest sp ep]
-forall s e a. DragboardCfg s e a -&gt; [Info a -&gt; WidgetRequest s e]
-</span><a href="Monomer.Dragboard.DragboardCfg.html#_dcOnChangeReq"><span class="hs-identifier hs-var hs-var">_dcOnChangeReq</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169690"><span class="hs-identifier hs-var">config</span></a></span><span>
-</span><span id="line-54"></span><span>    </span><span id="local-6989586621679169673"><span class="annot"><span class="annottext">dataReq :: [EventResponse s e sp ep]
-</span><a href="#local-6989586621679169673"><span class="hs-identifier hs-var hs-var">dataReq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">WidgetRequest sp ep -&gt; EventResponse s e sp ep
-forall s e sp ep. WidgetRequest sp ep -&gt; EventResponse s e sp ep
-</span><span class="hs-identifier hs-var">RequestParent</span></span><span> </span><span class="annot"><span class="annottext">(WidgetRequest sp ep -&gt; EventResponse s e sp ep)
--&gt; [WidgetRequest sp ep] -&gt; [EventResponse s e sp ep]
-forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">WidgetData sp [[a]] -&gt; [[a]] -&gt; [WidgetRequest sp ep]
-forall s a e. WidgetData s a -&gt; a -&gt; [WidgetRequest s e]
+</span><a href="#local-6989586621679132776"><span class="hs-identifier hs-var">_dcOnChangeReq</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-55"></span><span>    </span><span id="local-6989586621679132801"><span class="annot"><span class="annottext">dataReq :: [EventResponse s e sp ep]
+</span><a href="#local-6989586621679132801"><span class="hs-identifier hs-var hs-var">dataReq</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e sp ep. WidgetRequest sp ep -&gt; EventResponse s e sp ep
+</span><span class="hs-identifier hs-var">RequestParent</span></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall s a e. WidgetData s a -&gt; a -&gt; [WidgetRequest s e]
 </span><span class="hs-identifier hs-var">widgetDataSet</span></span><span> </span><span class="annot"><span class="annottext">WidgetData sp [[a]]
-</span><a href="#local-6989586621679169691"><span class="hs-identifier hs-var">wdata</span></a></span><span> </span><span class="annot"><span class="annottext">[[a]]
-</span><a href="#local-6989586621679169644"><span class="hs-identifier hs-var">newBoardState</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-55"></span><span>    </span><span id="local-6989586621679169644"><span class="annot"><span class="annottext">newBoardState :: [[a]]
-</span><a href="#local-6989586621679169644"><span class="hs-identifier hs-var hs-var">newBoardState</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Int -&gt; [a] -&gt; [a]) -&gt; [Int] -&gt; [[a]] -&gt; [[a]]
-forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
+</span><a href="#local-6989586621679132819"><span class="hs-identifier hs-var">wdata</span></a></span><span> </span><span class="annot"><span class="annottext">[[a]]
+</span><a href="#local-6989586621679132773"><span class="hs-identifier hs-var">newBoardState</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-56"></span><span>    </span><span id="local-6989586621679132773"><span class="annot"><span class="annottext">newBoardState :: [[a]]
+</span><a href="#local-6989586621679132773"><span class="hs-identifier hs-var hs-var">newBoardState</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; [a] -&gt; [a]
-</span><a href="#local-6989586621679169640"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169639"><span class="hs-identifier hs-var">offset</span></a></span><span class="hs-glyph">..</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[[a]]
-</span><a href="#local-6989586621679169667"><span class="hs-identifier hs-var">boardState'</span></a></span><span>
-</span><span id="line-56"></span><span>    </span><span id="local-6989586621679169640"><span class="annot"><span class="annottext">f :: Int -&gt; [a] -&gt; [a]
-</span><a href="#local-6989586621679169640"><span class="hs-identifier hs-var hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679169636"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169636"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679169635"><span class="annot"><span class="annottext">[a]
-</span><a href="#local-6989586621679169635"><span class="hs-identifier hs-var">xs</span></a></span></span><span>
-</span><span id="line-57"></span><span>        </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169636"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
-forall a. Eq a =&gt; a -&gt; a -&gt; Bool
-</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169693"><span class="hs-identifier hs-var">ixTo</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[a] -&gt; a
-forall a. [a] -&gt; a
-</span><span class="hs-identifier hs-var">head</span></span><span> </span><span class="annot"><span class="annottext">[a]
-</span><a href="#local-6989586621679169659"><span class="hs-identifier hs-var">sourceSquare</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679132769"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679132768"><span class="hs-identifier hs-var">offset</span></a></span><span class="hs-glyph">..</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[[a]]
+</span><a href="#local-6989586621679132795"><span class="hs-identifier hs-var">_dmBoardState</span></a></span><span>
+</span><span id="line-57"></span><span>    </span><span id="local-6989586621679132769"><span class="annot"><span class="annottext">f :: Int -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679132769"><span class="hs-identifier hs-var hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679132765"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679132765"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679132764"><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679132764"><span class="hs-identifier hs-var">xs</span></a></span></span><span>
 </span><span id="line-58"></span><span>        </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169636"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
-forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><a href="#local-6989586621679132765"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169692"><span class="hs-identifier hs-var">ixFrom</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[a] -&gt; [a]
-forall a. [a] -&gt; [a]
+</span><a href="#local-6989586621679132821"><span class="hs-identifier hs-var">ixTo</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall a. [a] -&gt; a
+</span><span class="hs-identifier hs-var">head</span></span><span> </span><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679132787"><span class="hs-identifier hs-var">sourceSquare</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-59"></span><span>        </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679132765"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679132820"><span class="hs-identifier hs-var">ixFrom</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">tail</span></span><span> </span><span class="annot"><span class="annottext">[a]
-</span><a href="#local-6989586621679169635"><span class="hs-identifier hs-var">xs</span></a></span><span>
-</span><span id="line-59"></span><span>        </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679132764"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-60"></span><span>        </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[a]
-</span><a href="#local-6989586621679169635"><span class="hs-identifier hs-var">xs</span></a></span><span>
-</span><span id="line-60"></span><span>    </span><span id="local-6989586621679169659"><span class="annot"><span class="annottext">sourceSquare :: [a]
-</span><a href="#local-6989586621679169659"><span class="hs-identifier hs-var hs-var">sourceSquare</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[a]]
-</span><a href="#local-6989586621679169667"><span class="hs-identifier hs-var">boardState'</span></a></span><span class="annot"><span class="annottext">[[a]] -&gt; Int -&gt; [a]
-forall a. [a] -&gt; Int -&gt; a
+</span><a href="#local-6989586621679132764"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-61"></span><span>    </span><span id="local-6989586621679132787"><span class="annot"><span class="annottext">sourceSquare :: [a]
+</span><a href="#local-6989586621679132787"><span class="hs-identifier hs-var hs-var">sourceSquare</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[a]]
+</span><a href="#local-6989586621679132795"><span class="hs-identifier hs-var">_dmBoardState</span></a></span><span class="annot"><span class="annottext">forall a. [a] -&gt; Int -&gt; a
 </span><span class="hs-operator hs-var">!!</span></span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169653"><span class="hs-identifier hs-var">ixFrom'</span></a></span><span>
-</span><span id="line-61"></span><span>    </span><span id="local-6989586621679169653"><span class="annot"><span class="annottext">ixFrom' :: Int
-</span><a href="#local-6989586621679169653"><span class="hs-identifier hs-var hs-var">ixFrom'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169692"><span class="hs-identifier hs-var">ixFrom</span></a></span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
-forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><a href="#local-6989586621679132781"><span class="hs-identifier hs-var">ixFrom'</span></a></span><span>
+</span><span id="line-62"></span><span>    </span><span id="local-6989586621679132781"><span class="annot"><span class="annottext">ixFrom' :: Int
+</span><a href="#local-6989586621679132781"><span class="hs-identifier hs-var hs-var">ixFrom'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679132820"><span class="hs-identifier hs-var">ixFrom</span></a></span><span class="annot"><span class="annottext">forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169639"><span class="hs-identifier hs-var">offset</span></a></span><span>
-</span><span id="line-62"></span><span>    </span><span id="local-6989586621679169639"><span class="annot"><span class="annottext">offset :: Int
-</span><a href="#local-6989586621679169639"><span class="hs-identifier hs-var hs-var">offset</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Maybe Int -&gt; Int
-forall a. a -&gt; Maybe a -&gt; a
+</span><a href="#local-6989586621679132768"><span class="hs-identifier hs-var">offset</span></a></span><span>
+</span><span id="line-63"></span><span>    </span><span id="local-6989586621679132768"><span class="annot"><span class="annottext">offset :: Int
+</span><a href="#local-6989586621679132768"><span class="hs-identifier hs-var hs-var">offset</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a -&gt; a
 </span><span class="hs-identifier hs-var">fromMaybe</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">(Maybe Int -&gt; Int) -&gt; Maybe Int -&gt; Int
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a -&gt; Maybe Int
-forall s e a. DragboardCfg s e a -&gt; Maybe Int
-</span><a href="Monomer.Dragboard.DragboardCfg.html#_dcOffset"><span class="hs-identifier hs-var hs-var">_dcOffset</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169690"><span class="hs-identifier hs-var">config</span></a></span><span>
-</span><span id="line-63"></span><span>    </span><span id="local-6989586621679169667"><span class="annot"><span class="annottext">boardState' :: [[a]]
-</span><a href="#local-6989586621679169667"><span class="hs-identifier hs-var hs-var">boardState'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DragboardModel a
-</span><a href="#local-6989586621679169689"><span class="hs-identifier hs-var">model</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a -&gt; Getting [[a]] (DragboardModel a) [[a]] -&gt; [[a]]
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [[a]] (DragboardModel a) [[a]]
-forall s a. HasBoardState s a =&gt; Lens' s a
-</span><a href="Monomer.Dragboard.DragboardModel.html#boardState"><span class="hs-identifier hs-var">boardState</span></a></span><span>
-</span><span id="line-64"></span><span>
-</span><span id="line-65"></span><span id="local-6989586621679169843"><span id="local-6989586621679169844"><span id="local-6989586621679169845"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#clickHandle"><span class="hs-identifier hs-type">clickHandle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventHandle"><span class="hs-identifier hs-type">EventHandle</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169845"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169844"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169843"><span class="hs-identifier hs-type">ep</span></a></span></span></span></span><span>
-</span><span id="line-66"></span><span id="clickHandle"><span class="annot"><span class="annottext">clickHandle :: forall a sp ep. Int -&gt; EventHandle a sp ep
-</span><a href="Monomer.Dragboard.DragboardEvent.html#clickHandle"><span class="hs-identifier hs-var hs-var">clickHandle</span></a></span></span><span> </span><span id="local-6989586621679169621"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169621"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679169620"><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169620"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span id="local-6989586621679169619"><span class="annot"><span class="annottext">DragboardModel a
-</span><a href="#local-6989586621679169619"><span class="hs-identifier hs-var">model</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[EventResponse (DragboardModel a) DragboardEvent sp ep]
-forall {sp} {ep}.
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Maybe Int
+</span><a href="#local-6989586621679132757"><span class="hs-identifier hs-var">_dcOffset</span></a></span><span>
+</span><span id="line-64"></span><span>    </span><span class="annot"><a href="Monomer.Dragboard.DragboardCfg.html#DragboardCfg"><span class="hs-identifier hs-type">DragboardCfg</span></a></span><span class="hs-special">{</span><span id="local-6989586621679132750"><span id="local-6989586621679132751"><span id="local-6989586621679132752"><span id="local-6989586621679132753"><span id="local-6989586621679132754"><span id="local-6989586621679132755"><span id="local-6989586621679132757"><span id="local-6989586621679132776"><span id="local-6989586621679132796"><span class="annot"><span class="annottext">[CheckerboardCfg]
+[([[a]], Int, Int) -&gt; WidgetRequest sp ep]
+[Path -&gt; WidgetRequest sp ep]
+Maybe Bool
+Maybe Int
+Maybe Color
+Maybe (([[a]], Int, Int) -&gt; Bool)
+_dcOnChangeReq :: forall s e a. DragboardCfg s e a -&gt; [Info a -&gt; WidgetRequest s e]
+_dcOnBlurReq :: forall s e a. DragboardCfg s e a -&gt; [Path -&gt; WidgetRequest s e]
+_dcOnFocusReq :: forall s e a. DragboardCfg s e a -&gt; [Path -&gt; WidgetRequest s e]
+_dcCheckerCfg :: forall s e a. DragboardCfg s e a -&gt; [CheckerboardCfg]
+_dcRenderS :: forall s e a. DragboardCfg s e a -&gt; Maybe Bool
+_dcNoClick :: forall s e a. DragboardCfg s e a -&gt; Maybe Bool
+_dcSelectColor :: forall s e a. DragboardCfg s e a -&gt; Maybe Color
+_dcOffset :: forall s e a. DragboardCfg s e a -&gt; Maybe Int
+_dcValidator :: forall s e a. DragboardCfg s e a -&gt; Maybe (Info a -&gt; Bool)
+_dcOnBlurReq :: [Path -&gt; WidgetRequest sp ep]
+_dcOnFocusReq :: [Path -&gt; WidgetRequest sp ep]
+_dcCheckerCfg :: [CheckerboardCfg]
+_dcRenderS :: Maybe Bool
+_dcNoClick :: Maybe Bool
+_dcSelectColor :: Maybe Color
+_dcOffset :: Maybe Int
+_dcOnChangeReq :: [([[a]], Int, Int) -&gt; WidgetRequest sp ep]
+_dcValidator :: Maybe (([[a]], Int, Int) -&gt; Bool)
+</span><a href="Monomer.Dragboard.DragboardCfg.html#_dcOnChangeReq"><span class="hs-glyph hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">..</span></a></span></span></span></span></span></span></span></span></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
+</span><a href="#local-6989586621679132818"><span class="hs-identifier hs-var">config</span></a></span><span>
+</span><span id="line-65"></span><span>    </span><span class="annot"><a href="Monomer.Dragboard.DragboardModel.html#DragboardModel"><span class="hs-identifier hs-type">DragboardModel</span></a></span><span class="hs-special">{</span><span id="local-6989586621679132739"><span id="local-6989586621679132795"><span class="annot"><span class="annottext">[[a]]
+Maybe Int
+_dmSelectedSquare :: forall a. DragboardModel a -&gt; Maybe Int
+_dmBoardState :: forall a. DragboardModel a -&gt; [[a]]
+_dmSelectedSquare :: Maybe Int
+_dmBoardState :: [[a]]
+</span><a href="Monomer.Dragboard.DragboardModel.html#_dmSelectedSquare"><span class="hs-glyph hs-var hs-var hs-var hs-var">..</span></a></span></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DragboardModel a
+</span><a href="#local-6989586621679132817"><span class="hs-identifier hs-var">model</span></a></span><span>
+</span><span id="line-66"></span><span>
+</span><span id="line-67"></span><span id="local-6989586621679132966"><span id="local-6989586621679132967"><span id="local-6989586621679132968"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#clickHandle"><span class="hs-identifier hs-type">clickHandle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventHandle"><span class="hs-identifier hs-type">EventHandle</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132968"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132967"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132966"><span class="hs-identifier hs-type">ep</span></a></span></span></span></span><span>
+</span><span id="line-68"></span><span id="clickHandle"><span class="annot"><span class="annottext">clickHandle :: forall a sp ep. Int -&gt; EventHandle a sp ep
+</span><a href="Monomer.Dragboard.DragboardEvent.html#clickHandle"><span class="hs-identifier hs-var hs-var">clickHandle</span></a></span></span><span> </span><span id="local-6989586621679132736"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679132736"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679132735"><span class="annot"><span class="annottext">DragboardCfg sp ep a
+</span><a href="#local-6989586621679132735"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span id="local-6989586621679132734"><span class="annot"><span class="annottext">model :: DragboardModel a
+</span><a href="#local-6989586621679132734"><span class="hs-identifier hs-var">model</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Dragboard.DragboardModel.html#DragboardModel"><span class="hs-identifier hs-type">DragboardModel</span></a></span><span class="hs-special">{</span><span id="local-6989586621679132732"><span id="local-6989586621679132733"><span class="annot"><span class="annottext">[[a]]
+Maybe Int
+_dmSelectedSquare :: Maybe Int
+_dmBoardState :: [[a]]
+_dmSelectedSquare :: forall a. DragboardModel a -&gt; Maybe Int
+_dmBoardState :: forall a. DragboardModel a -&gt; [[a]]
+</span><a href="#local-6989586621679132732"><span class="hs-glyph hs-var hs-var hs-var hs-var">..</span></a></span></span></span><span class="hs-special">}</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall {sp} {ep}.
 [EventResponse (DragboardModel a) DragboardEvent sp ep]
-</span><a href="#local-6989586621679169618"><span class="hs-identifier hs-var">response</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-67"></span><span>    </span><span id="local-6989586621679169618"><span class="annot"><span class="annottext">response :: [EventResponse (DragboardModel a) DragboardEvent sp ep]
-</span><a href="#local-6989586621679169618"><span class="hs-identifier hs-var hs-var">response</span></a></span></span><span>
-</span><span id="line-68"></span><span>        </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Maybe Int -&gt; Bool
-forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
+</span><a href="#local-6989586621679132731"><span class="hs-identifier hs-var">response</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-69"></span><span>    </span><span id="local-6989586621679132731"><span class="annot"><span class="annottext">response :: [EventResponse (DragboardModel a) DragboardEvent sp ep]
+</span><a href="#local-6989586621679132731"><span class="hs-identifier hs-var hs-var">response</span></a></span></span><span>
+</span><span id="line-70"></span><span>        </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">Maybe Int
-</span><a href="#local-6989586621679169608"><span class="hs-identifier hs-var">selected</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Int
--&gt; [EventResponse (DragboardModel a) DragboardEvent sp ep]
-forall {e} {sp} {ep}.
+</span><a href="#local-6989586621679132732"><span class="hs-identifier hs-var">_dmSelectedSquare</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall {e} {sp} {ep}.
 Maybe Int -&gt; [EventResponse (DragboardModel a) e sp ep]
-</span><a href="#local-6989586621679169607"><span class="hs-identifier hs-var">setSelectedSquare</span></a></span><span> </span><span class="annot"><span class="annottext">(Maybe Int
- -&gt; [EventResponse (DragboardModel a) DragboardEvent sp ep])
--&gt; Maybe Int
--&gt; [EventResponse (DragboardModel a) DragboardEvent sp ep]
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Maybe Int
-forall a. a -&gt; Maybe a
+</span><a href="#local-6989586621679132721"><span class="hs-identifier hs-var">setSelectedSquare</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169621"><span class="hs-identifier hs-var">i</span></a></span><span>
-</span><span id="line-69"></span><span>        </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Maybe Int
-</span><a href="#local-6989586621679169608"><span class="hs-identifier hs-var">selected</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Int -&gt; Maybe Int -&gt; Bool
-forall a. Eq a =&gt; a -&gt; a -&gt; Bool
-</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Maybe Int
-forall a. a -&gt; Maybe a
+</span><a href="#local-6989586621679132736"><span class="hs-identifier hs-var">i</span></a></span><span>
+</span><span id="line-71"></span><span>        </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Maybe Int
+</span><a href="#local-6989586621679132732"><span class="hs-identifier hs-var">_dmSelectedSquare</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169621"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Int
--&gt; [EventResponse (DragboardModel a) DragboardEvent sp ep]
-forall {e} {sp} {ep}.
+</span><a href="#local-6989586621679132736"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall {e} {sp} {ep}.
 Maybe Int -&gt; [EventResponse (DragboardModel a) e sp ep]
-</span><a href="#local-6989586621679169607"><span class="hs-identifier hs-var">setSelectedSquare</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Int
-forall a. Maybe a
+</span><a href="#local-6989586621679132721"><span class="hs-identifier hs-var">setSelectedSquare</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-70"></span><span>        </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-72"></span><span>        </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-71"></span><span>            </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">DragboardModel a
--&gt; EventResponse (DragboardModel a) DragboardEvent sp ep
-forall s e sp ep. s -&gt; EventResponse s e sp ep
-</span><span class="hs-identifier hs-var">Model</span></span><span> </span><span class="annot"><span class="annottext">(DragboardModel a
- -&gt; EventResponse (DragboardModel a) DragboardEvent sp ep)
--&gt; DragboardModel a
--&gt; EventResponse (DragboardModel a) DragboardEvent sp ep
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span id="line-73"></span><span>            </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">forall s e sp ep. s -&gt; EventResponse s e sp ep
+</span><span class="hs-identifier hs-var">Model</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
-</span><a href="#local-6989586621679169619"><span class="hs-identifier hs-var">model</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
--&gt; (DragboardModel a -&gt; DragboardModel a) -&gt; DragboardModel a
-forall a b. a -&gt; (a -&gt; b) -&gt; b
-</span><span class="hs-operator hs-var">&amp;</span></span><span> </span><span class="annot"><span class="annottext">(Maybe Int -&gt; Identity (Maybe Int))
--&gt; DragboardModel a -&gt; Identity (DragboardModel a)
-forall s a. HasSelectedSquare s a =&gt; Lens' s a
-</span><a href="Monomer.Dragboard.DragboardModel.html#selectedSquare"><span class="hs-identifier hs-var">selectedSquare</span></a></span><span> </span><span class="annot"><span class="annottext">((Maybe Int -&gt; Identity (Maybe Int))
- -&gt; DragboardModel a -&gt; Identity (DragboardModel a))
--&gt; Maybe Int -&gt; DragboardModel a -&gt; DragboardModel a
-forall s t a b. ASetter s t a b -&gt; b -&gt; s -&gt; t
+</span><a href="#local-6989586621679132734"><span class="hs-identifier hs-var">model</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. a -&gt; (a -&gt; b) -&gt; b
+</span><span class="hs-operator hs-var">&amp;</span></span><span> </span><span class="annot"><span class="annottext">forall s a. HasSelectedSquare s a =&gt; Lens' s a
+</span><a href="Monomer.Dragboard.DragboardModel.html#selectedSquare"><span class="hs-identifier hs-var">selectedSquare</span></a></span><span> </span><span class="annot"><span class="annottext">forall s t a b. ASetter s t a b -&gt; b -&gt; s -&gt; t
 </span><span class="hs-operator hs-var">.~</span></span><span> </span><span class="annot"><span class="annottext">Maybe Int
-</span><a href="#local-6989586621679169602"><span class="hs-identifier hs-var">newSelected</span></a></span><span>
-</span><span id="line-72"></span><span>            </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DragboardEvent
--&gt; EventResponse (DragboardModel a) DragboardEvent sp ep
-forall s e sp ep. e -&gt; EventResponse s e sp ep
-</span><span class="hs-identifier hs-var">Event</span></span><span> </span><span class="annot"><span class="annottext">(DragboardEvent
- -&gt; EventResponse (DragboardModel a) DragboardEvent sp ep)
--&gt; DragboardEvent
--&gt; EventResponse (DragboardModel a) DragboardEvent sp ep
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679132716"><span class="hs-identifier hs-var">newSelected</span></a></span><span>
+</span><span id="line-74"></span><span>            </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall s e sp ep. e -&gt; EventResponse s e sp ep
+</span><span class="hs-identifier hs-var">Event</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; DragId -&gt; DragboardEvent
 </span><a href="Monomer.Dragboard.DragboardEvent.html#EventDrop"><span class="hs-identifier hs-var">EventDrop</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169621"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">DragId
-</span><a href="#local-6989586621679169600"><span class="hs-identifier hs-var">d</span></a></span><span>
-</span><span id="line-73"></span><span>            </span><span class="hs-special">]</span><span>
-</span><span id="line-74"></span><span>    </span><span id="local-6989586621679169602"><span class="annot"><span class="annottext">newSelected :: Maybe Int
-</span><a href="#local-6989586621679169602"><span class="hs-identifier hs-var hs-var">newSelected</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">[EventResponse (DragboardModel a) DragboardEvent sp ep] -&gt; Bool
-forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
+</span><a href="#local-6989586621679132736"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">DragId
+</span><a href="#local-6989586621679132714"><span class="hs-identifier hs-var">d</span></a></span><span>
+</span><span id="line-75"></span><span>            </span><span class="hs-special">]</span><span>
+</span><span id="line-76"></span><span>    </span><span id="local-6989586621679132716"><span class="annot"><span class="annottext">newSelected :: Maybe Int
+</span><a href="#local-6989586621679132716"><span class="hs-identifier hs-var hs-var">newSelected</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">[EventResponse (DragboardModel a) DragboardEvent sp ep]
-</span><a href="#local-6989586621679169598"><span class="hs-identifier hs-var">dropResponses</span></a></span><span>
-</span><span id="line-75"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Maybe Int
-forall a. a -&gt; Maybe a
+</span><a href="#local-6989586621679132712"><span class="hs-identifier hs-var">dropResponses</span></a></span><span>
+</span><span id="line-77"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169621"><span class="hs-identifier hs-var">i</span></a></span><span>
-</span><span id="line-76"></span><span>        </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">Maybe Int
-forall a. Maybe a
+</span><a href="#local-6989586621679132736"><span class="hs-identifier hs-var">i</span></a></span><span>
+</span><span id="line-78"></span><span>        </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-77"></span><span>    </span><span id="local-6989586621679169598"><span class="annot"><span class="annottext">dropResponses :: [EventResponse (DragboardModel a) DragboardEvent sp ep]
-</span><a href="#local-6989586621679169598"><span class="hs-identifier hs-var hs-var">dropResponses</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; DragId -&gt; WidgetData sp [[a]] -&gt; EventHandle a sp ep
-forall sp a ep.
+</span><span id="line-79"></span><span>    </span><span id="local-6989586621679132712"><span class="annot"><span class="annottext">dropResponses :: [EventResponse (DragboardModel a) DragboardEvent sp ep]
+</span><a href="#local-6989586621679132712"><span class="hs-identifier hs-var hs-var">dropResponses</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall sp a ep.
 Int -&gt; DragId -&gt; WidgetData sp [[a]] -&gt; EventHandle a sp ep
 </span><a href="Monomer.Dragboard.DragboardEvent.html#dropHandle"><span class="hs-identifier hs-var">dropHandle</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679169621"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">DragId
-</span><a href="#local-6989586621679169600"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[a]] -&gt; WidgetData sp [[a]]
-forall s a. a -&gt; WidgetData s a
+</span><a href="#local-6989586621679132736"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="annot"><span class="annottext">DragId
+</span><a href="#local-6989586621679132714"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall s a. a -&gt; WidgetData s a
 </span><span class="hs-identifier hs-var">WidgetValue</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169620"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
-</span><a href="#local-6989586621679169619"><span class="hs-identifier hs-var">model</span></a></span><span>
-</span><span id="line-78"></span><span>    </span><span id="local-6989586621679169600"><span class="annot"><span class="annottext">d :: DragId
-</span><a href="#local-6989586621679169600"><span class="hs-identifier hs-var hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; DragId
-</span><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier hs-var">DragId</span></a></span><span> </span><span class="annot"><span class="annottext">(Int -&gt; DragId) -&gt; Int -&gt; DragId
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Maybe Int -&gt; Int
-forall a. HasCallStack =&gt; Maybe a -&gt; a
+</span><a href="#local-6989586621679132735"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
+</span><a href="#local-6989586621679132734"><span class="hs-identifier hs-var">model</span></a></span><span>
+</span><span id="line-80"></span><span>    </span><span id="local-6989586621679132714"><span class="annot"><span class="annottext">d :: DragId
+</span><a href="#local-6989586621679132714"><span class="hs-identifier hs-var hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; DragId
+</span><a href="Monomer.Dragboard.DragboardEvent.html#DragId"><span class="hs-identifier hs-var">DragId</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a. HasCallStack =&gt; Maybe a -&gt; a
 </span><span class="hs-identifier hs-var">fromJust</span></span><span> </span><span class="annot"><span class="annottext">Maybe Int
-</span><a href="#local-6989586621679169608"><span class="hs-identifier hs-var">selected</span></a></span><span>
-</span><span id="line-79"></span><span>    </span><span id="local-6989586621679169608"><span class="annot"><span class="annottext">selected :: Maybe Int
-</span><a href="#local-6989586621679169608"><span class="hs-identifier hs-var hs-var">selected</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DragboardModel a
-</span><a href="#local-6989586621679169619"><span class="hs-identifier hs-var">model</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
--&gt; Getting (Maybe Int) (DragboardModel a) (Maybe Int) -&gt; Maybe Int
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Maybe Int) (DragboardModel a) (Maybe Int)
-forall s a. HasSelectedSquare s a =&gt; Lens' s a
-</span><a href="Monomer.Dragboard.DragboardModel.html#selectedSquare"><span class="hs-identifier hs-var">selectedSquare</span></a></span><span>
-</span><span id="line-80"></span><span>    </span><span id="local-6989586621679169607"><span class="annot"><span class="annottext">setSelectedSquare :: Maybe Int -&gt; [EventResponse (DragboardModel a) e sp ep]
-</span><a href="#local-6989586621679169607"><span class="hs-identifier hs-var hs-var">setSelectedSquare</span></a></span></span><span> </span><span id="local-6989586621679169589"><span class="annot"><span class="annottext">Maybe Int
-</span><a href="#local-6989586621679169589"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DragboardModel a -&gt; EventResponse (DragboardModel a) e sp ep
-forall s e sp ep. s -&gt; EventResponse s e sp ep
-</span><span class="hs-identifier hs-var">Model</span></span><span> </span><span class="annot"><span class="annottext">(DragboardModel a -&gt; EventResponse (DragboardModel a) e sp ep)
--&gt; DragboardModel a -&gt; EventResponse (DragboardModel a) e sp ep
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679132732"><span class="hs-identifier hs-var">_dmSelectedSquare</span></a></span><span>
+</span><span id="line-81"></span><span>    </span><span id="local-6989586621679132721"><span class="annot"><span class="annottext">setSelectedSquare :: Maybe Int -&gt; [EventResponse (DragboardModel a) e sp ep]
+</span><a href="#local-6989586621679132721"><span class="hs-identifier hs-var hs-var">setSelectedSquare</span></a></span></span><span> </span><span id="local-6989586621679132705"><span class="annot"><span class="annottext">Maybe Int
+</span><a href="#local-6989586621679132705"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall s e sp ep. s -&gt; EventResponse s e sp ep
+</span><span class="hs-identifier hs-var">Model</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
-</span><a href="#local-6989586621679169619"><span class="hs-identifier hs-var">model</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
--&gt; (DragboardModel a -&gt; DragboardModel a) -&gt; DragboardModel a
-forall a b. a -&gt; (a -&gt; b) -&gt; b
-</span><span class="hs-operator hs-var">&amp;</span></span><span> </span><span class="annot"><span class="annottext">(Maybe Int -&gt; Identity (Maybe Int))
--&gt; DragboardModel a -&gt; Identity (DragboardModel a)
-forall s a. HasSelectedSquare s a =&gt; Lens' s a
-</span><a href="Monomer.Dragboard.DragboardModel.html#selectedSquare"><span class="hs-identifier hs-var">selectedSquare</span></a></span><span> </span><span class="annot"><span class="annottext">((Maybe Int -&gt; Identity (Maybe Int))
- -&gt; DragboardModel a -&gt; Identity (DragboardModel a))
--&gt; Maybe Int -&gt; DragboardModel a -&gt; DragboardModel a
-forall s t a b. ASetter s t a b -&gt; b -&gt; s -&gt; t
+</span><a href="#local-6989586621679132734"><span class="hs-identifier hs-var">model</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. a -&gt; (a -&gt; b) -&gt; b
+</span><span class="hs-operator hs-var">&amp;</span></span><span> </span><span class="annot"><span class="annottext">forall s a. HasSelectedSquare s a =&gt; Lens' s a
+</span><a href="Monomer.Dragboard.DragboardModel.html#selectedSquare"><span class="hs-identifier hs-var">selectedSquare</span></a></span><span> </span><span class="annot"><span class="annottext">forall s t a b. ASetter s t a b -&gt; b -&gt; s -&gt; t
 </span><span class="hs-operator hs-var">.~</span></span><span> </span><span class="annot"><span class="annottext">Maybe Int
-</span><a href="#local-6989586621679169589"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-81"></span><span>
-</span><span id="line-82"></span><span id="local-6989586621679169838"><span id="local-6989586621679169839"><span id="local-6989586621679169840"><span id="local-6989586621679169841"><span id="local-6989586621679169842"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#focusHandle"><span class="hs-identifier hs-type">focusHandle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetNode</span></span><span> </span><span class="annot"><a href="#local-6989586621679169842"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169841"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Path</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventHandle"><span class="hs-identifier hs-type">EventHandle</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169840"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169839"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169838"><span class="hs-identifier hs-type">ep</span></a></span></span></span></span></span></span><span>
-</span><span id="line-83"></span><span id="focusHandle"><span class="annot"><span class="annottext">focusHandle :: forall s e a sp ep. WidgetNode s e -&gt; Path -&gt; EventHandle a sp ep
-</span><a href="Monomer.Dragboard.DragboardEvent.html#focusHandle"><span class="hs-identifier hs-var hs-var">focusHandle</span></a></span></span><span> </span><span id="local-6989586621679169588"><span class="annot"><span class="annottext">WidgetNode s e
-</span><a href="#local-6989586621679169588"><span class="hs-identifier hs-var">node</span></a></span></span><span> </span><span id="local-6989586621679169587"><span class="annot"><span class="annottext">Path
-</span><a href="#local-6989586621679169587"><span class="hs-identifier hs-var">prev</span></a></span></span><span> </span><span id="local-6989586621679169586"><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169586"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
-</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[EventResponse (DragboardModel a) DragboardEvent sp ep]
-forall {s} {e}. [EventResponse s e sp ep]
-</span><a href="#local-6989586621679169585"><span class="hs-identifier hs-var">response</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-84"></span><span>    </span><span id="local-6989586621679169585"><span class="annot"><span class="annottext">response :: [EventResponse s e sp ep]
-</span><a href="#local-6989586621679169585"><span class="hs-identifier hs-var hs-var">response</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679169582"><span class="hs-identifier hs-var">valid</span></a></span><span>
-</span><span id="line-85"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">WidgetRequest sp ep -&gt; EventResponse s e sp ep
-forall s e sp ep. WidgetRequest sp ep -&gt; EventResponse s e sp ep
-</span><span class="hs-identifier hs-var">RequestParent</span></span><span> </span><span class="annot"><span class="annottext">(WidgetRequest sp ep -&gt; EventResponse s e sp ep)
--&gt; [WidgetRequest sp ep] -&gt; [EventResponse s e sp ep]
-forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Path -&gt; WidgetRequest sp ep) -&gt; Path -&gt; WidgetRequest sp ep
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679132705"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-82"></span><span>
+</span><span id="line-83"></span><span id="local-6989586621679132961"><span id="local-6989586621679132962"><span id="local-6989586621679132963"><span id="local-6989586621679132964"><span id="local-6989586621679132965"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#focusHandle"><span class="hs-identifier hs-type">focusHandle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetNode</span></span><span> </span><span class="annot"><a href="#local-6989586621679132965"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132964"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Path</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventHandle"><span class="hs-identifier hs-type">EventHandle</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132963"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132962"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132961"><span class="hs-identifier hs-type">ep</span></a></span></span></span></span></span></span><span>
+</span><span id="line-84"></span><span id="focusHandle"><span class="annot"><span class="annottext">focusHandle :: forall s e a sp ep. WidgetNode s e -&gt; Path -&gt; EventHandle a sp ep
+</span><a href="Monomer.Dragboard.DragboardEvent.html#focusHandle"><span class="hs-identifier hs-var hs-var">focusHandle</span></a></span></span><span> </span><span id="local-6989586621679132704"><span class="annot"><span class="annottext">WidgetNode s e
+</span><a href="#local-6989586621679132704"><span class="hs-identifier hs-var">node</span></a></span></span><span> </span><span id="local-6989586621679132703"><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679132703"><span class="hs-identifier hs-var">prev</span></a></span></span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardCfg.html#DragboardCfg"><span class="hs-identifier hs-type">DragboardCfg</span></a></span><span class="hs-special">{</span><span id="local-6989586621679132694"><span id="local-6989586621679132695"><span id="local-6989586621679132696"><span id="local-6989586621679132697"><span id="local-6989586621679132698"><span id="local-6989586621679132699"><span id="local-6989586621679132700"><span id="local-6989586621679132701"><span id="local-6989586621679132702"><span class="annot"><span class="annottext">[CheckerboardCfg]
+[Info a -&gt; WidgetRequest sp ep]
+[Path -&gt; WidgetRequest sp ep]
+Maybe Bool
+Maybe Int
+Maybe Color
+Maybe (Info a -&gt; Bool)
+_dcOnChangeReq :: [Info a -&gt; WidgetRequest sp ep]
+_dcOnBlurReq :: [Path -&gt; WidgetRequest sp ep]
+_dcOnFocusReq :: [Path -&gt; WidgetRequest sp ep]
+_dcCheckerCfg :: [CheckerboardCfg]
+_dcRenderS :: Maybe Bool
+_dcNoClick :: Maybe Bool
+_dcSelectColor :: Maybe Color
+_dcOffset :: Maybe Int
+_dcValidator :: Maybe (Info a -&gt; Bool)
+_dcOnChangeReq :: forall s e a. DragboardCfg s e a -&gt; [Info a -&gt; WidgetRequest s e]
+_dcOnBlurReq :: forall s e a. DragboardCfg s e a -&gt; [Path -&gt; WidgetRequest s e]
+_dcOnFocusReq :: forall s e a. DragboardCfg s e a -&gt; [Path -&gt; WidgetRequest s e]
+_dcCheckerCfg :: forall s e a. DragboardCfg s e a -&gt; [CheckerboardCfg]
+_dcRenderS :: forall s e a. DragboardCfg s e a -&gt; Maybe Bool
+_dcNoClick :: forall s e a. DragboardCfg s e a -&gt; Maybe Bool
+_dcSelectColor :: forall s e a. DragboardCfg s e a -&gt; Maybe Color
+_dcOffset :: forall s e a. DragboardCfg s e a -&gt; Maybe Int
+_dcValidator :: forall s e a. DragboardCfg s e a -&gt; Maybe (Info a -&gt; Bool)
+</span><a href="#local-6989586621679132694"><span class="hs-glyph hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">..</span></a></span></span></span></span></span></span></span></span></span></span><span class="hs-special">}</span><span> </span><span class="annot"><span class="annottext">DragboardModel a
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall {s} {e}. [EventResponse s e sp ep]
+</span><a href="#local-6989586621679132693"><span class="hs-identifier hs-var">response</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-85"></span><span>    </span><span id="local-6989586621679132693"><span class="annot"><span class="annottext">response :: [EventResponse s e sp ep]
+</span><a href="#local-6989586621679132693"><span class="hs-identifier hs-var hs-var">response</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679132690"><span class="hs-identifier hs-var">valid</span></a></span><span>
+</span><span id="line-86"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">forall s e sp ep. WidgetRequest sp ep -&gt; EventResponse s e sp ep
+</span><span class="hs-identifier hs-var">RequestParent</span></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Path
-</span><a href="#local-6989586621679169587"><span class="hs-identifier hs-var">prev</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">((Path -&gt; WidgetRequest sp ep) -&gt; WidgetRequest sp ep)
--&gt; [Path -&gt; WidgetRequest sp ep] -&gt; [WidgetRequest sp ep]
-forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a -&gt; [Path -&gt; WidgetRequest sp ep]
-forall s e a. DragboardCfg s e a -&gt; [Path -&gt; WidgetRequest s e]
-</span><a href="Monomer.Dragboard.DragboardCfg.html#_dcOnFocusReq"><span class="hs-identifier hs-var hs-var">_dcOnFocusReq</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169586"><span class="hs-identifier hs-var">config</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-86"></span><span>        </span><span class="hs-keyword">else</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-87"></span><span>    </span><span id="local-6989586621679169582"><span class="annot"><span class="annottext">valid :: Bool
-</span><a href="#local-6989586621679169582"><span class="hs-identifier hs-var hs-var">valid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
-</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; Bool -&gt; Bool
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">WidgetNode s e -&gt; Path -&gt; Bool
-forall s e. WidgetNode s e -&gt; Path -&gt; Bool
+</span><a href="#local-6989586621679132703"><span class="hs-identifier hs-var">prev</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">[Path -&gt; WidgetRequest sp ep]
+</span><a href="#local-6989586621679132696"><span class="hs-identifier hs-var">_dcOnFocusReq</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-87"></span><span>        </span><span class="hs-keyword">else</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-88"></span><span>    </span><span id="local-6989586621679132690"><span class="annot"><span class="annottext">valid :: Bool
+</span><a href="#local-6989586621679132690"><span class="hs-identifier hs-var hs-var">valid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall s e. WidgetNode s e -&gt; Path -&gt; Bool
 </span><span class="hs-identifier hs-var">isNodeParentOfPath</span></span><span> </span><span class="annot"><span class="annottext">WidgetNode s e
-</span><a href="#local-6989586621679169588"><span class="hs-identifier hs-var">node</span></a></span><span> </span><span class="annot"><span class="annottext">Path
-</span><a href="#local-6989586621679169587"><span class="hs-identifier hs-var">prev</span></a></span><span>
-</span><span id="line-88"></span><span>
-</span><span id="line-89"></span><span id="local-6989586621679169574"><span id="local-6989586621679169575"><span id="local-6989586621679169576"><span id="local-6989586621679169577"><span id="local-6989586621679169578"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#blurHandle"><span class="hs-identifier hs-type">blurHandle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetNode</span></span><span> </span><span class="annot"><a href="#local-6989586621679169578"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169577"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Path</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventHandle"><span class="hs-identifier hs-type">EventHandle</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169576"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169575"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679169574"><span class="hs-identifier hs-type">ep</span></a></span></span></span></span></span></span><span>
-</span><span id="line-90"></span><span id="blurHandle"><span class="annot"><span class="annottext">blurHandle :: forall s e a sp ep. WidgetNode s e -&gt; Path -&gt; EventHandle a sp ep
-</span><a href="Monomer.Dragboard.DragboardEvent.html#blurHandle"><span class="hs-identifier hs-var hs-var">blurHandle</span></a></span></span><span> </span><span id="local-6989586621679169573"><span class="annot"><span class="annottext">WidgetNode s e
-</span><a href="#local-6989586621679169573"><span class="hs-identifier hs-var">node</span></a></span></span><span> </span><span id="local-6989586621679169572"><span class="annot"><span class="annottext">Path
-</span><a href="#local-6989586621679169572"><span class="hs-identifier hs-var">next</span></a></span></span><span> </span><span id="local-6989586621679169571"><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169571"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span class="annot"><span class="annottext">DragboardModel a
-</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[EventResponse (DragboardModel a) DragboardEvent sp ep]
-forall {s} {e}. [EventResponse s e sp ep]
-</span><a href="#local-6989586621679169570"><span class="hs-identifier hs-var">response</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-91"></span><span>    </span><span id="local-6989586621679169570"><span class="annot"><span class="annottext">response :: [EventResponse s e sp ep]
-</span><a href="#local-6989586621679169570"><span class="hs-identifier hs-var hs-var">response</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679169567"><span class="hs-identifier hs-var">valid</span></a></span><span>
-</span><span id="line-92"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">WidgetRequest sp ep -&gt; EventResponse s e sp ep
-forall s e sp ep. WidgetRequest sp ep -&gt; EventResponse s e sp ep
-</span><span class="hs-identifier hs-var">RequestParent</span></span><span> </span><span class="annot"><span class="annottext">(WidgetRequest sp ep -&gt; EventResponse s e sp ep)
--&gt; [WidgetRequest sp ep] -&gt; [EventResponse s e sp ep]
-forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Path -&gt; WidgetRequest sp ep) -&gt; Path -&gt; WidgetRequest sp ep
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679132704"><span class="hs-identifier hs-var">node</span></a></span><span> </span><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679132703"><span class="hs-identifier hs-var">prev</span></a></span><span>
+</span><span id="line-89"></span><span>
+</span><span id="line-90"></span><span id="local-6989586621679132683"><span id="local-6989586621679132684"><span id="local-6989586621679132685"><span id="local-6989586621679132686"><span id="local-6989586621679132687"><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#blurHandle"><span class="hs-identifier hs-type">blurHandle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetNode</span></span><span> </span><span class="annot"><a href="#local-6989586621679132687"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132686"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Path</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardEvent.html#EventHandle"><span class="hs-identifier hs-type">EventHandle</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132685"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132684"><span class="hs-identifier hs-type">sp</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132683"><span class="hs-identifier hs-type">ep</span></a></span></span></span></span></span></span><span>
+</span><span id="line-91"></span><span id="blurHandle"><span class="annot"><span class="annottext">blurHandle :: forall s e a sp ep. WidgetNode s e -&gt; Path -&gt; EventHandle a sp ep
+</span><a href="Monomer.Dragboard.DragboardEvent.html#blurHandle"><span class="hs-identifier hs-var hs-var">blurHandle</span></a></span></span><span> </span><span id="local-6989586621679132682"><span class="annot"><span class="annottext">WidgetNode s e
+</span><a href="#local-6989586621679132682"><span class="hs-identifier hs-var">node</span></a></span></span><span> </span><span id="local-6989586621679132681"><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679132681"><span class="hs-identifier hs-var">next</span></a></span></span><span> </span><span class="annot"><a href="Monomer.Dragboard.DragboardCfg.html#DragboardCfg"><span class="hs-identifier hs-type">DragboardCfg</span></a></span><span class="hs-special">{</span><span id="local-6989586621679132672"><span id="local-6989586621679132673"><span id="local-6989586621679132674"><span id="local-6989586621679132675"><span id="local-6989586621679132676"><span id="local-6989586621679132677"><span id="local-6989586621679132678"><span id="local-6989586621679132679"><span id="local-6989586621679132680"><span class="annot"><span class="annottext">[CheckerboardCfg]
+[Info a -&gt; WidgetRequest sp ep]
+[Path -&gt; WidgetRequest sp ep]
+Maybe Bool
+Maybe Int
+Maybe Color
+Maybe (Info a -&gt; Bool)
+_dcOnChangeReq :: [Info a -&gt; WidgetRequest sp ep]
+_dcOnBlurReq :: [Path -&gt; WidgetRequest sp ep]
+_dcOnFocusReq :: [Path -&gt; WidgetRequest sp ep]
+_dcCheckerCfg :: [CheckerboardCfg]
+_dcRenderS :: Maybe Bool
+_dcNoClick :: Maybe Bool
+_dcSelectColor :: Maybe Color
+_dcOffset :: Maybe Int
+_dcValidator :: Maybe (Info a -&gt; Bool)
+_dcOnChangeReq :: forall s e a. DragboardCfg s e a -&gt; [Info a -&gt; WidgetRequest s e]
+_dcOnBlurReq :: forall s e a. DragboardCfg s e a -&gt; [Path -&gt; WidgetRequest s e]
+_dcOnFocusReq :: forall s e a. DragboardCfg s e a -&gt; [Path -&gt; WidgetRequest s e]
+_dcCheckerCfg :: forall s e a. DragboardCfg s e a -&gt; [CheckerboardCfg]
+_dcRenderS :: forall s e a. DragboardCfg s e a -&gt; Maybe Bool
+_dcNoClick :: forall s e a. DragboardCfg s e a -&gt; Maybe Bool
+_dcSelectColor :: forall s e a. DragboardCfg s e a -&gt; Maybe Color
+_dcOffset :: forall s e a. DragboardCfg s e a -&gt; Maybe Int
+_dcValidator :: forall s e a. DragboardCfg s e a -&gt; Maybe (Info a -&gt; Bool)
+</span><a href="#local-6989586621679132672"><span class="hs-glyph hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">..</span></a></span></span></span></span></span></span></span></span></span></span><span class="hs-special">}</span><span> </span><span class="annot"><span class="annottext">DragboardModel a
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall {s} {e}. [EventResponse s e sp ep]
+</span><a href="#local-6989586621679132671"><span class="hs-identifier hs-var">response</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-92"></span><span>    </span><span id="local-6989586621679132671"><span class="annot"><span class="annottext">response :: [EventResponse s e sp ep]
+</span><a href="#local-6989586621679132671"><span class="hs-identifier hs-var hs-var">response</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679132668"><span class="hs-identifier hs-var">valid</span></a></span><span>
+</span><span id="line-93"></span><span>        </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">forall s e sp ep. WidgetRequest sp ep -&gt; EventResponse s e sp ep
+</span><span class="hs-identifier hs-var">RequestParent</span></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Path
-</span><a href="#local-6989586621679169572"><span class="hs-identifier hs-var">next</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">((Path -&gt; WidgetRequest sp ep) -&gt; WidgetRequest sp ep)
--&gt; [Path -&gt; WidgetRequest sp ep] -&gt; [WidgetRequest sp ep]
-forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a -&gt; [Path -&gt; WidgetRequest sp ep]
-forall s e a. DragboardCfg s e a -&gt; [Path -&gt; WidgetRequest s e]
-</span><a href="Monomer.Dragboard.DragboardCfg.html#_dcOnBlurReq"><span class="hs-identifier hs-var hs-var">_dcOnBlurReq</span></a></span><span> </span><span class="annot"><span class="annottext">DragboardCfg sp ep a
-</span><a href="#local-6989586621679169571"><span class="hs-identifier hs-var">config</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-93"></span><span>        </span><span class="hs-keyword">else</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-94"></span><span>    </span><span id="local-6989586621679169567"><span class="annot"><span class="annottext">valid :: Bool
-</span><a href="#local-6989586621679169567"><span class="hs-identifier hs-var hs-var">valid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
-</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; Bool -&gt; Bool
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">WidgetNode s e -&gt; Path -&gt; Bool
-forall s e. WidgetNode s e -&gt; Path -&gt; Bool
+</span><a href="#local-6989586621679132681"><span class="hs-identifier hs-var">next</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">[Path -&gt; WidgetRequest sp ep]
+</span><a href="#local-6989586621679132673"><span class="hs-identifier hs-var">_dcOnBlurReq</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-94"></span><span>        </span><span class="hs-keyword">else</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-95"></span><span>    </span><span id="local-6989586621679132668"><span class="annot"><span class="annottext">valid :: Bool
+</span><a href="#local-6989586621679132668"><span class="hs-identifier hs-var hs-var">valid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall s e. WidgetNode s e -&gt; Path -&gt; Bool
 </span><span class="hs-identifier hs-var">isNodeParentOfPath</span></span><span> </span><span class="annot"><span class="annottext">WidgetNode s e
-</span><a href="#local-6989586621679169573"><span class="hs-identifier hs-var">node</span></a></span><span> </span><span class="annot"><span class="annottext">Path
-</span><a href="#local-6989586621679169572"><span class="hs-identifier hs-var">next</span></a></span><span>
-</span><span id="line-95"></span></pre></body></html>
+</span><a href="#local-6989586621679132682"><span class="hs-identifier hs-var">node</span></a></span><span> </span><span class="annot"><span class="annottext">Path
+</span><a href="#local-6989586621679132681"><span class="hs-identifier hs-var">next</span></a></span><span>
+</span><span id="line-96"></span></pre></body></html>

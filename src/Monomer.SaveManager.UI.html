@@ -1,171 +1,141 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Monomer.SaveManager.UI</span><span>
-</span><span id="line-2"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Monomer.SaveManager.UI.html#buildUI"><span class="hs-identifier">buildUI</span></a></span><span>
-</span><span id="line-3"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-4"></span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span>
-</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Maybe</span></span><span>
-</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Typeable</span></span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Core.Combinators</span></span><span>
-</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Main.UserUtil</span></span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Composite</span></span><span>
-</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Containers.Confirm</span></span><span>
-</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Containers.Grid</span></span><span>
-</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Containers.SelectList</span></span><span>
-</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Containers.Stack</span></span><span>
-</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Containers.ZStack</span></span><span>
-</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Singles.Button</span></span><span>
-</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Singles.Label</span></span><span>
-</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Sequence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Seq</span></span><span>
-</span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerCfg.html"><span class="hs-identifier">Monomer.SaveManager.SaveManagerCfg</span></a></span><span>
-</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerEvent.html"><span class="hs-identifier">Monomer.SaveManager.SaveManagerEvent</span></a></span><span>
-</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html"><span class="hs-identifier">Monomer.SaveManager.SaveManagerModel</span></a></span><span>
-</span><span id="line-23"></span><span>
-</span><span id="line-24"></span><span id="local-6989586621679173660"><span id="local-6989586621679173661"><span id="local-6989586621679173662"><span class="annot"><a href="Monomer.SaveManager.UI.html#buildUI"><span class="hs-identifier hs-type">buildUI</span></a></span><span>
-</span><span id="line-25"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Typeable</span></span><span> </span><span class="annot"><a href="#local-6989586621679173662"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-26"></span><span>    </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.SaveManager.SaveManagerCfg.html#SaveManagerCfg"><span class="hs-identifier hs-type">SaveManagerCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679173661"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679173660"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679173662"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-27"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UIBuilder</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#SaveManagerModel"><span class="hs-identifier hs-type">SaveManagerModel</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679173662"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.SaveManager.SaveManagerEvent.html#SaveManagerEvent"><span class="hs-identifier hs-type">SaveManagerEvent</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679173662"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span></span></span><span>
-</span><span id="line-28"></span><span id="buildUI"><span class="annot"><span class="annottext">buildUI :: forall a s e.
-Typeable a =&gt;
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE RecordWildCards #-}</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Monomer.SaveManager.UI</span><span>
+</span><span id="line-4"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Monomer.SaveManager.UI.html#buildUI"><span class="hs-identifier">buildUI</span></a></span><span>
+</span><span id="line-5"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Maybe</span></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Typeable</span></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Core.Combinators</span></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Main.UserUtil</span></span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Composite</span></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Containers.Confirm</span></span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Containers.Grid</span></span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Containers.SelectList</span></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Containers.Stack</span></span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Containers.ZStack</span></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Singles.Button</span></span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Singles.Label</span></span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Sequence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Seq</span></span><span>
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerCfg.html"><span class="hs-identifier">Monomer.SaveManager.SaveManagerCfg</span></a></span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerEvent.html"><span class="hs-identifier">Monomer.SaveManager.SaveManagerEvent</span></a></span><span>
+</span><span id="line-23"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html"><span class="hs-identifier">Monomer.SaveManager.SaveManagerModel</span></a></span><span>
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span id="local-6989586621679137124"><span id="local-6989586621679137125"><span id="local-6989586621679137126"><span class="annot"><a href="Monomer.SaveManager.UI.html#buildUI"><span class="hs-identifier hs-type">buildUI</span></a></span><span>
+</span><span id="line-26"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Typeable</span></span><span> </span><span class="annot"><a href="#local-6989586621679137126"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span> </span><span class="annot"><a href="#local-6989586621679137126"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-27"></span><span>    </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.SaveManager.SaveManagerCfg.html#SaveManagerCfg"><span class="hs-identifier hs-type">SaveManagerCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679137125"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679137124"><span class="hs-identifier hs-type">e</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679137126"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UIBuilder</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#SaveManagerModel"><span class="hs-identifier hs-type">SaveManagerModel</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679137126"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.SaveManager.SaveManagerEvent.html#SaveManagerEvent"><span class="hs-identifier hs-type">SaveManagerEvent</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679137126"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span></span></span><span>
+</span><span id="line-29"></span><span id="buildUI"><span class="annot"><span class="annottext">buildUI :: forall a s e.
+(Typeable a, Eq a) =&gt;
 SaveManagerCfg s e a
 -&gt; UIBuilder (SaveManagerModel a) (SaveManagerEvent a)
-</span><a href="Monomer.SaveManager.UI.html#buildUI"><span class="hs-identifier hs-var hs-var">buildUI</span></a></span></span><span> </span><span id="local-6989586621679173538"><span class="annot"><span class="annottext">SaveManagerCfg s e a
-</span><a href="#local-6989586621679173538"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span class="annot"><span class="annottext">WidgetEnv (SaveManagerModel a) (SaveManagerEvent a)
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679173537"><span class="annot"><span class="annottext">SaveManagerModel a
-</span><a href="#local-6989586621679173537"><span class="hs-identifier hs-var">model</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-</span><a href="#local-6989586621679173536"><span class="hs-identifier hs-var">widgetTree</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-29"></span><span>    </span><span id="local-6989586621679173536"><span class="annot"><span class="annottext">widgetTree :: WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-</span><a href="#local-6989586621679173536"><span class="hs-identifier hs-var hs-var">widgetTree</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[WidgetNode (SaveManagerModel a) (SaveManagerEvent a)]
--&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-forall (t :: * -&gt; *) s e.
+</span><a href="Monomer.SaveManager.UI.html#buildUI"><span class="hs-identifier hs-var hs-var">buildUI</span></a></span></span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerCfg.html#SaveManagerCfg"><span class="hs-identifier hs-type">SaveManagerCfg</span></a></span><span class="hs-special">{</span><span id="local-6989586621679137004"><span id="local-6989586621679137005"><span id="local-6989586621679137006"><span id="local-6989586621679137007"><span id="local-6989586621679137008"><span id="local-6989586621679137009"><span class="annot"><span class="annottext">[a -&gt; WidgetRequest s e]
+[Path -&gt; WidgetRequest s e]
+[Saves a -&gt; WidgetRequest s e]
+Maybe Bool
+Maybe (a -&gt; ZonedTime -&gt; Text)
+_smcNoConfirm :: forall s e a. SaveManagerCfg s e a -&gt; Maybe Bool
+_smcCaptionMethod :: forall s e a.
+SaveManagerCfg s e a -&gt; Maybe (a -&gt; ZonedTime -&gt; Text)
+_smcOnSavesChangeReq :: forall s e a.
+SaveManagerCfg s e a -&gt; [Saves a -&gt; WidgetRequest s e]
+_smcOnChangeReq :: forall s e a. SaveManagerCfg s e a -&gt; [a -&gt; WidgetRequest s e]
+_smcOnBlurReq :: forall s e a. SaveManagerCfg s e a -&gt; [Path -&gt; WidgetRequest s e]
+_smcOnFocusReq :: forall s e a. SaveManagerCfg s e a -&gt; [Path -&gt; WidgetRequest s e]
+_smcNoConfirm :: Maybe Bool
+_smcCaptionMethod :: Maybe (a -&gt; ZonedTime -&gt; Text)
+_smcOnSavesChangeReq :: [Saves a -&gt; WidgetRequest s e]
+_smcOnChangeReq :: [a -&gt; WidgetRequest s e]
+_smcOnBlurReq :: [Path -&gt; WidgetRequest s e]
+_smcOnFocusReq :: [Path -&gt; WidgetRequest s e]
+</span><a href="Monomer.SaveManager.SaveManagerCfg.html#_smcNoConfirm"><span class="hs-glyph hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">..</span></a></span></span></span></span></span></span></span><span class="hs-special">}</span><span> </span><span class="annot"><span class="annottext">WidgetEnv (SaveManagerModel a) (SaveManagerEvent a)
+</span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><a href="Monomer.SaveManager.SaveManagerModel.html#SaveManagerModel"><span class="hs-identifier hs-type">SaveManagerModel</span></a></span><span class="hs-special">{</span><span id="local-6989586621679136993"><span id="local-6989586621679136994"><span id="local-6989586621679136995"><span id="local-6989586621679136996"><span class="annot"><span class="annottext">a
+Bool
+Maybe Int
+Saves a
+_smmShowConfirmRemove :: forall a. SaveManagerModel a -&gt; Bool
+_smmSelectedData :: forall a. SaveManagerModel a -&gt; Maybe Int
+_smmCurrentData :: forall a. SaveManagerModel a -&gt; a
+_smmSavedData :: forall a. SaveManagerModel a -&gt; Seq (a, Text)
+_smmShowConfirmRemove :: Bool
+_smmSelectedData :: Maybe Int
+_smmCurrentData :: a
+_smmSavedData :: Saves a
+</span><a href="Monomer.SaveManager.SaveManagerModel.html#_smmShowConfirmRemove"><span class="hs-glyph hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">..</span></a></span></span></span></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
+</span><a href="#local-6989586621679136988"><span class="hs-identifier hs-var">widgetTree</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-30"></span><span>    </span><span id="local-6989586621679136988"><span class="annot"><span class="annottext">widgetTree :: WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
+</span><a href="#local-6989586621679136988"><span class="hs-identifier hs-var hs-var">widgetTree</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) s e.
 Traversable t =&gt;
 t (WidgetNode s e) -&gt; WidgetNode s e
 </span><span class="hs-identifier hs-var">zstack</span></span><span>
-</span><span id="line-30"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-</span><a href="#local-6989586621679173518"><span class="hs-identifier hs-var">mainTree</span></a></span><span>
-</span><span id="line-31"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Bool
--&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
--&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-forall s e. Bool -&gt; WidgetNode s e -&gt; WidgetNode s e
-</span><span class="hs-identifier hs-var">widgetIf</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SaveManagerModel a
-</span><a href="#local-6989586621679173537"><span class="hs-identifier hs-var">model</span></a></span><span> </span><span class="annot"><span class="annottext">SaveManagerModel a
--&gt; Getting Bool (SaveManagerModel a) Bool -&gt; Bool
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Bool (SaveManagerModel a) Bool
-forall s a. HasShowConfirmRemove s a =&gt; Lens' s a
-</span><a href="Monomer.SaveManager.SaveManagerModel.html#showConfirmRemove"><span class="hs-identifier hs-var">showConfirmRemove</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
- -&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a))
--&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
--&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span id="line-31"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
+</span><a href="#local-6989586621679136971"><span class="hs-identifier hs-var">mainTree</span></a></span><span>
+</span><span id="line-32"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall s e. Bool -&gt; WidgetNode s e -&gt; WidgetNode s e
+</span><span class="hs-identifier hs-var">widgetIf</span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679136993"><span class="hs-identifier hs-var">_smmShowConfirmRemove</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-32"></span><span>            </span><span class="annot"><span class="annottext">Text
--&gt; SaveManagerEvent a
--&gt; SaveManagerEvent a
--&gt; [ConfirmCfg]
--&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-forall s e.
-(WidgetModel s, WidgetEvent e) =&gt;
+</span><span id="line-33"></span><span>            </span><span class="annot"><span class="annottext">forall s e.
+(CompositeModel s, WidgetEvent e) =&gt;
 Text -&gt; e -&gt; e -&gt; [ConfirmCfg] -&gt; WidgetNode s e
 </span><span class="hs-identifier hs-var">confirmMsg_</span></span><span> </span><span class="annot"><span class="annottext">Text
-</span><span class="hs-string">&quot;Are you sure?&quot;</span></span><span> </span><span class="annot"><span class="annottext">SaveManagerEvent a
-forall a. SaveManagerEvent a
-</span><a href="Monomer.SaveManager.SaveManagerEvent.html#EventRemove"><span class="hs-identifier hs-var">EventRemove</span></a></span><span> </span><span class="annot"><span class="annottext">SaveManagerEvent a
-forall a. SaveManagerEvent a
+</span><span class="hs-string">&quot;Are you sure?&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. SaveManagerEvent a
+</span><a href="Monomer.SaveManager.SaveManagerEvent.html#EventRemove"><span class="hs-identifier hs-var">EventRemove</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. SaveManagerEvent a
 </span><a href="Monomer.SaveManager.SaveManagerEvent.html#EventCancel"><span class="hs-identifier hs-var">EventCancel</span></a></span><span>
-</span><span id="line-33"></span><span>                </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Text -&gt; ConfirmCfg
-forall t. CmbAcceptCaption t =&gt; Text -&gt; t
+</span><span id="line-34"></span><span>                </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall t. CmbAcceptCaption t =&gt; Text -&gt; t
 </span><span class="hs-identifier hs-var">acceptCaption</span></span><span> </span><span class="annot"><span class="annottext">Text
 </span><span class="hs-string">&quot;Remove&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-34"></span><span>        </span><span class="hs-special">]</span><span>
-</span><span id="line-35"></span><span>    </span><span id="local-6989586621679173518"><span class="annot"><span class="annottext">mainTree :: WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-</span><a href="#local-6989586621679173518"><span class="hs-identifier hs-var hs-var">mainTree</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[StackCfg]
--&gt; [WidgetNode (SaveManagerModel a) (SaveManagerEvent a)]
--&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-forall (t :: * -&gt; *) s e.
+</span><span id="line-35"></span><span>        </span><span class="hs-special">]</span><span>
+</span><span id="line-36"></span><span>    </span><span id="local-6989586621679136971"><span class="annot"><span class="annottext">mainTree :: WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
+</span><a href="#local-6989586621679136971"><span class="hs-identifier hs-var hs-var">mainTree</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) s e.
 Traversable t =&gt;
 [StackCfg] -&gt; t (WidgetNode s e) -&gt; WidgetNode s e
-</span><span class="hs-identifier hs-var">vstack_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Double -&gt; StackCfg
-forall t. CmbChildSpacing t =&gt; Double -&gt; t
+</span><span class="hs-identifier hs-var">vstack_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall t. CmbChildSpacing t =&gt; Double -&gt; t
 </span><span class="hs-identifier hs-var">childSpacing_</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">16</span></span><span class="hs-special">]</span><span>
-</span><span id="line-36"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">[GridCfg]
--&gt; [WidgetNode (SaveManagerModel a) (SaveManagerEvent a)]
--&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-forall (t :: * -&gt; *) s e.
+</span><span id="line-37"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) s e.
 Traversable t =&gt;
 [GridCfg] -&gt; t (WidgetNode s e) -&gt; WidgetNode s e
-</span><span class="hs-identifier hs-var">hgrid_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Double -&gt; GridCfg
-forall t. CmbChildSpacing t =&gt; Double -&gt; t
+</span><span class="hs-identifier hs-var">hgrid_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall t. CmbChildSpacing t =&gt; Double -&gt; t
 </span><span class="hs-identifier hs-var">childSpacing_</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">16</span></span><span class="hs-special">]</span><span>
-</span><span id="line-37"></span><span>            </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">Text
--&gt; SaveManagerEvent a
--&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-forall {a} {s}.
+</span><span id="line-38"></span><span>            </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">forall {a} {s}.
 Typeable a =&gt;
 Text -&gt; SaveManagerEvent a -&gt; WidgetNode s (SaveManagerEvent a)
-</span><a href="#local-6989586621679173467"><span class="hs-identifier hs-var">button'</span></a></span><span> </span><span class="annot"><span class="annottext">Text
-</span><span class="hs-string">&quot;New slot&quot;</span></span><span> </span><span class="annot"><span class="annottext">SaveManagerEvent a
-forall a. SaveManagerEvent a
+</span><a href="#local-6989586621679136919"><span class="hs-identifier hs-var">button'</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;New slot&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. SaveManagerEvent a
 </span><a href="Monomer.SaveManager.SaveManagerEvent.html#EventNewSlot"><span class="hs-identifier hs-var">EventNewSlot</span></a></span><span>
-</span><span id="line-38"></span><span>            </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Text
--&gt; SaveManagerEvent a
--&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-forall {a} {s}.
+</span><span id="line-39"></span><span>            </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall {a} {s}.
 Typeable a =&gt;
 Text -&gt; SaveManagerEvent a -&gt; WidgetNode s (SaveManagerEvent a)
-</span><a href="#local-6989586621679173465"><span class="hs-identifier hs-var">buttonIfSelected</span></a></span><span> </span><span class="annot"><span class="annottext">Text
-</span><span class="hs-string">&quot;Save&quot;</span></span><span> </span><span class="annot"><span class="annottext">SaveManagerEvent a
-forall a. SaveManagerEvent a
+</span><a href="#local-6989586621679136917"><span class="hs-identifier hs-var">buttonIfSelected</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Save&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. SaveManagerEvent a
 </span><a href="Monomer.SaveManager.SaveManagerEvent.html#EventSave"><span class="hs-identifier hs-var">EventSave</span></a></span><span>
-</span><span id="line-39"></span><span>            </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Text
--&gt; SaveManagerEvent a
--&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-forall {a} {s}.
+</span><span id="line-40"></span><span>            </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall {a} {s}.
 Typeable a =&gt;
 Text -&gt; SaveManagerEvent a -&gt; WidgetNode s (SaveManagerEvent a)
-</span><a href="#local-6989586621679173465"><span class="hs-identifier hs-var">buttonIfSelected</span></a></span><span> </span><span class="annot"><span class="annottext">Text
-</span><span class="hs-string">&quot;Load&quot;</span></span><span> </span><span class="annot"><span class="annottext">SaveManagerEvent a
-forall a. SaveManagerEvent a
+</span><a href="#local-6989586621679136917"><span class="hs-identifier hs-var">buttonIfSelected</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Load&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. SaveManagerEvent a
 </span><a href="Monomer.SaveManager.SaveManagerEvent.html#EventLoad"><span class="hs-identifier hs-var">EventLoad</span></a></span><span>
-</span><span id="line-40"></span><span>            </span><span class="hs-special">,</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Maybe Bool -&gt; Bool
-forall a. a -&gt; Maybe a -&gt; a
-</span><span class="hs-identifier hs-var">fromMaybe</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SaveManagerCfg s e a -&gt; Maybe Bool
-forall s e a. SaveManagerCfg s e a -&gt; Maybe Bool
-</span><a href="Monomer.SaveManager.SaveManagerCfg.html#_smcNoConfirm"><span class="hs-identifier hs-var hs-var">_smcNoConfirm</span></a></span><span> </span><span class="annot"><span class="annottext">SaveManagerCfg s e a
-</span><a href="#local-6989586621679173538"><span class="hs-identifier hs-var">config</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-41"></span><span>                </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">Text
--&gt; SaveManagerEvent a
--&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-forall {a} {s}.
+</span><span id="line-41"></span><span>            </span><span class="hs-special">,</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Maybe Bool
+</span><a href="#local-6989586621679137004"><span class="hs-identifier hs-var">_smcNoConfirm</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Eq a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span>
+</span><span id="line-42"></span><span>                </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">forall {a} {s}.
 Typeable a =&gt;
 Text -&gt; SaveManagerEvent a -&gt; WidgetNode s (SaveManagerEvent a)
-</span><a href="#local-6989586621679173465"><span class="hs-identifier hs-var">buttonIfSelected</span></a></span><span> </span><span class="annot"><span class="annottext">Text
-</span><span class="hs-string">&quot;Remove&quot;</span></span><span> </span><span class="annot"><span class="annottext">SaveManagerEvent a
-forall a. SaveManagerEvent a
+</span><a href="#local-6989586621679136917"><span class="hs-identifier hs-var">buttonIfSelected</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Remove&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. SaveManagerEvent a
 </span><a href="Monomer.SaveManager.SaveManagerEvent.html#EventRemove"><span class="hs-identifier hs-var">EventRemove</span></a></span><span>
-</span><span id="line-42"></span><span>                </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">Text
--&gt; SaveManagerEvent a
--&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-forall {a} {s}.
+</span><span id="line-43"></span><span>                </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">forall {a} {s}.
 Typeable a =&gt;
 Text -&gt; SaveManagerEvent a -&gt; WidgetNode s (SaveManagerEvent a)
-</span><a href="#local-6989586621679173465"><span class="hs-identifier hs-var">buttonIfSelected</span></a></span><span> </span><span class="annot"><span class="annottext">Text
-</span><span class="hs-string">&quot;Remove&quot;</span></span><span> </span><span class="annot"><span class="annottext">SaveManagerEvent a
-forall a. SaveManagerEvent a
+</span><a href="#local-6989586621679136917"><span class="hs-identifier hs-var">buttonIfSelected</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><span class="hs-string">&quot;Remove&quot;</span></span><span> </span><span class="annot"><span class="annottext">forall a. SaveManagerEvent a
 </span><a href="Monomer.SaveManager.SaveManagerEvent.html#EventConfirmRemove"><span class="hs-identifier hs-var">EventConfirmRemove</span></a></span><span>
-</span><span id="line-43"></span><span>            </span><span class="hs-special">]</span><span>
-</span><span id="line-44"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Maybe Text
--&gt; (Int -&gt; Maybe Text -&gt; SaveManagerEvent a)
--&gt; Seq (Maybe Text)
--&gt; SelectListMakeRow
-     (SaveManagerModel a) (SaveManagerEvent a) (Maybe Text)
--&gt; [SelectListCfg
-      (SaveManagerModel a) (SaveManagerEvent a) (Maybe Text)]
--&gt; WidgetNode (SaveManagerModel a) (SaveManagerEvent a)
-forall s e (t :: * -&gt; *) a.
+</span><span id="line-44"></span><span>            </span><span class="hs-special">]</span><span>
+</span><span id="line-45"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall s e (t :: * -&gt; *) a.
 (WidgetModel s, WidgetEvent e, Traversable t, SelectListItem a) =&gt;
 a
 -&gt; (Int -&gt; a -&gt; e)
@@ -174,129 +144,75 @@ a
 -&gt; [SelectListCfg s e a]
 -&gt; WidgetNode s e
 </span><span class="hs-identifier hs-var">selectListV_</span></span><span> </span><span class="annot"><span class="annottext">Maybe Text
-</span><a href="#local-6989586621679173458"><span class="hs-identifier hs-var">selectedCaption</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Maybe Text -&gt; SaveManagerEvent a
-forall {p} {a}. Int -&gt; p -&gt; SaveManagerEvent a
-</span><a href="#local-6989586621679173457"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">Seq (Maybe Text)
-</span><a href="#local-6989586621679173456"><span class="hs-identifier hs-var">savedDataList</span></a></span><span> </span><span class="annot"><span class="annottext">SelectListMakeRow
-  (SaveManagerModel a) (SaveManagerEvent a) (Maybe Text)
-forall {s} {e}. Maybe Text -&gt; WidgetNode s e
-</span><a href="#local-6989586621679173455"><span class="hs-identifier hs-var">makeRow</span></a></span><span>
-</span><span id="line-45"></span><span>            </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">(Path -&gt; SaveManagerEvent a)
--&gt; SelectListCfg
-     (SaveManagerModel a) (SaveManagerEvent a) (Maybe Text)
-forall t e a. CmbOnFocus t e a =&gt; (a -&gt; e) -&gt; t
-</span><span class="hs-identifier hs-var">onFocus</span></span><span> </span><span class="annot"><span class="annottext">Path -&gt; SaveManagerEvent a
-forall a. Path -&gt; SaveManagerEvent a
+</span><a href="#local-6989586621679136912"><span class="hs-identifier hs-var">selectedCaption</span></a></span><span> </span><span class="annot"><span class="annottext">forall {p} {a}. Int -&gt; p -&gt; SaveManagerEvent a
+</span><a href="#local-6989586621679136911"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">Seq (Maybe Text)
+</span><a href="#local-6989586621679136910"><span class="hs-identifier hs-var">savedDataList</span></a></span><span> </span><span class="annot"><span class="annottext">forall {s} {e}. Maybe Text -&gt; WidgetNode s e
+</span><a href="#local-6989586621679136909"><span class="hs-identifier hs-var">makeRow</span></a></span><span>
+</span><span id="line-46"></span><span>            </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">forall t e a. CmbOnFocus t e a =&gt; (a -&gt; e) -&gt; t
+</span><span class="hs-identifier hs-var">onFocus</span></span><span> </span><span class="annot"><span class="annottext">forall a. Path -&gt; SaveManagerEvent a
 </span><a href="Monomer.SaveManager.SaveManagerEvent.html#EventFocus"><span class="hs-identifier hs-var">EventFocus</span></a></span><span>
-</span><span id="line-46"></span><span>            </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Path -&gt; SaveManagerEvent a)
--&gt; SelectListCfg
-     (SaveManagerModel a) (SaveManagerEvent a) (Maybe Text)
-forall t e a. CmbOnBlur t e a =&gt; (a -&gt; e) -&gt; t
-</span><span class="hs-identifier hs-var">onBlur</span></span><span> </span><span class="annot"><span class="annottext">Path -&gt; SaveManagerEvent a
-forall a. Path -&gt; SaveManagerEvent a
+</span><span id="line-47"></span><span>            </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall t e a. CmbOnBlur t e a =&gt; (a -&gt; e) -&gt; t
+</span><span class="hs-identifier hs-var">onBlur</span></span><span> </span><span class="annot"><span class="annottext">forall a. Path -&gt; SaveManagerEvent a
 </span><a href="Monomer.SaveManager.SaveManagerEvent.html#EventBlur"><span class="hs-identifier hs-var">EventBlur</span></a></span><span>
-</span><span id="line-47"></span><span>            </span><span class="hs-special">]</span><span>
-</span><span id="line-48"></span><span>        </span><span class="hs-special">]</span><span>
-</span><span id="line-49"></span><span>    </span><span id="local-6989586621679173465"><span class="annot"><span class="annottext">buttonIfSelected :: Text -&gt; SaveManagerEvent a -&gt; WidgetNode s (SaveManagerEvent a)
-</span><a href="#local-6989586621679173465"><span class="hs-identifier hs-var hs-var">buttonIfSelected</span></a></span></span><span> </span><span id="local-6989586621679173448"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679173448"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679173447"><span class="annot"><span class="annottext">SaveManagerEvent a
-</span><a href="#local-6989586621679173447"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text -&gt; SaveManagerEvent a -&gt; WidgetNode s (SaveManagerEvent a)
-forall {a} {s}.
+</span><span id="line-48"></span><span>            </span><span class="hs-special">]</span><span>
+</span><span id="line-49"></span><span>        </span><span class="hs-special">]</span><span>
+</span><span id="line-50"></span><span>    </span><span id="local-6989586621679136917"><span class="annot"><span class="annottext">buttonIfSelected :: Text -&gt; SaveManagerEvent a -&gt; WidgetNode s (SaveManagerEvent a)
+</span><a href="#local-6989586621679136917"><span class="hs-identifier hs-var hs-var">buttonIfSelected</span></a></span></span><span> </span><span id="local-6989586621679136902"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679136902"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679136901"><span class="annot"><span class="annottext">SaveManagerEvent a
+</span><a href="#local-6989586621679136901"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall {a} {s}.
 Typeable a =&gt;
 Text -&gt; SaveManagerEvent a -&gt; WidgetNode s (SaveManagerEvent a)
-</span><a href="#local-6989586621679173467"><span class="hs-identifier hs-var">button'</span></a></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679173448"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">SaveManagerEvent a
-</span><a href="#local-6989586621679173447"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">WidgetNode s (SaveManagerEvent a)
--&gt; Bool -&gt; WidgetNode s (SaveManagerEvent a)
-forall s e. WidgetNode s e -&gt; Bool -&gt; WidgetNode s e
+</span><a href="#local-6989586621679136919"><span class="hs-identifier hs-var">button'</span></a></span><span> </span><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679136902"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">SaveManagerEvent a
+</span><a href="#local-6989586621679136901"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">forall s e. WidgetNode s e -&gt; Bool -&gt; WidgetNode s e
 </span><span class="hs-operator hs-var">`nodeEnabled`</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679173445"><span class="hs-identifier hs-var">selected</span></a></span><span>
-</span><span id="line-50"></span><span>    </span><span id="local-6989586621679173467"><span class="annot"><span class="annottext">button' :: Text -&gt; SaveManagerEvent a -&gt; WidgetNode s (SaveManagerEvent a)
-</span><a href="#local-6989586621679173467"><span class="hs-identifier hs-var hs-var">button'</span></a></span></span><span> </span><span id="local-6989586621679173435"><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679173435"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679173434"><span class="annot"><span class="annottext">SaveManagerEvent a
-</span><a href="#local-6989586621679173434"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text
--&gt; SaveManagerEvent a
--&gt; [ButtonCfg s (SaveManagerEvent a)]
--&gt; WidgetNode s (SaveManagerEvent a)
-forall e s.
+</span><a href="#local-6989586621679136899"><span class="hs-identifier hs-var">selected</span></a></span><span>
+</span><span id="line-51"></span><span>    </span><span id="local-6989586621679136919"><span class="annot"><span class="annottext">button' :: Text -&gt; SaveManagerEvent a -&gt; WidgetNode s (SaveManagerEvent a)
+</span><a href="#local-6989586621679136919"><span class="hs-identifier hs-var hs-var">button'</span></a></span></span><span> </span><span id="local-6989586621679136889"><span class="annot"><span class="annottext">Text
+</span><a href="#local-6989586621679136889"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679136888"><span class="annot"><span class="annottext">SaveManagerEvent a
+</span><a href="#local-6989586621679136888"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e s.
 WidgetEvent e =&gt;
 Text -&gt; e -&gt; [ButtonCfg s e] -&gt; WidgetNode s e
 </span><span class="hs-identifier hs-var">button_</span></span><span> </span><span class="annot"><span class="annottext">Text
-</span><a href="#local-6989586621679173435"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">SaveManagerEvent a
-</span><a href="#local-6989586621679173434"><span class="hs-identifier hs-var">e</span></a></span><span>
-</span><span id="line-51"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">(Path -&gt; SaveManagerEvent a) -&gt; ButtonCfg s (SaveManagerEvent a)
-forall t e a. CmbOnFocus t e a =&gt; (a -&gt; e) -&gt; t
-</span><span class="hs-identifier hs-var">onFocus</span></span><span> </span><span class="annot"><span class="annottext">Path -&gt; SaveManagerEvent a
-forall a. Path -&gt; SaveManagerEvent a
+</span><a href="#local-6989586621679136889"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">SaveManagerEvent a
+</span><a href="#local-6989586621679136888"><span class="hs-identifier hs-var">e</span></a></span><span>
+</span><span id="line-52"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">forall t e a. CmbOnFocus t e a =&gt; (a -&gt; e) -&gt; t
+</span><span class="hs-identifier hs-var">onFocus</span></span><span> </span><span class="annot"><span class="annottext">forall a. Path -&gt; SaveManagerEvent a
 </span><a href="Monomer.SaveManager.SaveManagerEvent.html#EventFocus"><span class="hs-identifier hs-var">EventFocus</span></a></span><span>
-</span><span id="line-52"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(Path -&gt; SaveManagerEvent a) -&gt; ButtonCfg s (SaveManagerEvent a)
-forall t e a. CmbOnBlur t e a =&gt; (a -&gt; e) -&gt; t
-</span><span class="hs-identifier hs-var">onBlur</span></span><span> </span><span class="annot"><span class="annottext">Path -&gt; SaveManagerEvent a
-forall a. Path -&gt; SaveManagerEvent a
+</span><span id="line-53"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall t e a. CmbOnBlur t e a =&gt; (a -&gt; e) -&gt; t
+</span><span class="hs-identifier hs-var">onBlur</span></span><span> </span><span class="annot"><span class="annottext">forall a. Path -&gt; SaveManagerEvent a
 </span><a href="Monomer.SaveManager.SaveManagerEvent.html#EventBlur"><span class="hs-identifier hs-var">EventBlur</span></a></span><span>
-</span><span id="line-53"></span><span>        </span><span class="hs-special">]</span><span>
-</span><span id="line-54"></span><span>    </span><span id="local-6989586621679173445"><span class="annot"><span class="annottext">selected :: Bool
-</span><a href="#local-6989586621679173445"><span class="hs-identifier hs-var hs-var">selected</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
-</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; Bool -&gt; Bool
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Maybe Int -&gt; Bool
-forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
+</span><span id="line-54"></span><span>        </span><span class="hs-special">]</span><span>
+</span><span id="line-55"></span><span>    </span><span id="local-6989586621679136899"><span class="annot"><span class="annottext">selected :: Bool
+</span><a href="#local-6989586621679136899"><span class="hs-identifier hs-var hs-var">selected</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">Maybe Int
-</span><a href="#local-6989586621679173428"><span class="hs-identifier hs-var">selectedData'</span></a></span><span>
-</span><span id="line-55"></span><span>    </span><span id="local-6989586621679173458"><span class="annot"><span class="annottext">selectedCaption :: Maybe Text
-</span><a href="#local-6989586621679173458"><span class="hs-identifier hs-var hs-var">selectedCaption</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Int
-</span><a href="#local-6989586621679173428"><span class="hs-identifier hs-var">selectedData'</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Int -&gt; (Int -&gt; Maybe Text) -&gt; Maybe Text
-forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
-</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">Seq (Maybe Text) -&gt; Int -&gt; Maybe Text
-forall a. Seq a -&gt; Int -&gt; a
+</span><a href="#local-6989586621679136994"><span class="hs-identifier hs-var">_smmSelectedData</span></a></span><span>
+</span><span id="line-56"></span><span>    </span><span id="local-6989586621679136912"><span class="annot"><span class="annottext">selectedCaption :: Maybe Text
+</span><a href="#local-6989586621679136912"><span class="hs-identifier hs-var hs-var">selectedCaption</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Int
+</span><a href="#local-6989586621679136994"><span class="hs-identifier hs-var">_smmSelectedData</span></a></span><span> </span><span class="annot"><span class="annottext">forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
+</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">forall a. Seq a -&gt; Int -&gt; a
 </span><span class="hs-identifier hs-var">Seq.index</span></span><span> </span><span class="annot"><span class="annottext">Seq (Maybe Text)
-</span><a href="#local-6989586621679173456"><span class="hs-identifier hs-var">savedDataList</span></a></span><span>
-</span><span id="line-56"></span><span>    </span><span id="local-6989586621679173457"><span class="annot"><span class="annottext">f :: Int -&gt; p -&gt; SaveManagerEvent a
-</span><a href="#local-6989586621679173457"><span class="hs-identifier hs-var hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679173424"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679173424"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="annot"><span class="annottext">p
-</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Int -&gt; SaveManagerEvent a
-forall a. Maybe Int -&gt; SaveManagerEvent a
-</span><a href="Monomer.SaveManager.SaveManagerEvent.html#EventSetSelectedData"><span class="hs-identifier hs-var">EventSetSelectedData</span></a></span><span> </span><span class="annot"><span class="annottext">(Maybe Int -&gt; SaveManagerEvent a)
--&gt; Maybe Int -&gt; SaveManagerEvent a
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Maybe Int
-forall a. a -&gt; Maybe a
+</span><a href="#local-6989586621679136910"><span class="hs-identifier hs-var">savedDataList</span></a></span><span>
+</span><span id="line-57"></span><span>    </span><span id="local-6989586621679136911"><span class="annot"><span class="annottext">f :: Int -&gt; p -&gt; SaveManagerEvent a
+</span><a href="#local-6989586621679136911"><span class="hs-identifier hs-var hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679136879"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679136879"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="annot"><span class="annottext">p
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe Int -&gt; SaveManagerEvent a
+</span><a href="Monomer.SaveManager.SaveManagerEvent.html#EventSetSelectedData"><span class="hs-identifier hs-var">EventSetSelectedData</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679173424"><span class="hs-identifier hs-var">i</span></a></span><span>
-</span><span id="line-57"></span><span>    </span><span id="local-6989586621679173456"><span class="annot"><span class="annottext">savedDataList :: Seq (Maybe Text)
-</span><a href="#local-6989586621679173456"><span class="hs-identifier hs-var hs-var">savedDataList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text -&gt; Maybe Text
-forall a. a -&gt; Maybe a
-</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; Maybe Text)
--&gt; ((a, Text) -&gt; Text) -&gt; (a, Text) -&gt; Maybe Text
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(a, Text) -&gt; Text
-forall a b. (a, b) -&gt; b
-</span><span class="hs-identifier hs-var">snd</span></span><span> </span><span class="annot"><span class="annottext">((a, Text) -&gt; Maybe Text) -&gt; Seq (a, Text) -&gt; Seq (Maybe Text)
-forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
-</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">SaveManagerModel a
-</span><a href="#local-6989586621679173537"><span class="hs-identifier hs-var">model</span></a></span><span> </span><span class="annot"><span class="annottext">SaveManagerModel a
--&gt; Getting (Seq (a, Text)) (SaveManagerModel a) (Seq (a, Text))
--&gt; Seq (a, Text)
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Seq (a, Text)) (SaveManagerModel a) (Seq (a, Text))
-forall s a. HasSavedData s a =&gt; Lens' s a
-</span><a href="Monomer.SaveManager.SaveManagerModel.html#savedData"><span class="hs-identifier hs-var">savedData</span></a></span><span>
-</span><span id="line-58"></span><span>    </span><span id="local-6989586621679173428"><span class="annot"><span class="annottext">selectedData' :: Maybe Int
-</span><a href="#local-6989586621679173428"><span class="hs-identifier hs-var hs-var">selectedData'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SaveManagerModel a
-</span><a href="#local-6989586621679173537"><span class="hs-identifier hs-var">model</span></a></span><span> </span><span class="annot"><span class="annottext">SaveManagerModel a
--&gt; Getting (Maybe Int) (SaveManagerModel a) (Maybe Int)
--&gt; Maybe Int
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Maybe Int) (SaveManagerModel a) (Maybe Int)
-forall s a. HasSelectedData s a =&gt; Lens' s a
-</span><a href="Monomer.SaveManager.SaveManagerModel.html#selectedData"><span class="hs-identifier hs-var">selectedData</span></a></span><span>
-</span><span id="line-59"></span><span>    </span><span id="local-6989586621679173455"><span class="annot"><span class="annottext">makeRow :: Maybe Text -&gt; WidgetNode s e
-</span><a href="#local-6989586621679173455"><span class="hs-identifier hs-var hs-var">makeRow</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Text -&gt; WidgetNode s e
-forall s e. Text -&gt; WidgetNode s e
-</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">(Text -&gt; WidgetNode s e)
--&gt; (Maybe Text -&gt; Text) -&gt; Maybe Text -&gt; WidgetNode s e
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Maybe Text -&gt; Text
-forall a. HasCallStack =&gt; Maybe a -&gt; a
+</span><a href="#local-6989586621679136879"><span class="hs-identifier hs-var">i</span></a></span><span>
+</span><span id="line-58"></span><span>    </span><span id="local-6989586621679136910"><span class="annot"><span class="annottext">savedDataList :: Seq (Maybe Text)
+</span><a href="#local-6989586621679136910"><span class="hs-identifier hs-var hs-var">savedDataList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a, b) -&gt; b
+</span><span class="hs-identifier hs-var">snd</span></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-operator hs-var">&lt;$&gt;</span></span><span> </span><span class="annot"><span class="annottext">Saves a
+</span><a href="#local-6989586621679136996"><span class="hs-identifier hs-var">_smmSavedData</span></a></span><span>
+</span><span id="line-59"></span><span>    </span><span id="local-6989586621679136909"><span class="annot"><span class="annottext">makeRow :: Maybe Text -&gt; WidgetNode s e
+</span><a href="#local-6989586621679136909"><span class="hs-identifier hs-var hs-var">makeRow</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. Text -&gt; WidgetNode s e
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">forall a. HasCallStack =&gt; Maybe a -&gt; a
 </span><span class="hs-identifier hs-var">fromJust</span></span><span>
 </span><span id="line-60"></span></pre></body></html>

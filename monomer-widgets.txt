@@ -60,6 +60,8 @@ module Monomer.Dragboard.DragboardCfg
 --   <li><a>selectColor</a>: color of selected square.</li>
 --   <li><a>disableClick</a>: whether items can be moved only by
 --   dragging.</li>
+--   <li><a>renderSource</a>: whether to render the source widget when
+--   dragging.</li>
 --   <li><a>checkerConfig</a>: config options for checkerboard
 --   container.</li>
 --   <li><a>onFocus</a>: event to raise when focus is received.</li>
@@ -73,11 +75,12 @@ module Monomer.Dragboard.DragboardCfg
 --   board changes.</li>
 --   </ul>
 data DragboardCfg s e a
-DragboardCfg :: Maybe (Info a -> Bool) -> Maybe Int -> Maybe Color -> Maybe Bool -> [CheckerboardCfg] -> [Path -> WidgetRequest s e] -> [Path -> WidgetRequest s e] -> [Info a -> WidgetRequest s e] -> DragboardCfg s e a
+DragboardCfg :: Maybe (Info a -> Bool) -> Maybe Int -> Maybe Color -> Maybe Bool -> Maybe Bool -> [CheckerboardCfg] -> [Path -> WidgetRequest s e] -> [Path -> WidgetRequest s e] -> [Info a -> WidgetRequest s e] -> DragboardCfg s e a
 [_dcValidator] :: DragboardCfg s e a -> Maybe (Info a -> Bool)
 [_dcOffset] :: DragboardCfg s e a -> Maybe Int
 [_dcSelectColor] :: DragboardCfg s e a -> Maybe Color
 [_dcNoClick] :: DragboardCfg s e a -> Maybe Bool
+[_dcRenderS] :: DragboardCfg s e a -> Maybe Bool
 [_dcCheckerCfg] :: DragboardCfg s e a -> [CheckerboardCfg]
 [_dcOnFocusReq] :: DragboardCfg s e a -> [Path -> WidgetRequest s e]
 [_dcOnBlurReq] :: DragboardCfg s e a -> [Path -> WidgetRequest s e]
@@ -112,6 +115,12 @@ disableClick :: DragboardCfg s e a
 
 -- | Whether items can be moved only by dragging.
 disableClick_ :: Bool -> DragboardCfg s e a
+
+-- | Renders the source widget when dragging.
+renderSource :: DragboardCfg s e a
+
+-- | Whether to render the source widget when dragging.
+renderSource_ :: Bool -> DragboardCfg s e a
 
 -- | Config options for checkerboard container which is used by dragboard.
 checkerConfig :: [CheckerboardCfg] -> DragboardCfg s e a
@@ -353,54 +362,73 @@ module Monomer.Graph.GraphData
 --   <li><a>graphPoint</a>: render single point.</li>
 --   <li><a>graphPoints</a>: use multiple points.</li>
 --   <li><a>graphColor</a>: set the color.</li>
+--   <li><a>graphHoverColor</a>: set the color of hovered point.</li>
+--   <li><a>graphActiveColor</a>: set the color of dragged point.</li>
 --   <li><a>graphWidth</a>: set the width of the line.</li>
 --   <li><a>graphSeparate</a>: whether the points should be rendered
 --   separately.</li>
 --   <li><a>graphFill</a>: whether to fill the area surrounded by
 --   points.</li>
 --   <li><a>graphFillAlpha</a>: transparency level of the filled area.</li>
+--   <li><a>graphOnChange</a>: event to raise when a point is dragged.</li>
 --   </ul>
-data GraphData
-GraphData :: [(Double, Double)] -> Maybe Color -> Maybe Double -> Maybe Bool -> Maybe Bool -> Maybe Double -> GraphData
-[_gdPoints] :: GraphData -> [(Double, Double)]
-[_gdColor] :: GraphData -> Maybe Color
-[_gdWidth] :: GraphData -> Maybe Double
-[_gdSeparate] :: GraphData -> Maybe Bool
-[_gdFill] :: GraphData -> Maybe Bool
-[_gdFillAlpha] :: GraphData -> Maybe Double
+data GraphData e
+GraphData :: [(Double, Double)] -> Maybe Color -> Maybe Color -> Maybe Color -> Maybe Double -> Maybe Bool -> Maybe Bool -> Maybe Double -> Maybe (Int -> (Double, Double) -> e) -> GraphData e
+[_gdPoints] :: GraphData e -> [(Double, Double)]
+[_gdColor] :: GraphData e -> Maybe Color
+[_gdHoverColor] :: GraphData e -> Maybe Color
+[_gdActiveColor] :: GraphData e -> Maybe Color
+[_gdWidth] :: GraphData e -> Maybe Double
+[_gdSeparate] :: GraphData e -> Maybe Bool
+[_gdFill] :: GraphData e -> Maybe Bool
+[_gdFillAlpha] :: GraphData e -> Maybe Double
+[_gdOnChange] :: GraphData e -> Maybe (Int -> (Double, Double) -> e)
 
 -- | Render single point.
-graphPoint :: (Double, Double) -> GraphData
+graphPoint :: (Double, Double) -> GraphData e
 
 -- | Use multiple points.
-graphPoints :: [(Double, Double)] -> GraphData
+graphPoints :: [(Double, Double)] -> GraphData e
 
 -- | Set the color (if this option is not used then the graph will not be
 --   rendered).
-graphColor :: Color -> GraphData
+graphColor :: Color -> GraphData e
+
+-- | Set the color of hovered point (if this option is not used then the
+--   color set by <a>graphColor</a> is used).
+graphHoverColor :: Color -> GraphData e
+
+-- | Set the color of dragged point (if this option is not used then the
+--   color set by <a>graphColor</a> is used).
+graphActiveColor :: Color -> GraphData e
 
 -- | Width of the line connecting provided points. If only single point is
 --   rendered then its radius will be twice the width.
-graphWidth :: Double -> GraphData
+graphWidth :: Double -> GraphData e
 
 -- | Do not connect the points and render them separately. Used when all
 --   points in the collection must have the same color.
-graphSeparate :: GraphData
+graphSeparate :: GraphData e
 
 -- | Whether the points should be rendered separately.
-graphSeparate_ :: Bool -> GraphData
+graphSeparate_ :: Bool -> GraphData e
 
 -- | Fill the area surrounded by provided points with the color.
-graphFill :: GraphData
+graphFill :: GraphData e
 
 -- | Whether to fill the area surrounded by provided points.
-graphFill_ :: Bool -> GraphData
+graphFill_ :: Bool -> GraphData e
 
 -- | Transparency level of the filled area.
-graphFillAlpha :: Double -> GraphData
-instance Data.Default.Class.Default Monomer.Graph.GraphData.GraphData
-instance GHC.Base.Semigroup Monomer.Graph.GraphData.GraphData
-instance GHC.Base.Monoid Monomer.Graph.GraphData.GraphData
+graphFillAlpha :: Double -> GraphData e
+
+-- | Raises an event when a point is dragged by passing its index and new
+--   coordinates. This option is ignored if <a>graphSeparate</a> is not
+--   enabled.
+graphOnChange :: (Int -> (Double, Double) -> e) -> GraphData e
+instance Data.Default.Class.Default (Monomer.Graph.GraphData.GraphData e)
+instance GHC.Base.Semigroup (Monomer.Graph.GraphData.GraphData e)
+instance GHC.Base.Monoid (Monomer.Graph.GraphData.GraphData e)
 
 module Monomer.Graph.GraphMsg
 data GraphMsg
@@ -412,12 +440,14 @@ instance GHC.Classes.Eq Monomer.Graph.GraphMsg.GraphMsg
 
 module Monomer.Graph.GraphState
 data GraphState
-GraphState :: Point -> Point -> Point -> Point -> Maybe Point -> GraphState
+GraphState :: Point -> Point -> Point -> Point -> Maybe Point -> Maybe (Int, Int) -> Maybe (Int, Int) -> GraphState
 [_gsTranslation] :: GraphState -> Point
 [_gsScale] :: GraphState -> Point
 [_gsUnit] :: GraphState -> Point
 [_gsSections] :: GraphState -> Point
 [_gsMousePosition] :: GraphState -> Maybe Point
+[_gsHoverPoint] :: GraphState -> Maybe (Int, Int)
+[_gsActivePoint] :: GraphState -> Maybe (Int, Int)
 instance GHC.Show.Show Monomer.Graph.GraphState.GraphState
 instance GHC.Classes.Eq Monomer.Graph.GraphState.GraphState
 instance Data.Default.Class.Default Monomer.Graph.GraphState.GraphState
@@ -443,24 +473,24 @@ instance Data.Default.Class.Default Monomer.Graph.GraphState.GraphState
 module Monomer.Graph
 
 -- | Creates a graph plotter using the list with points.
-graph :: [[(Double, Double)]] -> WidgetNode s e
+graph :: WidgetEvent e => [[(Double, Double)]] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with points. Accepts config.
-graph_ :: [[(Double, Double)]] -> [GraphCfg] -> WidgetNode s e
+graph_ :: WidgetEvent e => [[(Double, Double)]] -> [GraphCfg] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with colors and points.
-graphWithColors :: [(Color, [(Double, Double)])] -> WidgetNode s e
+graphWithColors :: WidgetEvent e => [(Color, [(Double, Double)])] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with colors and points. Accepts
 --   config.
-graphWithColors_ :: [(Color, [(Double, Double)])] -> [GraphCfg] -> WidgetNode s e
+graphWithColors_ :: WidgetEvent e => [(Color, [(Double, Double)])] -> [GraphCfg] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with <a>GraphData</a>.
-graphWithData :: [[GraphData]] -> WidgetNode s e
+graphWithData :: WidgetEvent e => [[GraphData e]] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with <a>GraphData</a>. Accepts
 --   config.
-graphWithData_ :: [[GraphData]] -> [GraphCfg] -> WidgetNode s e
+graphWithData_ :: WidgetEvent e => [[GraphData e]] -> [GraphCfg] -> WidgetNode s e
 
 module Monomer.SaveManager.SaveManagerCfg
 type Saves a = Seq (a, Text)

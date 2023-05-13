@@ -3,263 +3,320 @@
 </span><span id="line-3"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphPoint"><span class="hs-identifier">graphPoint</span></a></span><span>
 </span><span id="line-4"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphPoints"><span class="hs-identifier">graphPoints</span></a></span><span>
 </span><span id="line-5"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphColor"><span class="hs-identifier">graphColor</span></a></span><span>
-</span><span id="line-6"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphWidth"><span class="hs-identifier">graphWidth</span></a></span><span>
-</span><span id="line-7"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphSeparate"><span class="hs-identifier">graphSeparate</span></a></span><span>
-</span><span id="line-8"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphSeparate_"><span class="hs-identifier">graphSeparate_</span></a></span><span>
-</span><span id="line-9"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphFill"><span class="hs-identifier">graphFill</span></a></span><span>
-</span><span id="line-10"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphFill_"><span class="hs-identifier">graphFill_</span></a></span><span>
-</span><span id="line-11"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphFillAlpha"><span class="hs-identifier">graphFillAlpha</span></a></span><span>
-</span><span id="line-12"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-13"></span><span>
-</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Applicative</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(&lt;|&gt;)</span></span><span class="hs-special">)</span><span>
-</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Default</span></span><span>
-</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Graphics.Types</span></span><span>
-</span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="hs-comment">{-|
+</span><span id="line-6"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphHoverColor"><span class="hs-identifier">graphHoverColor</span></a></span><span>
+</span><span id="line-7"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphActiveColor"><span class="hs-identifier">graphActiveColor</span></a></span><span>
+</span><span id="line-8"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphWidth"><span class="hs-identifier">graphWidth</span></a></span><span>
+</span><span id="line-9"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphSeparate"><span class="hs-identifier">graphSeparate</span></a></span><span>
+</span><span id="line-10"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphSeparate_"><span class="hs-identifier">graphSeparate_</span></a></span><span>
+</span><span id="line-11"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphFill"><span class="hs-identifier">graphFill</span></a></span><span>
+</span><span id="line-12"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphFill_"><span class="hs-identifier">graphFill_</span></a></span><span>
+</span><span id="line-13"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphFillAlpha"><span class="hs-identifier">graphFillAlpha</span></a></span><span>
+</span><span id="line-14"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphOnChange"><span class="hs-identifier">graphOnChange</span></a></span><span>
+</span><span id="line-15"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Applicative</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(&lt;|&gt;)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Default</span></span><span>
+</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Graphics.Types</span></span><span>
+</span><span id="line-20"></span><span>
+</span><span id="line-21"></span><span class="hs-comment">{-|
 Options for graph data:
 
 - 'graphPoint': render single point.
 - 'graphPoints': use multiple points.
 - 'graphColor': set the color.
+- 'graphHoverColor': set the color of hovered point.
+- 'graphActiveColor': set the color of dragged point.
 - 'graphWidth': set the width of the line.
 - 'graphSeparate': whether the points should be rendered separately.
 - 'graphFill': whether to fill the area surrounded by points.
 - 'graphFillAlpha': transparency level of the filled area.
+- 'graphOnChange': event to raise when a point is dragged.
 -}</span><span>
-</span><span id="line-29"></span><span class="hs-keyword">data</span><span> </span><span id="GraphData"><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-var">GraphData</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="GraphData"><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-var">GraphData</span></a></span></span><span>
-</span><span id="line-30"></span><span>    </span><span class="hs-special">{</span><span> </span><span id="_gdPoints"><span class="annot"><span class="annottext">GraphData -&gt; [(Double, Double)]
+</span><span id="line-35"></span><span class="hs-keyword">data</span><span> </span><span id="GraphData"><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-var">GraphData</span></a></span></span><span> </span><span id="local-6989586621679134855"><span class="annot"><a href="#local-6989586621679134855"><span class="hs-identifier hs-type">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="GraphData"><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-var">GraphData</span></a></span></span><span>
+</span><span id="line-36"></span><span>    </span><span class="hs-special">{</span><span> </span><span id="_gdPoints"><span class="annot"><span class="annottext">forall e. GraphData e -&gt; [(Double, Double)]
 </span><a href="Monomer.Graph.GraphData.html#_gdPoints"><span class="hs-identifier hs-var hs-var">_gdPoints</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-31"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gdColor"><span class="annot"><span class="annottext">GraphData -&gt; Maybe Color
+</span><span id="line-37"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gdColor"><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Color
 </span><a href="Monomer.Graph.GraphData.html#_gdColor"><span class="hs-identifier hs-var hs-var">_gdColor</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Color</span></span><span>
-</span><span id="line-32"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gdWidth"><span class="annot"><span class="annottext">GraphData -&gt; Maybe Double
+</span><span id="line-38"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gdHoverColor"><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdHoverColor"><span class="hs-identifier hs-var hs-var">_gdHoverColor</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Color</span></span><span>
+</span><span id="line-39"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gdActiveColor"><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdActiveColor"><span class="hs-identifier hs-var hs-var">_gdActiveColor</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Color</span></span><span>
+</span><span id="line-40"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gdWidth"><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Double
 </span><a href="Monomer.Graph.GraphData.html#_gdWidth"><span class="hs-identifier hs-var hs-var">_gdWidth</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span>
-</span><span id="line-33"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gdSeparate"><span class="annot"><span class="annottext">GraphData -&gt; Maybe Bool
+</span><span id="line-41"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gdSeparate"><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Bool
 </span><a href="Monomer.Graph.GraphData.html#_gdSeparate"><span class="hs-identifier hs-var hs-var">_gdSeparate</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
-</span><span id="line-34"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gdFill"><span class="annot"><span class="annottext">GraphData -&gt; Maybe Bool
+</span><span id="line-42"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gdFill"><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Bool
 </span><a href="Monomer.Graph.GraphData.html#_gdFill"><span class="hs-identifier hs-var hs-var">_gdFill</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
-</span><span id="line-35"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gdFillAlpha"><span class="annot"><span class="annottext">GraphData -&gt; Maybe Double
+</span><span id="line-43"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gdFillAlpha"><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Double
 </span><a href="Monomer.Graph.GraphData.html#_gdFillAlpha"><span class="hs-identifier hs-var hs-var">_gdFillAlpha</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span>
-</span><span id="line-36"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-37"></span><span>
-</span><span id="line-38"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Default</span></span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-39"></span><span>    </span><span id="local-6989586621679171566"><span class="annot"><span class="annottext">def :: GraphData
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">def</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData :: [(Double, Double)]
--&gt; Maybe Color
--&gt; Maybe Double
--&gt; Maybe Bool
--&gt; Maybe Bool
--&gt; Maybe Double
--&gt; GraphData
-</span><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span>
-</span><span id="line-40"></span><span>        </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdPoints :: [(Double, Double)]
+</span><span id="line-44"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gdOnChange"><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe (Int -&gt; (Double, Double) -&gt; e)
+</span><a href="Monomer.Graph.GraphData.html#_gdOnChange"><span class="hs-identifier hs-var hs-var">_gdOnChange</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679134855"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-45"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679134841"><span class="annot"><span class="hs-identifier hs-type">Default</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134841"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-48"></span><span>    </span><span id="local-6989586621679134781"><span class="annot"><span class="annottext">def :: GraphData e
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">def</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span>
+</span><span id="line-49"></span><span>        </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdPoints :: [(Double, Double)]
 </span><a href="Monomer.Graph.GraphData.html#_gdPoints"><span class="hs-identifier hs-var">_gdPoints</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-41"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdColor :: Maybe Color
-</span><a href="Monomer.Graph.GraphData.html#_gdColor"><span class="hs-identifier hs-var">_gdColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Color
-forall a. Maybe a
+</span><span id="line-50"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdColor :: Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdColor"><span class="hs-identifier hs-var">_gdColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-42"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdWidth :: Maybe Double
-</span><a href="Monomer.Graph.GraphData.html#_gdWidth"><span class="hs-identifier hs-var">_gdWidth</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Double
-forall a. Maybe a
+</span><span id="line-51"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdHoverColor :: Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdHoverColor"><span class="hs-identifier hs-var">_gdHoverColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-43"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdSeparate :: Maybe Bool
-</span><a href="Monomer.Graph.GraphData.html#_gdSeparate"><span class="hs-identifier hs-var">_gdSeparate</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Bool
-forall a. Maybe a
+</span><span id="line-52"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdActiveColor :: Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdActiveColor"><span class="hs-identifier hs-var">_gdActiveColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-44"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdFill :: Maybe Bool
-</span><a href="Monomer.Graph.GraphData.html#_gdFill"><span class="hs-identifier hs-var">_gdFill</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Bool
-forall a. Maybe a
+</span><span id="line-53"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdWidth :: Maybe Double
+</span><a href="Monomer.Graph.GraphData.html#_gdWidth"><span class="hs-identifier hs-var">_gdWidth</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-45"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdFillAlpha :: Maybe Double
-</span><a href="Monomer.Graph.GraphData.html#_gdFillAlpha"><span class="hs-identifier hs-var">_gdFillAlpha</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Double
-forall a. Maybe a
+</span><span id="line-54"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdSeparate :: Maybe Bool
+</span><a href="Monomer.Graph.GraphData.html#_gdSeparate"><span class="hs-identifier hs-var">_gdSeparate</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-46"></span><span>        </span><span class="hs-special">}</span><span>
-</span><span id="line-47"></span><span>
-</span><span id="line-48"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679171560"><span id="local-6989586621679171562"><span class="annot"><span class="hs-identifier hs-type">Semigroup</span></span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-49"></span><span>    </span><span id="local-6989586621679171549"><span class="annot"><span class="annottext">&lt;&gt; :: GraphData -&gt; GraphData -&gt; GraphData
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">(&lt;&gt;)</span></span></span><span> </span><span id="local-6989586621679171548"><span class="annot"><span class="annottext">GraphData
-</span><a href="#local-6989586621679171548"><span class="hs-identifier hs-var">a1</span></a></span></span><span> </span><span id="local-6989586621679171547"><span class="annot"><span class="annottext">GraphData
-</span><a href="#local-6989586621679171547"><span class="hs-identifier hs-var">a2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData
-forall a. Default a =&gt; a
+</span><span id="line-55"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdFill :: Maybe Bool
+</span><a href="Monomer.Graph.GraphData.html#_gdFill"><span class="hs-identifier hs-var">_gdFill</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-56"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdFillAlpha :: Maybe Double
+</span><a href="Monomer.Graph.GraphData.html#_gdFillAlpha"><span class="hs-identifier hs-var">_gdFillAlpha</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-57"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdOnChange :: Maybe (Int -&gt; (Double, Double) -&gt; e)
+</span><a href="Monomer.Graph.GraphData.html#_gdOnChange"><span class="hs-identifier hs-var">_gdOnChange</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-58"></span><span>        </span><span class="hs-special">}</span><span>
+</span><span id="line-59"></span><span>
+</span><span id="line-60"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679134775"><span id="local-6989586621679134777"><span id="local-6989586621679134837"><span class="annot"><span class="hs-identifier hs-type">Semigroup</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134837"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-61"></span><span>    </span><span id="local-6989586621679134761"><span class="annot"><span class="annottext">&lt;&gt; :: GraphData e -&gt; GraphData e -&gt; GraphData e
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">(&lt;&gt;)</span></span></span><span> </span><span id="local-6989586621679134760"><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134760"><span class="hs-identifier hs-var">a1</span></a></span></span><span> </span><span id="local-6989586621679134759"><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134759"><span class="hs-identifier hs-var">a2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-50"></span><span>        </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdPoints :: [(Double, Double)]
-</span><a href="Monomer.Graph.GraphData.html#_gdPoints"><span class="hs-identifier hs-var">_gdPoints</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData -&gt; [(Double, Double)]
-</span><a href="Monomer.Graph.GraphData.html#_gdPoints"><span class="hs-identifier hs-var hs-var">_gdPoints</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData
-</span><a href="#local-6989586621679171548"><span class="hs-identifier hs-var">a1</span></a></span><span> </span><span class="annot"><span class="annottext">[(Double, Double)] -&gt; [(Double, Double)] -&gt; [(Double, Double)]
-forall a. Semigroup a =&gt; a -&gt; a -&gt; a
-</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">GraphData -&gt; [(Double, Double)]
-</span><a href="Monomer.Graph.GraphData.html#_gdPoints"><span class="hs-identifier hs-var hs-var">_gdPoints</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData
-</span><a href="#local-6989586621679171547"><span class="hs-identifier hs-var">a2</span></a></span><span>
-</span><span id="line-51"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdColor :: Maybe Color
-</span><a href="Monomer.Graph.GraphData.html#_gdColor"><span class="hs-identifier hs-var">_gdColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData -&gt; Maybe Color
-</span><a href="Monomer.Graph.GraphData.html#_gdColor"><span class="hs-identifier hs-var hs-var">_gdColor</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData
-</span><a href="#local-6989586621679171547"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Color -&gt; Maybe Color -&gt; Maybe Color
-forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
-</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">GraphData -&gt; Maybe Color
-</span><a href="Monomer.Graph.GraphData.html#_gdColor"><span class="hs-identifier hs-var hs-var">_gdColor</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData
-</span><a href="#local-6989586621679171548"><span class="hs-identifier hs-var">a1</span></a></span><span>
-</span><span id="line-52"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdWidth :: Maybe Double
-</span><a href="Monomer.Graph.GraphData.html#_gdWidth"><span class="hs-identifier hs-var">_gdWidth</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData -&gt; Maybe Double
-</span><a href="Monomer.Graph.GraphData.html#_gdWidth"><span class="hs-identifier hs-var hs-var">_gdWidth</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData
-</span><a href="#local-6989586621679171547"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Double -&gt; Maybe Double -&gt; Maybe Double
-forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
-</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">GraphData -&gt; Maybe Double
-</span><a href="Monomer.Graph.GraphData.html#_gdWidth"><span class="hs-identifier hs-var hs-var">_gdWidth</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData
-</span><a href="#local-6989586621679171548"><span class="hs-identifier hs-var">a1</span></a></span><span>
-</span><span id="line-53"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdSeparate :: Maybe Bool
-</span><a href="Monomer.Graph.GraphData.html#_gdSeparate"><span class="hs-identifier hs-var">_gdSeparate</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData -&gt; Maybe Bool
-</span><a href="Monomer.Graph.GraphData.html#_gdSeparate"><span class="hs-identifier hs-var hs-var">_gdSeparate</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData
-</span><a href="#local-6989586621679171547"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Bool -&gt; Maybe Bool -&gt; Maybe Bool
-forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
-</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">GraphData -&gt; Maybe Bool
-</span><a href="Monomer.Graph.GraphData.html#_gdSeparate"><span class="hs-identifier hs-var hs-var">_gdSeparate</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData
-</span><a href="#local-6989586621679171548"><span class="hs-identifier hs-var">a1</span></a></span><span>
-</span><span id="line-54"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdFill :: Maybe Bool
-</span><a href="Monomer.Graph.GraphData.html#_gdFill"><span class="hs-identifier hs-var">_gdFill</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData -&gt; Maybe Bool
-</span><a href="Monomer.Graph.GraphData.html#_gdFill"><span class="hs-identifier hs-var hs-var">_gdFill</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData
-</span><a href="#local-6989586621679171547"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Bool -&gt; Maybe Bool -&gt; Maybe Bool
-forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
-</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">GraphData -&gt; Maybe Bool
-</span><a href="Monomer.Graph.GraphData.html#_gdFill"><span class="hs-identifier hs-var hs-var">_gdFill</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData
-</span><a href="#local-6989586621679171548"><span class="hs-identifier hs-var">a1</span></a></span><span>
-</span><span id="line-55"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdFillAlpha :: Maybe Double
-</span><a href="Monomer.Graph.GraphData.html#_gdFillAlpha"><span class="hs-identifier hs-var">_gdFillAlpha</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData -&gt; Maybe Double
-</span><a href="Monomer.Graph.GraphData.html#_gdFillAlpha"><span class="hs-identifier hs-var hs-var">_gdFillAlpha</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData
-</span><a href="#local-6989586621679171547"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Double -&gt; Maybe Double -&gt; Maybe Double
-forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
-</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">GraphData -&gt; Maybe Double
-</span><a href="Monomer.Graph.GraphData.html#_gdFillAlpha"><span class="hs-identifier hs-var hs-var">_gdFillAlpha</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData
-</span><a href="#local-6989586621679171548"><span class="hs-identifier hs-var">a1</span></a></span><span>
-</span><span id="line-56"></span><span>        </span><span class="hs-special">}</span><span>
-</span><span id="line-57"></span><span>
-</span><span id="line-58"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679171540"><span id="local-6989586621679171542"><span class="annot"><span class="hs-identifier hs-type">Monoid</span></span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-59"></span><span>    </span><span id="local-6989586621679171537"><span class="annot"><span class="annottext">mempty :: GraphData
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">mempty</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData
-forall a. Default a =&gt; a
+</span><span id="line-62"></span><span>        </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdPoints :: [(Double, Double)]
+</span><a href="Monomer.Graph.GraphData.html#_gdPoints"><span class="hs-identifier hs-var">_gdPoints</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; [(Double, Double)]
+</span><a href="Monomer.Graph.GraphData.html#_gdPoints"><span class="hs-identifier hs-var">_gdPoints</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134760"><span class="hs-identifier hs-var">a1</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; [(Double, Double)]
+</span><a href="Monomer.Graph.GraphData.html#_gdPoints"><span class="hs-identifier hs-var">_gdPoints</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134759"><span class="hs-identifier hs-var">a2</span></a></span><span>
+</span><span id="line-63"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdColor :: Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdColor"><span class="hs-identifier hs-var">_gdColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdColor"><span class="hs-identifier hs-var">_gdColor</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134759"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdColor"><span class="hs-identifier hs-var">_gdColor</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134760"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-64"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdHoverColor :: Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdHoverColor"><span class="hs-identifier hs-var">_gdHoverColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdHoverColor"><span class="hs-identifier hs-var">_gdHoverColor</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134759"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdHoverColor"><span class="hs-identifier hs-var">_gdHoverColor</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134760"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-65"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdActiveColor :: Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdActiveColor"><span class="hs-identifier hs-var">_gdActiveColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdActiveColor"><span class="hs-identifier hs-var">_gdActiveColor</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134759"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdActiveColor"><span class="hs-identifier hs-var">_gdActiveColor</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134760"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-66"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdWidth :: Maybe Double
+</span><a href="Monomer.Graph.GraphData.html#_gdWidth"><span class="hs-identifier hs-var">_gdWidth</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphData.html#_gdWidth"><span class="hs-identifier hs-var">_gdWidth</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134759"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphData.html#_gdWidth"><span class="hs-identifier hs-var">_gdWidth</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134760"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-67"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdSeparate :: Maybe Bool
+</span><a href="Monomer.Graph.GraphData.html#_gdSeparate"><span class="hs-identifier hs-var">_gdSeparate</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphData.html#_gdSeparate"><span class="hs-identifier hs-var">_gdSeparate</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134759"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphData.html#_gdSeparate"><span class="hs-identifier hs-var">_gdSeparate</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134760"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-68"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdFill :: Maybe Bool
+</span><a href="Monomer.Graph.GraphData.html#_gdFill"><span class="hs-identifier hs-var">_gdFill</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphData.html#_gdFill"><span class="hs-identifier hs-var">_gdFill</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134759"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphData.html#_gdFill"><span class="hs-identifier hs-var">_gdFill</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134760"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-69"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdFillAlpha :: Maybe Double
+</span><a href="Monomer.Graph.GraphData.html#_gdFillAlpha"><span class="hs-identifier hs-var">_gdFillAlpha</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphData.html#_gdFillAlpha"><span class="hs-identifier hs-var">_gdFillAlpha</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134759"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphData.html#_gdFillAlpha"><span class="hs-identifier hs-var">_gdFillAlpha</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134760"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-70"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gdOnChange :: Maybe (Int -&gt; (Double, Double) -&gt; e)
+</span><a href="Monomer.Graph.GraphData.html#_gdOnChange"><span class="hs-identifier hs-var">_gdOnChange</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe (Int -&gt; (Double, Double) -&gt; e)
+</span><a href="Monomer.Graph.GraphData.html#_gdOnChange"><span class="hs-identifier hs-var">_gdOnChange</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134759"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall e. GraphData e -&gt; Maybe (Int -&gt; (Double, Double) -&gt; e)
+</span><a href="Monomer.Graph.GraphData.html#_gdOnChange"><span class="hs-identifier hs-var">_gdOnChange</span></a></span><span> </span><span class="annot"><span class="annottext">GraphData e
+</span><a href="#local-6989586621679134760"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-71"></span><span>        </span><span class="hs-special">}</span><span>
+</span><span id="line-72"></span><span>
+</span><span id="line-73"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679134752"><span id="local-6989586621679134754"><span id="local-6989586621679134831"><span class="annot"><span class="hs-identifier hs-type">Monoid</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134831"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-74"></span><span>    </span><span id="local-6989586621679134749"><span class="annot"><span class="annottext">mempty :: GraphData e
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">mempty</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-60"></span><span>
-</span><span id="line-61"></span><span class="hs-comment">{-|
+</span><span id="line-75"></span><span>
+</span><span id="line-76"></span><span class="hs-comment">{-|
 Render single point.
 -}</span><span>
-</span><span id="line-64"></span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphPoint"><span class="hs-identifier hs-type">graphPoint</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span>
-</span><span id="line-65"></span><span id="graphPoint"><span class="annot"><span class="annottext">graphPoint :: (Double, Double) -&gt; GraphData
-</span><a href="Monomer.Graph.GraphData.html#graphPoint"><span class="hs-identifier hs-var hs-var">graphPoint</span></a></span></span><span> </span><span id="local-6989586621679171536"><span class="annot"><span class="annottext">(Double, Double)
-</span><a href="#local-6989586621679171536"><span class="hs-identifier hs-var">point</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(Double, Double)] -&gt; GraphData
+</span><span id="line-79"></span><span id="local-6989586621679134830"><span class="annot"><a href="Monomer.Graph.GraphData.html#graphPoint"><span class="hs-identifier hs-type">graphPoint</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134830"><span class="hs-identifier hs-type">e</span></a></span></span><span>
+</span><span id="line-80"></span><span id="graphPoint"><span class="annot"><span class="annottext">graphPoint :: forall e. (Double, Double) -&gt; GraphData e
+</span><a href="Monomer.Graph.GraphData.html#graphPoint"><span class="hs-identifier hs-var hs-var">graphPoint</span></a></span></span><span> </span><span id="local-6989586621679134748"><span class="annot"><span class="annottext">(Double, Double)
+</span><a href="#local-6989586621679134748"><span class="hs-identifier hs-var">point</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. [(Double, Double)] -&gt; GraphData e
 </span><a href="Monomer.Graph.GraphData.html#graphPoints"><span class="hs-identifier hs-var">graphPoints</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Double, Double)
-</span><a href="#local-6989586621679171536"><span class="hs-identifier hs-var">point</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-66"></span><span>
-</span><span id="line-67"></span><span class="hs-comment">{-|
+</span><a href="#local-6989586621679134748"><span class="hs-identifier hs-var">point</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-81"></span><span>
+</span><span id="line-82"></span><span class="hs-comment">{-|
 Use multiple points.
 -}</span><span>
-</span><span id="line-70"></span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphPoints"><span class="hs-identifier hs-type">graphPoints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span>
-</span><span id="line-71"></span><span id="graphPoints"><span class="annot"><span class="annottext">graphPoints :: [(Double, Double)] -&gt; GraphData
-</span><a href="Monomer.Graph.GraphData.html#graphPoints"><span class="hs-identifier hs-var hs-var">graphPoints</span></a></span></span><span> </span><span id="local-6989586621679171535"><span class="annot"><span class="annottext">[(Double, Double)]
-</span><a href="#local-6989586621679171535"><span class="hs-identifier hs-var">points</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData
-forall a. Default a =&gt; a
+</span><span id="line-85"></span><span id="local-6989586621679134829"><span class="annot"><a href="Monomer.Graph.GraphData.html#graphPoints"><span class="hs-identifier hs-type">graphPoints</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134829"><span class="hs-identifier hs-type">e</span></a></span></span><span>
+</span><span id="line-86"></span><span id="graphPoints"><span class="annot"><span class="annottext">graphPoints :: forall e. [(Double, Double)] -&gt; GraphData e
+</span><a href="Monomer.Graph.GraphData.html#graphPoints"><span class="hs-identifier hs-var hs-var">graphPoints</span></a></span></span><span> </span><span id="local-6989586621679134746"><span class="annot"><span class="annottext">[(Double, Double)]
+</span><a href="#local-6989586621679134746"><span class="hs-identifier hs-var">points</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-72"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdPoints :: [(Double, Double)]
+</span><span id="line-87"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdPoints :: [(Double, Double)]
 </span><a href="Monomer.Graph.GraphData.html#_gdPoints"><span class="hs-identifier hs-var">_gdPoints</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(Double, Double)]
-</span><a href="#local-6989586621679171535"><span class="hs-identifier hs-var">points</span></a></span><span>
-</span><span id="line-73"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-74"></span><span>
-</span><span id="line-75"></span><span class="hs-comment">{-|
+</span><a href="#local-6989586621679134746"><span class="hs-identifier hs-var">points</span></a></span><span>
+</span><span id="line-88"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-89"></span><span>
+</span><span id="line-90"></span><span class="hs-comment">{-|
 Set the color (if this option is not used then the graph will not be
 rendered).
 -}</span><span>
-</span><span id="line-79"></span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphColor"><span class="hs-identifier hs-type">graphColor</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Color</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span>
-</span><span id="line-80"></span><span id="graphColor"><span class="annot"><span class="annottext">graphColor :: Color -&gt; GraphData
-</span><a href="Monomer.Graph.GraphData.html#graphColor"><span class="hs-identifier hs-var hs-var">graphColor</span></a></span></span><span> </span><span id="local-6989586621679171534"><span class="annot"><span class="annottext">Color
-</span><a href="#local-6989586621679171534"><span class="hs-identifier hs-var">color</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData
-forall a. Default a =&gt; a
+</span><span id="line-94"></span><span id="local-6989586621679134827"><span class="annot"><a href="Monomer.Graph.GraphData.html#graphColor"><span class="hs-identifier hs-type">graphColor</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Color</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134827"><span class="hs-identifier hs-type">e</span></a></span></span><span>
+</span><span id="line-95"></span><span id="graphColor"><span class="annot"><span class="annottext">graphColor :: forall e. Color -&gt; GraphData e
+</span><a href="Monomer.Graph.GraphData.html#graphColor"><span class="hs-identifier hs-var hs-var">graphColor</span></a></span></span><span> </span><span id="local-6989586621679134744"><span class="annot"><span class="annottext">Color
+</span><a href="#local-6989586621679134744"><span class="hs-identifier hs-var">color</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-81"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdColor :: Maybe Color
-</span><a href="Monomer.Graph.GraphData.html#_gdColor"><span class="hs-identifier hs-var">_gdColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Color -&gt; Maybe Color
-forall a. a -&gt; Maybe a
+</span><span id="line-96"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdColor :: Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdColor"><span class="hs-identifier hs-var">_gdColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Color
-</span><a href="#local-6989586621679171534"><span class="hs-identifier hs-var">color</span></a></span><span>
-</span><span id="line-82"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-83"></span><span>
-</span><span id="line-84"></span><span class="hs-comment">{-|
-Width of the line connecting provided points. If only single point
-is rendered then its radius will be twice the width.
+</span><a href="#local-6989586621679134744"><span class="hs-identifier hs-var">color</span></a></span><span>
+</span><span id="line-97"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-98"></span><span>
+</span><span id="line-99"></span><span class="hs-comment">{-|
+Set the color of hovered point (if this option is not used then
+the color set by 'graphColor' is used).
 -}</span><span>
-</span><span id="line-88"></span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphWidth"><span class="hs-identifier hs-type">graphWidth</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span>
-</span><span id="line-89"></span><span id="graphWidth"><span class="annot"><span class="annottext">graphWidth :: Double -&gt; GraphData
-</span><a href="Monomer.Graph.GraphData.html#graphWidth"><span class="hs-identifier hs-var hs-var">graphWidth</span></a></span></span><span> </span><span id="local-6989586621679171533"><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679171533"><span class="hs-identifier hs-var">width</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData
-forall a. Default a =&gt; a
+</span><span id="line-103"></span><span id="local-6989586621679134743"><span class="annot"><a href="Monomer.Graph.GraphData.html#graphHoverColor"><span class="hs-identifier hs-type">graphHoverColor</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Color</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134743"><span class="hs-identifier hs-type">e</span></a></span></span><span>
+</span><span id="line-104"></span><span id="graphHoverColor"><span class="annot"><span class="annottext">graphHoverColor :: forall e. Color -&gt; GraphData e
+</span><a href="Monomer.Graph.GraphData.html#graphHoverColor"><span class="hs-identifier hs-var hs-var">graphHoverColor</span></a></span></span><span> </span><span id="local-6989586621679134741"><span class="annot"><span class="annottext">Color
+</span><a href="#local-6989586621679134741"><span class="hs-identifier hs-var">color</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-90"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdWidth :: Maybe Double
-</span><a href="Monomer.Graph.GraphData.html#_gdWidth"><span class="hs-identifier hs-var">_gdWidth</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Double -&gt; Maybe Double
-forall a. a -&gt; Maybe a
-</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679171533"><span class="hs-identifier hs-var">width</span></a></span><span>
-</span><span id="line-91"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-92"></span><span>
-</span><span id="line-93"></span><span class="hs-comment">{-|
-Do not connect the points and render them separately. Used when all
-points in the collection must have the same color.
--}</span><span>
-</span><span id="line-97"></span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphSeparate"><span class="hs-identifier hs-type">graphSeparate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span>
-</span><span id="line-98"></span><span id="graphSeparate"><span class="annot"><span class="annottext">graphSeparate :: GraphData
-</span><a href="Monomer.Graph.GraphData.html#graphSeparate"><span class="hs-identifier hs-var hs-var">graphSeparate</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; GraphData
-</span><a href="Monomer.Graph.GraphData.html#graphSeparate_"><span class="hs-identifier hs-var">graphSeparate_</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-99"></span><span>
-</span><span id="line-100"></span><span class="hs-comment">{-|
-Whether the points should be rendered separately.
--}</span><span>
-</span><span id="line-103"></span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphSeparate_"><span class="hs-identifier hs-type">graphSeparate_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span>
-</span><span id="line-104"></span><span id="graphSeparate_"><span class="annot"><span class="annottext">graphSeparate_ :: Bool -&gt; GraphData
-</span><a href="Monomer.Graph.GraphData.html#graphSeparate_"><span class="hs-identifier hs-var hs-var">graphSeparate_</span></a></span></span><span> </span><span id="local-6989586621679171532"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679171532"><span class="hs-identifier hs-var">separate</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData
-forall a. Default a =&gt; a
-</span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-105"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdSeparate :: Maybe Bool
-</span><a href="Monomer.Graph.GraphData.html#_gdSeparate"><span class="hs-identifier hs-var">_gdSeparate</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Maybe Bool
-forall a. a -&gt; Maybe a
-</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679171532"><span class="hs-identifier hs-var">separate</span></a></span><span>
+</span><span id="line-105"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdHoverColor :: Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdHoverColor"><span class="hs-identifier hs-var">_gdHoverColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Color
+</span><a href="#local-6989586621679134741"><span class="hs-identifier hs-var">color</span></a></span><span>
 </span><span id="line-106"></span><span>    </span><span class="hs-special">}</span><span>
 </span><span id="line-107"></span><span>
 </span><span id="line-108"></span><span class="hs-comment">{-|
+Set the color of dragged point (if this option is not used then
+the color set by 'graphColor' is used).
+-}</span><span>
+</span><span id="line-112"></span><span id="local-6989586621679134740"><span class="annot"><a href="Monomer.Graph.GraphData.html#graphActiveColor"><span class="hs-identifier hs-type">graphActiveColor</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Color</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134740"><span class="hs-identifier hs-type">e</span></a></span></span><span>
+</span><span id="line-113"></span><span id="graphActiveColor"><span class="annot"><span class="annottext">graphActiveColor :: forall e. Color -&gt; GraphData e
+</span><a href="Monomer.Graph.GraphData.html#graphActiveColor"><span class="hs-identifier hs-var hs-var">graphActiveColor</span></a></span></span><span> </span><span id="local-6989586621679134738"><span class="annot"><span class="annottext">Color
+</span><a href="#local-6989586621679134738"><span class="hs-identifier hs-var">color</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-114"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdActiveColor :: Maybe Color
+</span><a href="Monomer.Graph.GraphData.html#_gdActiveColor"><span class="hs-identifier hs-var">_gdActiveColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Color
+</span><a href="#local-6989586621679134738"><span class="hs-identifier hs-var">color</span></a></span><span>
+</span><span id="line-115"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-116"></span><span>
+</span><span id="line-117"></span><span class="hs-comment">{-|
+Width of the line connecting provided points. If only single point
+is rendered then its radius will be twice the width.
+-}</span><span>
+</span><span id="line-121"></span><span id="local-6989586621679134823"><span class="annot"><a href="Monomer.Graph.GraphData.html#graphWidth"><span class="hs-identifier hs-type">graphWidth</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134823"><span class="hs-identifier hs-type">e</span></a></span></span><span>
+</span><span id="line-122"></span><span id="graphWidth"><span class="annot"><span class="annottext">graphWidth :: forall e. Double -&gt; GraphData e
+</span><a href="Monomer.Graph.GraphData.html#graphWidth"><span class="hs-identifier hs-var hs-var">graphWidth</span></a></span></span><span> </span><span id="local-6989586621679134736"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679134736"><span class="hs-identifier hs-var">width</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-123"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdWidth :: Maybe Double
+</span><a href="Monomer.Graph.GraphData.html#_gdWidth"><span class="hs-identifier hs-var">_gdWidth</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679134736"><span class="hs-identifier hs-var">width</span></a></span><span>
+</span><span id="line-124"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-125"></span><span>
+</span><span id="line-126"></span><span class="hs-comment">{-|
+Do not connect the points and render them separately. Used when all
+points in the collection must have the same color.
+-}</span><span>
+</span><span id="line-130"></span><span id="local-6989586621679134735"><span class="annot"><a href="Monomer.Graph.GraphData.html#graphSeparate"><span class="hs-identifier hs-type">graphSeparate</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134735"><span class="hs-identifier hs-type">e</span></a></span></span><span>
+</span><span id="line-131"></span><span id="graphSeparate"><span class="annot"><span class="annottext">graphSeparate :: forall e. GraphData e
+</span><a href="Monomer.Graph.GraphData.html#graphSeparate"><span class="hs-identifier hs-var hs-var">graphSeparate</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. Bool -&gt; GraphData e
+</span><a href="Monomer.Graph.GraphData.html#graphSeparate_"><span class="hs-identifier hs-var">graphSeparate_</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span>
+</span><span id="line-132"></span><span>
+</span><span id="line-133"></span><span class="hs-comment">{-|
+Whether the points should be rendered separately.
+-}</span><span>
+</span><span id="line-136"></span><span id="local-6989586621679134821"><span class="annot"><a href="Monomer.Graph.GraphData.html#graphSeparate_"><span class="hs-identifier hs-type">graphSeparate_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134821"><span class="hs-identifier hs-type">e</span></a></span></span><span>
+</span><span id="line-137"></span><span id="graphSeparate_"><span class="annot"><span class="annottext">graphSeparate_ :: forall e. Bool -&gt; GraphData e
+</span><a href="Monomer.Graph.GraphData.html#graphSeparate_"><span class="hs-identifier hs-var hs-var">graphSeparate_</span></a></span></span><span> </span><span id="local-6989586621679134733"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679134733"><span class="hs-identifier hs-var">separate</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-138"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdSeparate :: Maybe Bool
+</span><a href="Monomer.Graph.GraphData.html#_gdSeparate"><span class="hs-identifier hs-var">_gdSeparate</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679134733"><span class="hs-identifier hs-var">separate</span></a></span><span>
+</span><span id="line-139"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-140"></span><span>
+</span><span id="line-141"></span><span class="hs-comment">{-|
 Fill the area surrounded by provided points with the color.
 -}</span><span>
-</span><span id="line-111"></span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphFill"><span class="hs-identifier hs-type">graphFill</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span>
-</span><span id="line-112"></span><span id="graphFill"><span class="annot"><span class="annottext">graphFill :: GraphData
-</span><a href="Monomer.Graph.GraphData.html#graphFill"><span class="hs-identifier hs-var hs-var">graphFill</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; GraphData
+</span><span id="line-144"></span><span id="local-6989586621679134732"><span class="annot"><a href="Monomer.Graph.GraphData.html#graphFill"><span class="hs-identifier hs-type">graphFill</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134732"><span class="hs-identifier hs-type">e</span></a></span></span><span>
+</span><span id="line-145"></span><span id="graphFill"><span class="annot"><span class="annottext">graphFill :: forall e. GraphData e
+</span><a href="Monomer.Graph.GraphData.html#graphFill"><span class="hs-identifier hs-var hs-var">graphFill</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. Bool -&gt; GraphData e
 </span><a href="Monomer.Graph.GraphData.html#graphFill_"><span class="hs-identifier hs-var">graphFill_</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-113"></span><span>
-</span><span id="line-114"></span><span class="hs-comment">{-|
+</span><span id="line-146"></span><span>
+</span><span id="line-147"></span><span class="hs-comment">{-|
 Whether to fill the area surrounded by provided points.
 -}</span><span>
-</span><span id="line-117"></span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphFill_"><span class="hs-identifier hs-type">graphFill_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span>
-</span><span id="line-118"></span><span id="graphFill_"><span class="annot"><span class="annottext">graphFill_ :: Bool -&gt; GraphData
-</span><a href="Monomer.Graph.GraphData.html#graphFill_"><span class="hs-identifier hs-var hs-var">graphFill_</span></a></span></span><span> </span><span id="local-6989586621679171531"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679171531"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData
-forall a. Default a =&gt; a
+</span><span id="line-150"></span><span id="local-6989586621679134731"><span class="annot"><a href="Monomer.Graph.GraphData.html#graphFill_"><span class="hs-identifier hs-type">graphFill_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134731"><span class="hs-identifier hs-type">e</span></a></span></span><span>
+</span><span id="line-151"></span><span id="graphFill_"><span class="annot"><span class="annottext">graphFill_ :: forall e. Bool -&gt; GraphData e
+</span><a href="Monomer.Graph.GraphData.html#graphFill_"><span class="hs-identifier hs-var hs-var">graphFill_</span></a></span></span><span> </span><span id="local-6989586621679134729"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679134729"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-119"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdFill :: Maybe Bool
-</span><a href="Monomer.Graph.GraphData.html#_gdFill"><span class="hs-identifier hs-var">_gdFill</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Maybe Bool
-forall a. a -&gt; Maybe a
+</span><span id="line-152"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdFill :: Maybe Bool
+</span><a href="Monomer.Graph.GraphData.html#_gdFill"><span class="hs-identifier hs-var">_gdFill</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679171531"><span class="hs-identifier hs-var">v</span></a></span><span>
-</span><span id="line-120"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-121"></span><span>
-</span><span id="line-122"></span><span class="hs-comment">{-|
+</span><a href="#local-6989586621679134729"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-153"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-154"></span><span>
+</span><span id="line-155"></span><span class="hs-comment">{-|
 Transparency level of the filled area.
 -}</span><span>
-</span><span id="line-125"></span><span class="annot"><a href="Monomer.Graph.GraphData.html#graphFillAlpha"><span class="hs-identifier hs-type">graphFillAlpha</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span>
-</span><span id="line-126"></span><span id="graphFillAlpha"><span class="annot"><span class="annottext">graphFillAlpha :: Double -&gt; GraphData
-</span><a href="Monomer.Graph.GraphData.html#graphFillAlpha"><span class="hs-identifier hs-var hs-var">graphFillAlpha</span></a></span></span><span> </span><span id="local-6989586621679171530"><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679171530"><span class="hs-identifier hs-var">alpha</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphData
-forall a. Default a =&gt; a
+</span><span id="line-158"></span><span id="local-6989586621679134728"><span class="annot"><a href="Monomer.Graph.GraphData.html#graphFillAlpha"><span class="hs-identifier hs-type">graphFillAlpha</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134728"><span class="hs-identifier hs-type">e</span></a></span></span><span>
+</span><span id="line-159"></span><span id="graphFillAlpha"><span class="annot"><span class="annottext">graphFillAlpha :: forall e. Double -&gt; GraphData e
+</span><a href="Monomer.Graph.GraphData.html#graphFillAlpha"><span class="hs-identifier hs-var hs-var">graphFillAlpha</span></a></span></span><span> </span><span id="local-6989586621679134726"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679134726"><span class="hs-identifier hs-var">alpha</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-127"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdFillAlpha :: Maybe Double
-</span><a href="Monomer.Graph.GraphData.html#_gdFillAlpha"><span class="hs-identifier hs-var">_gdFillAlpha</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Double -&gt; Maybe Double
-forall a. a -&gt; Maybe a
+</span><span id="line-160"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdFillAlpha :: Maybe Double
+</span><a href="Monomer.Graph.GraphData.html#_gdFillAlpha"><span class="hs-identifier hs-var">_gdFillAlpha</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679171530"><span class="hs-identifier hs-var">alpha</span></a></span><span>
-</span><span id="line-128"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-129"></span></pre></body></html>
+</span><a href="#local-6989586621679134726"><span class="hs-identifier hs-var">alpha</span></a></span><span>
+</span><span id="line-161"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-162"></span><span>
+</span><span id="line-163"></span><span class="hs-comment">{-|
+Raises an event when a point is dragged by passing its index and
+new coordinates. This option is ignored if 'graphSeparate' is not
+enabled.
+-}</span><span>
+</span><span id="line-168"></span><span id="local-6989586621679134817"><span class="annot"><a href="Monomer.Graph.GraphData.html#graphOnChange"><span class="hs-identifier hs-type">graphOnChange</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679134817"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphData.html#GraphData"><span class="hs-identifier hs-type">GraphData</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679134817"><span class="hs-identifier hs-type">e</span></a></span></span><span>
+</span><span id="line-169"></span><span id="graphOnChange"><span class="annot"><span class="annottext">graphOnChange :: forall e. (Int -&gt; (Double, Double) -&gt; e) -&gt; GraphData e
+</span><a href="Monomer.Graph.GraphData.html#graphOnChange"><span class="hs-identifier hs-var hs-var">graphOnChange</span></a></span></span><span> </span><span id="local-6989586621679134724"><span class="annot"><span class="annottext">Int -&gt; (Double, Double) -&gt; e
+</span><a href="#local-6989586621679134724"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-170"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gdOnChange :: Maybe (Int -&gt; (Double, Double) -&gt; e)
+</span><a href="Monomer.Graph.GraphData.html#_gdOnChange"><span class="hs-identifier hs-var">_gdOnChange</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; (Double, Double) -&gt; e
+</span><a href="#local-6989586621679134724"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-171"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-172"></span></pre></body></html>
