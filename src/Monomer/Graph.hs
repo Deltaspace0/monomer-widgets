@@ -33,6 +33,7 @@ module Monomer.Graph
     , graphWithData_
     ) where
 
+import Control.Applicative ((<|>))
 import Control.Lens
 import Control.Monad
 import Data.Default
@@ -54,7 +55,8 @@ import Monomer.Graph.GraphState
 Creates a graph plotter using the list with points.
 -}
 graph
-    :: [[(Double, Double)]]  -- ^ The list with points.
+    :: (WidgetEvent e)
+    => [[(Double, Double)]]  -- ^ The list with points.
     -> WidgetNode s e        -- ^ The created graph plotter.
 graph points = graph_ points def
 
@@ -62,7 +64,8 @@ graph points = graph_ points def
 Creates a graph plotter using the list with points. Accepts config.
 -}
 graph_
-    :: [[(Double, Double)]]  -- ^ The list with points.
+    :: (WidgetEvent e)
+    => [[(Double, Double)]]  -- ^ The list with points.
     -> [GraphCfg]            -- ^ The config options.
     -> WidgetNode s e        -- ^ The created graph plotter.
 graph_ points configs = graphWithColors_ colorPoints configs where
@@ -75,7 +78,8 @@ graph_ points configs = graphWithColors_ colorPoints configs where
 Creates a graph plotter using the list with colors and points.
 -}
 graphWithColors
-    :: [(Color, [(Double, Double)])]
+    :: (WidgetEvent e)
+    => [(Color, [(Double, Double)])]
     -- ^ The list with colors and points.
     -> WidgetNode s e
     -- ^ The created graph plotter.
@@ -86,7 +90,8 @@ Creates a graph plotter using the list with colors and points.
 Accepts config.
 -}
 graphWithColors_
-    :: [(Color, [(Double, Double)])]
+    :: (WidgetEvent e)
+    => [(Color, [(Double, Double)])]
     -- ^ The list with colors and points.
     -> [GraphCfg]
     -- ^ The config options.
@@ -103,8 +108,9 @@ graphWithColors_ colorPoints configs = node where
 Creates a graph plotter using the list with 'GraphData'.
 -}
 graphWithData
-    :: [[GraphData]]   -- ^ The list with 'GraphData'.
-    -> WidgetNode s e  -- ^ The created graph plotter.
+    :: (WidgetEvent e)
+    => [[GraphData e]]  -- ^ The list with 'GraphData'.
+    -> WidgetNode s e   -- ^ The created graph plotter.
 graphWithData dataList = graphWithData_ dataList def
 
 {-|
@@ -112,49 +118,56 @@ Creates a graph plotter using the list with 'GraphData'. Accepts
 config.
 -}
 graphWithData_
-    :: [[GraphData]]   -- ^ The list with 'GraphData'.
-    -> [GraphCfg]      -- ^ The config options.
-    -> WidgetNode s e  -- ^ The created graph plotter.
+    :: (WidgetEvent e)
+    => [[GraphData e]]  -- ^ The list with 'GraphData'.
+    -> [GraphCfg]       -- ^ The config options.
+    -> WidgetNode s e   -- ^ The created graph plotter.
 graphWithData_ dataList configs = node where
     node = defaultWidgetNode (WidgetType "graph") widget
     widget = makeGraph (mconcat <$> dataList) config def
     config = mconcat configs
 
 makeGraph
-    :: [GraphData]
+    :: (WidgetEvent e)
+    => [GraphData e]
     -> GraphCfg
     -> GraphState
     -> Widget s e
 makeGraph graphDatas config@(GraphCfg{..}) state = widget where
     widget = createSingle state def
-        { singleMerge = merge
+        { singleGetCurrentStyle = getCurrentStyle
+        , singleMerge = merge
         , singleHandleEvent = handleEvent
         , singleHandleMessage = handleMessage
         , singleGetSizeReq = getSizeReq
         , singleRender = render
         }
 
+    getCurrentStyle wenv node = style where
+        style = currentStyle wenv node & L.cursorIcon .~ cursor
+        cursor = if null (_gsHoverPoint state)
+            then Nothing
+            else Just CursorHand
+
     merge _ newNode _ oldState = resultNode resNode where
-        resNode = newNode & L.widget .~ makeGraphWithState oldState
+        resNode = makeNodeWithState oldState newNode
 
     handleEvent wenv node _ event = result where
         result = case event of
-            ButtonAction p _ BtnPressed _ -> resultPoint p
+            ButtonAction p _ BtnPressed _ -> resultPressed p
             ButtonAction _ _ BtnReleased _ -> resultReleased
-            Move p | isNodePressed wenv node -> resultPoint p
+            Move p -> handleMove wenv node p
             WheelScroll p (Point _ wy) _ -> resultScroll p wy
             _ -> Nothing
-        resultPoint = resultRender . newPoint
-        resultScroll p = resultRender . newScroll p
+        resultPressed p = resultRender $ newNode $ state
+            { _gsMousePosition = Just p
+            , _gsActivePoint = _gsHoverPoint state
+            }
         resultReleased = Just $ resultNode $ newNode $ state
             { _gsMousePosition = Nothing
+            , _gsActivePoint = Nothing
             }
-        newPoint point@(Point mx my) = newNode $ if null mp
-            then state {_gsMousePosition = Just point}
-            else state
-                { _gsTranslation = Point (tx+mx-mx0) (ty+my-my0)
-                , _gsMousePosition = Just point
-                }
+        resultScroll p = resultRender . newScroll p
         newScroll (Point mx my) wy = newNode $ state
             { _gsTranslation = Point tx' ty'
             , _gsScale = Point cx' cy'
@@ -186,15 +199,59 @@ makeGraph graphDatas config@(GraphCfg{..}) state = widget where
                 d = 10**(-1-(floor' $ logBase 10 x))
         Point tx ty = _gsTranslation state
         Point cx cy = _gsScale state
+        newNode s = makeNodeWithState s node
+
+    handleMove wenv node p@(Point x y) = result where
+        result = Just $ resultReqs newNode reqs
+        newNode = makeNodeWithState newState node
+        newState
+            | isNodePressed wenv node && dragPoint = state
+            | isNodePressed wenv node && (not $ null mp) = state
+                { _gsTranslation = Point (tx+x-mx0) (ty+y-my0)
+                , _gsMousePosition = Just p
+                }
+            | otherwise = state
+                { _gsHoverPoint = hp
+                }
+        reqs = if not dragPoint
+            then [RenderOnce]
+            else
+                [ RaiseEvent $ (fromJust report) dj (dx, dy)
+                , RenderOnce
+                ]
+        dragPoint = not $ (null dp || null report)
+        Point tx ty = _gsTranslation state
+        Point cx cy = _gsScale state
         Point mx0 my0 = fromJust mp
         mp = _gsMousePosition state
-        resultRender n = Just $ resultReqs n [RenderOnce]
-        newNode s = node & L.widget .~ makeGraphWithState s
+        (di, dj) = fromJust dp
+        dp = _gsActivePoint state
+        report = _gdOnChange $ graphDatas!!di
+        hp = hoverPointData $ zip [0..] graphDatas
+        hoverPointData [] = Nothing
+        hoverPointData ((i, graphData):xs)
+            | _gdSeparate graphData /= Just True = hoverPointData xs
+            | null hp' = hoverPointData xs
+            | otherwise = (,) i <$> hp'
+            where
+                hp' = getHP r $ zip [0..] $ _gdPoints graphData
+                r = 2*(fromMaybe 2 $ _gdWidth graphData)
+        getHP _ [] = Nothing
+        getHP r ((j, pp):xs) = if checkHover pp r
+            then Just j
+            else getHP r xs
+        checkHover (px, py) r = distance <= r**2 where
+            distance = ((px-dx)*cx*64)**2+((py-dy)*cy*64)**2
+        (dx, dy) = ((x-ox)/64/cx, (oy-y)/64/cy)
+        (ox, oy) = (gx+gw/2+tx, gy+gh/2+ty)
+        Rect gx gy gw gh = getContentArea node style
+        style = currentStyle wenv node
+
+    resultRender node = Just $ resultReqs node [RenderOnce]
 
     handleMessage _ node _ message = do
         s <- getNewState <$> cast message
-        let newNode = node & L.widget .~ makeGraphWithState s
-        return $ resultReqs newNode [RenderOnce]
+        return $ resultReqs (makeNodeWithState s node) [RenderOnce]
 
     getNewState (GraphSetTranslation p) = state {_gsTranslation = p}
     getNewState (GraphSetScale p) = state {_gsScale = p}
@@ -254,11 +311,12 @@ makeGraph graphDatas config@(GraphCfg{..}) state = widget where
             forM_ [ovy1, ovy1-sy..gy] horLine
             forM_ [ovy1, ovy1+sy..(gy+gh)] horLine
         let p (x, y) = (64*cx*x+ox, 64*cy*(-y)+oy)
-        forM_ graphDatas $ \graphData@(GraphData{..}) -> do
-            let ps = p <$> _gdPoints
+        forM_ (zip [0..] graphDatas) $ \(i, graphData) -> do
+            let GraphData{..} = graphData
+                ps = p <$> _gdPoints
                 newGraphData = graphData {_gdPoints = ps}
             when (not $ null _gdColor) $
-                renderGraphData renderer newGraphData
+                renderGraphData renderer newGraphData i
         when (_gcHideNumbers /= Just True) $ do
             setFillColor renderer black
             drawInAlpha renderer 0.62 $ do
@@ -268,21 +326,27 @@ makeGraph graphDatas config@(GraphCfg{..}) state = widget where
                 forM_ [(foy-1),(foy-2)..(foy-20)] horN'
         restoreContext renderer
 
-    renderGraphData renderer GraphData{..} = do
-        let ps = _gdPoints
+    renderGraphData renderer GraphData{..} i = do
+        let GraphState{..} = state
+            ps = _gdPoints
             c = _gdColor
             w = fromMaybe 2 _gdWidth
             alpha = fromMaybe 0.32 _gdFillAlpha
             p (x, y) = Point x y
             connect (a, b) = drawLine renderer (p a) (p b) w c
-            drawDot (Point x y) = drawEllipse renderer el c where
-                el = Rect (x-w*2) (y-w*2) (w*4) (w*4)
+            drawDot cs (Point x y) = drawEllipse renderer r cs where
+                r = Rect (x-w*2) (y-w*2) (w*4) (w*4)
+            getSeparateColor j
+                | _gsActivePoint == Just (i, j) = _gdActiveColor
+                | _gsHoverPoint == Just (i, j) = _gdHoverColor
+                | otherwise = Nothing
             l = length ps
         if _gdSeparate == Just True
-            then forM_ ps $ drawDot . p
+            then forM_ (zip [0..] ps) $ \(j, q) ->
+                drawDot (getSeparateColor j <|> c) $ p q
             else do
                 when (l > 1) $ forM_ (zip ps (tail ps)) connect
-                when (l == 1) $ drawDot $ p $ head ps
+                when (l == 1) $ drawDot c $ p $ head ps
         when (_gdFill == Just True && l > 2) $ do
             beginPath renderer
             moveTo renderer $ p $ head ps
@@ -299,4 +363,5 @@ makeGraph graphDatas config@(GraphCfg{..}) state = widget where
     round' :: Double -> Double
     round' x = fromIntegral $ (round x :: Int)
 
-    makeGraphWithState = makeGraph graphDatas config
+    makeNodeWithState newState = L.widget .~ newWidget where
+        newWidget = makeGraph graphDatas config newState

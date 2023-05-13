@@ -11,6 +11,8 @@ data GraphState = GraphState
     , _gsUnit :: Point
     , _gsSections :: Point
     , _gsMousePosition :: Maybe Point
+    , _gsHoverPoint :: Maybe (Int, Int)
+    , _gsActivePoint :: Maybe (Int, Int)
     } deriving (Eq, Show)
 
 instance Default GraphState where
@@ -20,4 +22,6 @@ instance Default GraphState where
         , _gsUnit = Point 1 1
         , _gsSections = Point 5 5
         , _gsMousePosition = Nothing
+        , _gsHoverPoint = Nothing
+        , _gsActivePoint = Nothing
         }
