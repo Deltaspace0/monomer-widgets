@@ -28,10 +28,29 @@ makeLensesWith abbreviatedFields 'TestModel
 
 spec :: Spec
 spec = describe "Dragboard" $ do
+    clicking
     dragging
     validateMove
     handleEvent
     handleEventV
+
+clicking :: Spec
+clicking = describe "clicking" $ do
+    let wenv = mockWenvEvtUnit $ TestModel [[42], []]
+        node = dragboard 2 1 field getColor
+        noClick = dragboard_ 2 1 field getColor [disableClick]
+        evtC (x1, y1) (x2, y2) =
+            [ evtRelease $ Point x1 y1
+            , evtRelease $ Point x2 y2
+            ]
+        model p1 p2 n = nodeHandleEventModel wenv (evtC p1 p2) n
+        f = view field
+    it "should update the model when clicked from nonempty square" $
+        f (model (5, 30) (400, 30) node) `shouldBe` [[], [42]]
+    it "should do nothing when clicked from empty square" $
+        f (model (325, 5) (5, 5) node) `shouldBe` [[42], []]
+    it "should do nothing when clicked with disableClick config" $
+        f (model (5, 30) (400, 30) noClick) `shouldBe` [[42], []]
 
 dragging :: Spec
 dragging = describe "dragging" $ do
