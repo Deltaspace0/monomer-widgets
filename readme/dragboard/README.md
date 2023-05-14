@@ -15,6 +15,8 @@ of a filler or path to the image.
 
 Here is the [example](/examples/dragboard/UI.hs).
 
+Also, check out my [Monomer chess](https://github.com/Deltaspace0/monomer-chess) repo which uses this widget.
+
 ## Configuration
 
 - `[moveValidator f]`, where `f` is a function of type `([[a]], Int, Int) -> Bool`. It receives previous board, index of a square where item has been
