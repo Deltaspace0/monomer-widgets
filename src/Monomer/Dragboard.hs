@@ -133,4 +133,4 @@ dragboardD_ c r wdata f configs cmpConfigs = node where
         [ mergeRequired (\_ _ _ -> True)
         , compositeMergeModel mergeHandler
         ] <> cmpConfigs
-    mergeHandler _ pm _ = boardState .~ widgetDataGet pm wdata
+    mergeHandler _ pm m _ = m & boardState .~ widgetDataGet pm wdata

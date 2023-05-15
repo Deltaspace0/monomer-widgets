@@ -10,6 +10,7 @@ import Control.Lens
 import Data.Maybe
 import Monomer.Main.UserUtil
 import Monomer.Widgets.Composite
+import Monomer.Widgets.Single
 
 import Monomer.Dragboard.DragboardCfg
 import Monomer.Dragboard.DragboardModel
@@ -76,7 +77,8 @@ clickHandle i config model@(DragboardModel{..}) = response where
     newSelected = if null dropResponses
         then Just i
         else Nothing
-    dropResponses = dropHandle i d (WidgetValue []) config model
+    dropResponses = dropHandle i d (WidgetValue []) config' model
+    config' = config <> (onChangeReq $ const RenderOnce)
     d = DragId $ fromJust _dmSelectedSquare
     setSelectedSquare v = [Model $ model & selectedSquare .~ v]
 
