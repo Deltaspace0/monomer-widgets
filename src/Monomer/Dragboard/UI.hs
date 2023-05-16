@@ -12,12 +12,15 @@ import Monomer.Checkerboard
 import Monomer.Core.Combinators
 import Monomer.Graphics.ColorTable
 import Monomer.Graphics.Types
+import Monomer.Widgets.Animation
 import Monomer.Widgets.Containers.Box
 import Monomer.Widgets.Containers.Draggable
 import Monomer.Widgets.Containers.DropTarget
 import Monomer.Widgets.Singles.Image
 import Monomer.Widgets.Singles.Spacer
 import Monomer.Widgets.Composite
+import TextShow
+import qualified Data.Map as Map
 
 import Monomer.Dragboard.DragboardCfg
 import Monomer.Dragboard.DragboardEvent
@@ -39,7 +42,7 @@ buildUI DragboardCfg{..} c r getPathOrColor _ model = node where
     offset = fromMaybe 0 _dcOffset
     f i xs = clickBox i $ dropTarget (EventDrop i) $ if null xs
         then filler
-        else draggable_ (DragId i) draggableConfigs $ managed xs
+        else draggable_ (DragId i) draggableConfigs $ makeAnim i xs
     clickBox i x = if _dcNoClick == Just True
         then x
         else paint i $ box_ [onBtnReleased $ \_ _ -> EventClick i] x
@@ -49,7 +52,23 @@ buildUI DragboardCfg{..} c r getPathOrColor _ model = node where
     draggableConfigs = [draggableRenderSource_ renderS]
     renderS = fromMaybe False _dcRenderS
     selectedColor = fromMaybe yellow _dcSelectColor
+    makeAnim i xs = animTransform_
+        [ duration dur
+        , onFinished $ EventFinished i
+        ] (fa i) (managed xs) `nodeKey` ("dragItem" <> showt i)
+    fa i t (Rect x2 y2 _ _) = transformation where
+        transformation = if null sourceRect
+            then []
+            else
+                [ animTranslation $ Point x y
+                , animScissor $ Rect (-10000) (-10000) 20000 20000
+                ]
+        (x, y) = ((x2-x1)*t/dur'-x2+x1, (y2-y1)*t/dur'-y2+y1)
+        Rect x1 y1 _ _ = fromJust sourceRect
+        sourceRect = Map.lookup i $ model ^. animationSources
     managed = makeWidget . getPathOrColor . head
     makeWidget (Left path) = image_ path [fitEither]
     makeWidget (Right color) = filler `styleBasic` [bgColor color]
     boardState' = model ^. boardState
+    dur' = fromIntegral dur
+    dur = fromMaybe 500 _dcDuration

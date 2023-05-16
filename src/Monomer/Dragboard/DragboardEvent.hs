@@ -9,8 +9,12 @@ module Monomer.Dragboard.DragboardEvent
 import Control.Lens
 import Data.Maybe
 import Monomer.Main.UserUtil
+import Monomer.Widgets.Animation
 import Monomer.Widgets.Composite
 import Monomer.Widgets.Single
+import TextShow
+import qualified Data.Map as Map
+import qualified Monomer.Lens as L
 
 import Monomer.Dragboard.DragboardCfg
 import Monomer.Dragboard.DragboardModel
@@ -20,6 +24,7 @@ newtype DragId = DragId Int deriving Eq
 data DragboardEvent
     = EventDrop Int DragId
     | EventClick Int
+    | EventFinished Int
     | EventFocus Path
     | EventBlur Path
     deriving Eq
@@ -33,9 +38,10 @@ handleEvent
     :: (WidgetData sp [[a]])
     -> (DragboardCfg sp ep a)
     -> EventHandler (DragboardModel a) DragboardEvent sp ep
-handleEvent wdata config _ node model event = case event of
+handleEvent wdata config wenv node model event = case event of
     EventDrop i d -> dropHandle i d wdata config model
-    EventClick i -> clickHandle i config model
+    EventClick i -> clickHandle i wenv config model
+    EventFinished i -> finishedHandle i config model
     EventFocus prev -> focusHandle node prev config model
     EventBlur next -> blurHandle node next config model
 
@@ -65,22 +71,41 @@ dropHandle ixTo (DragId ixFrom) wdata config model = response where
     DragboardCfg{..} = config
     DragboardModel{..} = model
 
-clickHandle :: Int -> EventHandle a sp ep
-clickHandle i config model@(DragboardModel{..}) = response where
-    response
+clickHandle
+    :: Int
+    -> WidgetEnv (DragboardModel a) DragboardEvent
+    -> EventHandle a sp ep
+clickHandle i wenv config model@(DragboardModel{..}) = resp where
+    resp
         | null _dmSelectedSquare = setSelectedSquare $ Just i
         | _dmSelectedSquare == Just i = setSelectedSquare Nothing
         | otherwise =
-            [ Model $ model & selectedSquare .~ newSelected
+            [ Model $ model
+                & selectedSquare .~ newSelected
+                & animationSources %~ insertSource
             , Event $ EventDrop i d
+            , responseIf (not $ null dropResponses) $
+                Message destinationKey AnimationStart
             ]
     newSelected = if null dropResponses
         then Just i
         else Nothing
+    insertSource = if null sourceRect
+        then id
+        else Map.insert i $ fromJust sourceRect
+    sourceRect = view L.viewport <$> sourceInfo
+    sourceInfo = nodeInfoFromKey wenv $ WidgetKey sourceKey
+    destinationKey = WidgetKey $ "dragItem" <> showt i
+    sourceKey = "dragItem" <> (showt $ fromJust _dmSelectedSquare)
     dropResponses = dropHandle i d (WidgetValue []) config' model
     config' = config <> (onChangeReq $ const RenderOnce)
     d = DragId $ fromJust _dmSelectedSquare
     setSelectedSquare v = [Model $ model & selectedSquare .~ v]
+
+finishedHandle :: Int -> EventHandle a sp ep
+finishedHandle i _ _ = response where
+    response = [Message destinationKey AnimationStop]
+    destinationKey = WidgetKey $ "dragItem" <> (showt i)
 
 focusHandle :: WidgetNode s e -> Path -> EventHandle a sp ep
 focusHandle node prev DragboardCfg{..} _ = response where

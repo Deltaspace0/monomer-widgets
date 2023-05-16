@@ -31,6 +31,7 @@ Configuration options for dragboard:
 - 'selectColor': color of selected square.
 - 'disableClick': whether items can be moved only by dragging.
 - 'renderSource': whether to render the source widget when dragging.
+- 'duration': how long the animation lasts in ms.
 - 'checkerConfig': config options for checkerboard container.
 - 'onFocus': event to raise when focus is received.
 - 'onFocusReq': 'WidgetRequest' to generate when focus is received.
@@ -45,6 +46,7 @@ data DragboardCfg s e a = DragboardCfg
     , _dcSelectColor :: Maybe Color
     , _dcNoClick :: Maybe Bool
     , _dcRenderS :: Maybe Bool
+    , _dcDuration :: Maybe Millisecond
     , _dcCheckerCfg :: [CheckerboardCfg]
     , _dcOnFocusReq :: [Path -> WidgetRequest s e]
     , _dcOnBlurReq :: [Path -> WidgetRequest s e]
@@ -58,6 +60,7 @@ instance Default (DragboardCfg s e a) where
         , _dcSelectColor = Nothing
         , _dcNoClick = Nothing
         , _dcRenderS = Nothing
+        , _dcDuration = Nothing
         , _dcCheckerCfg = []
         , _dcOnFocusReq = []
         , _dcOnBlurReq = []
@@ -71,6 +74,7 @@ instance Semigroup (DragboardCfg s e a) where
         , _dcSelectColor = _dcSelectColor a2 <|> _dcSelectColor a1
         , _dcNoClick = _dcNoClick a2 <|> _dcNoClick a1
         , _dcRenderS = _dcRenderS a2 <|> _dcRenderS a1
+        , _dcDuration = _dcDuration a2 <|> _dcDuration a1
         , _dcCheckerCfg = _dcCheckerCfg a1 <> _dcCheckerCfg a2
         , _dcOnFocusReq = _dcOnFocusReq a1 <> _dcOnFocusReq a2
         , _dcOnBlurReq = _dcOnBlurReq a1 <> _dcOnBlurReq a2
@@ -79,6 +83,11 @@ instance Semigroup (DragboardCfg s e a) where
 
 instance Monoid (DragboardCfg s e a) where
     mempty = def
+
+instance CmbDuration (DragboardCfg s e a) Millisecond where
+    duration dur = def
+        { _dcDuration = Just dur
+        }
 
 instance WidgetEvent e =>
     CmbOnFocus (DragboardCfg s e a) e Path where

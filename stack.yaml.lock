@@ -5,15 +5,15 @@
 
 packages:
 - completed:
-    commit: fdb3b086e91c30b2a5b9db68fe133929959573e0
+    commit: 081801ed525e88677825d65056ced68a53a38dd1
     git: https://github.com/Deltaspace0/monomer.git
     name: monomer
     pantry-tree:
-      sha256: ac6cd39b4350418b7cfbff49978b9920de583f3315e9c5b24964a562c536c1f5
+      sha256: ffa380239f746b1a8e8e961c179e1afa0cd6017e48d1d1f280801dfd04315203
       size: 18557
     version: 1.5.1.0
   original:
-    commit: fdb3b086e91c30b2a5b9db68fe133929959573e0
+    commit: 081801ed525e88677825d65056ced68a53a38dd1
     git: https://github.com/Deltaspace0/monomer.git
 - completed:
     hackage: nanovg-0.8.1.0@sha256:9131db15822c6593aa73946b56593eb0a14a0d044395bcdfd4fe2d3e6edb6759,4742

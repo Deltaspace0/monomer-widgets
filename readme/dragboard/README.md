@@ -27,6 +27,7 @@ then the board state will not change.
 - `[selectColor color]`. Color of selected square.
 - `[disableClick]`. Whether items can be moved only by dragging.
 - `[renderSource]`. Whether to render the source widget when dragging.
+- `[duration ms]`. How long the animation lasts in ms.
 - `[checkerConfig configs]`. Config options for checkerboard container which is used by dragboard.
 - `[onChange f]`, where type of `f` is `([[a]], Int, Int) -> e`: `[[a]]` is the board state before change, the first `Int` is destination square, the second `Int` is source square and `e` is the event.
 - `[onFocus f]`, where type of `f` is `Path -> e`: event to raise when the composite receives focus.
