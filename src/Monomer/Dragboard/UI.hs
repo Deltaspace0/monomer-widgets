@@ -32,7 +32,7 @@ buildUI
     -> Int
     -> Int
     -> (a -> Either Text Color)
-    -> UIBuilder (DragboardModel a) DragboardEvent
+    -> UIBuilder (DragboardModel a) (DragboardEvent a)
 buildUI DragboardCfg{..} c r getPathOrColor _ model = node where
     node = box_
         [ onFocus EventFocus
@@ -40,9 +40,10 @@ buildUI DragboardCfg{..} c r getPathOrColor _ model = node where
         ] $ checkerboard_ c r cc $ zipWith f [offset..] boardState'
     cc = _dcCheckerCfg
     offset = fromMaybe 0 _dcOffset
-    f i xs = clickBox i $ dropTarget (EventDrop i) $ if null xs
+    f i xs = clickBox i $ makeDrop i $ if null xs
         then filler
-        else draggable_ (DragId i) draggableConfigs $ makeAnim i xs
+        else draggable_ (DragId i) draggableConfigs $ managed xs
+    makeDrop i = dropTarget (EventDrop i) . makeAnim i
     clickBox i x = if _dcNoClick == Just True
         then x
         else paint i $ box_ [onBtnReleased $ \_ _ -> EventClick i] x
@@ -52,10 +53,10 @@ buildUI DragboardCfg{..} c r getPathOrColor _ model = node where
     draggableConfigs = [draggableRenderSource_ renderS]
     renderS = fromMaybe False _dcRenderS
     selectedColor = fromMaybe yellow _dcSelectColor
-    makeAnim i xs = animTransform_
+    makeAnim i x = animTransform_
         [ duration dur
         , onFinished $ EventFinished i
-        ] (fa i) (managed xs) `nodeKey` ("dragItem" <> showt i)
+        ] (fa i) x `nodeKey` ("dragItem" <> showt i)
     fa i t (Rect x2 y2 _ _) = transformation where
         transformation = if null sourceRect
             then []

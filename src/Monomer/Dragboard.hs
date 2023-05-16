@@ -118,7 +118,7 @@ dragboardD_
     -- ^ The path or color function.
     -> [DragboardCfg s e a]
     -- ^ The config options.
-    -> [CompositeCfg (DragboardModel a) DragboardEvent s e]
+    -> [CompositeCfg (DragboardModel a) (DragboardEvent a) s e]
     -- ^ The composite config options.
     -> WidgetNode s e
     -- ^ The created dragboard.
@@ -132,5 +132,6 @@ dragboardD_ c r wdata f configs cmpConfigs = node where
     cmpConfigs' =
         [ mergeRequired (\_ _ _ -> True)
         , compositeMergeModel mergeHandler
+        , compositeMergeEvents $ \_ _ _ _ m _ -> [EventMerge m]
         ] <> cmpConfigs
     mergeHandler _ pm m _ = m & boardState .~ widgetDataGet pm wdata

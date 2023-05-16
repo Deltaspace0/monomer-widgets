@@ -21,10 +21,11 @@ import Monomer.Dragboard.DragboardModel
 
 newtype DragId = DragId Int deriving Eq
 
-data DragboardEvent
+data DragboardEvent a
     = EventDrop Int DragId
     | EventClick Int
     | EventFinished Int
+    | EventMerge (DragboardModel a)
     | EventFocus Path
     | EventBlur Path
     deriving Eq
@@ -32,16 +33,18 @@ data DragboardEvent
 type EventHandle a sp ep
     = (DragboardCfg sp ep a)
     -> (DragboardModel a)
-    -> [EventResponse (DragboardModel a) DragboardEvent sp ep]
+    -> [EventResponse (DragboardModel a) (DragboardEvent a) sp ep]
 
 handleEvent
-    :: (WidgetData sp [[a]])
+    :: (Eq a)
+    => (WidgetData sp [[a]])
     -> (DragboardCfg sp ep a)
-    -> EventHandler (DragboardModel a) DragboardEvent sp ep
+    -> EventHandler (DragboardModel a) (DragboardEvent a) sp ep
 handleEvent wdata config wenv node model event = case event of
     EventDrop i d -> dropHandle i d wdata config model
     EventClick i -> clickHandle i wenv config model
     EventFinished i -> finishedHandle i config model
+    EventMerge m -> mergeHandle m wenv config model
     EventFocus prev -> focusHandle node prev config model
     EventBlur next -> blurHandle node next config model
 
@@ -53,14 +56,17 @@ dropHandle
 dropHandle ixTo (DragId ixFrom) wdata config model = response where
     response = if valid == Just False || emptySource
         then []
-        else (responseIf validFrom <$> dataReq) <> report
+        else setBoardState <> report
+    setBoardState = if validFrom
+        then [Model $ model & boardState .~ newState] <> dataReq
+        else []
     valid = ($ changeInfo) <$> _dcValidator
     changeInfo = (_dmBoardState, ixTo, ixFrom)
     emptySource = validFrom && length sourceSquare == 0
     validFrom = ixFrom' >= 0 && ixFrom' < length _dmBoardState
     report = RequestParent <$> (($ changeInfo) <$> _dcOnChangeReq)
-    dataReq = RequestParent <$> (widgetDataSet wdata newBoardState)
-    newBoardState = zipWith f [offset..] _dmBoardState
+    dataReq = RequestParent <$> (widgetDataSet wdata newState)
+    newState = zipWith f [offset..] _dmBoardState
     f i xs
         | i == ixTo = [head sourceSquare]
         | i == ixFrom = tail xs
@@ -73,7 +79,7 @@ dropHandle ixTo (DragId ixFrom) wdata config model = response where
 
 clickHandle
     :: Int
-    -> WidgetEnv (DragboardModel a) DragboardEvent
+    -> WidgetEnv (DragboardModel a) (DragboardEvent a)
     -> EventHandle a sp ep
 clickHandle i wenv config model@(DragboardModel{..}) = resp where
     resp
@@ -106,6 +112,44 @@ finishedHandle :: Int -> EventHandle a sp ep
 finishedHandle i _ _ = response where
     response = [Message destinationKey AnimationStop]
     destinationKey = WidgetKey $ "dragItem" <> (showt i)
+
+mergeHandle
+    :: (Eq a)
+    => DragboardModel a
+    -> WidgetEnv (DragboardModel a) (DragboardEvent a)
+    -> EventHandle a sp ep
+mergeHandle DragboardModel{..} wenv config model = response where
+    response = setSources:(flip Message AnimationStart <$> newKeys)
+    setSources = Model $ model & animationSources .~ newSources
+    (newSources, newKeys, _) = foldl f initState models
+    initState = (_dmAnimationSources, [], [])
+    f (sources, keys, kk) (i, a, b) = (sources', keys', kk') where
+        sources' = if noAnimation
+            then sources
+            else Map.insert i (fromJust sourceRect) sources
+        keys' = if noAnimation
+            then keys
+            else (WidgetKey $ "dragItem" <> (showt i)):keys
+        kk' = if noAnimation || null sourceKey
+            then kk
+            else (fromJust sourceKey):kk
+        noAnimation = (same a b) || null sourceRect
+        sourceRect = sourceKey >>= getRect
+        sourceKey = findSource models
+        findSource [] = Nothing
+        findSource ((j, a', b'):xs) = result where
+            result = if (same a' b') || (not $ same a' b) || usedKey
+                then findSource xs
+                else Just j
+            usedKey = j `elem` kk
+    getRect i = view L.viewport <$> sourceInfo where
+        sourceInfo = nodeInfoFromKey wenv $ WidgetKey sourceKey
+        sourceKey = "dragItem" <> (showt i)
+    same a b = sameHead || (null a && null b) where
+        sameHead = not (null a) && not (null b) && head a == head b
+    models = zip3 [offset..] _dmBoardState boardState'
+    boardState' = model ^. boardState
+    offset = fromMaybe 0 $ _dcOffset config
 
 focusHandle :: WidgetNode s e -> Path -> EventHandle a sp ep
 focusHandle node prev DragboardCfg{..} _ = response where
