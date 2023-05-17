@@ -66,7 +66,7 @@ Creates a graph plotter using the list with points. Accepts config.
 graph_
     :: (WidgetEvent e)
     => [[(Double, Double)]]  -- ^ The list with points.
-    -> [GraphCfg]            -- ^ The config options.
+    -> [GraphCfg s e]        -- ^ The config options.
     -> WidgetNode s e        -- ^ The created graph plotter.
 graph_ points configs = graphWithColors_ colorPoints configs where
     colorPoints = zip (cycle colors') points
@@ -93,7 +93,7 @@ graphWithColors_
     :: (WidgetEvent e)
     => [(Color, [(Double, Double)])]
     -- ^ The list with colors and points.
-    -> [GraphCfg]
+    -> [GraphCfg s e]
     -- ^ The config options.
     -> WidgetNode s e
     -- ^ The created graph plotter.
@@ -120,7 +120,7 @@ config.
 graphWithData_
     :: (WidgetEvent e)
     => [[GraphData e]]  -- ^ The list with 'GraphData'.
-    -> [GraphCfg]       -- ^ The config options.
+    -> [GraphCfg s e]   -- ^ The config options.
     -> WidgetNode s e   -- ^ The created graph plotter.
 graphWithData_ dataList configs = node where
     node = defaultWidgetNode (WidgetType "graph") widget
@@ -130,7 +130,7 @@ graphWithData_ dataList configs = node where
 makeGraph
     :: (WidgetEvent e)
     => [GraphData e]
-    -> GraphCfg
+    -> GraphCfg s e
     -> GraphState
     -> Widget s e
 makeGraph graphDatas config@(GraphCfg{..}) state = widget where
@@ -155,10 +155,14 @@ makeGraph graphDatas config@(GraphCfg{..}) state = widget where
     handleEvent wenv node _ event = result where
         result = case event of
             ButtonAction p _ BtnPressed _ -> resultPressed p
+            ButtonAction p BtnRight BtnReleased _ -> resultRight p
             ButtonAction _ _ BtnReleased _ -> resultReleased
             Move p -> handleMove wenv node p
             WheelScroll p (Point _ wy) _ -> resultScroll p wy
             _ -> Nothing
+        resultRight (Point x y) = Just res where
+            res = resultReqs node $ ($ p') <$> _gcOnRightClickReq
+            p' = ((x-ox)/64/cx, (oy-y)/64/cy)
         resultPressed p = resultRender $ newNode $ state
             { _gsMousePosition = Just p
             , _gsActivePoint = _gsHoverPoint state
@@ -186,6 +190,7 @@ makeGraph graphDatas config@(GraphCfg{..}) state = widget where
                     then 1
                     else 1.05**wr
                 wr = fromMaybe 1 _gcWheelRate
+        (ox, oy) = (gx+gw/2+tx, gy+gh/2+ty)
         Rect gx gy gw gh = getContentArea node style
         style = currentStyle wenv node
         getSec x = let l = 10**(mod' (logBase 10 x) 1) in

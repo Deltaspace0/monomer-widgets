@@ -13,11 +13,13 @@ buildUI _ model = tree where
     tree = hstack_ [childSpacing_ 64]
         [ graphWithData_ points
             [ wheelRate 2
+            , onRightClick AppAddPoint
             ] `nodeKey` "mainGraph"
         , separatorLine
         , vstack_ [childSpacing_ 16]
             [ hslider parameter (-2) 2
             , button "Reset" AppResetGraph
+            , button "Remove orange points" AppRemovePoints
             ]
         ] `styleBasic` [padding 16]
     points =
@@ -38,6 +40,11 @@ buildUI _ model = tree where
             , graphSeparate
             , graphFill
             , graphFillAlpha 0.64
+            ]
+        ,   [ graphPoints $ model ^. manyPoints
+            , graphColor orange
+            , graphSeparate
+            , graphOnChange $ AppOrangeChange
             ]
         ]
     xs = [-10, -9.98..10]

@@ -13,6 +13,9 @@ data AppEvent
     = AppInit
     | AppResetGraph
     | AppYellowChange Int (Double, Double)
+    | AppAddPoint (Double, Double)
+    | AppRemovePoints
+    | AppOrangeChange Int (Double, Double)
     deriving (Eq, Show)
 
 handleEvent :: AppEventHandler AppModel AppEvent
@@ -24,3 +27,6 @@ handleEvent _ _ model event = case event of
             & parameter .~ x+1
             & yellowPos .~ (x, y)
         ]
+    AppAddPoint p -> [Model $ model & manyPoints %~ (p:)]
+    AppRemovePoints -> [Model $ model & manyPoints .~ []]
+    AppOrangeChange i p -> [Model $ model & manyPoints . ix i .~ p]

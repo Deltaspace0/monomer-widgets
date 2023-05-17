@@ -46,3 +46,5 @@ Here is the [example](/examples/graph/UI.hs) of an app using this widget.
 - `[hideMinorGridlines]`. Hide minor gridlines.
 - `[hideAxisNumbers]`. Hide axis numbers.
 - `[graphColors colors]`. List of colors which are used to plot graphs. This list is then cycled when plotting graphs (in case there are more graphs than provided colors). It is ignored when using `graphWithColors` or `graphWithData`.
+- `[onRightClick f]`. Event to raise on right click.
+- `[onRightClickReq f]`. `WidgetRequest` to generate on right click.
