@@ -285,14 +285,17 @@ makeGraph graphDatas config@(GraphCfg{..}) state = widget where
                 r = (round' $ n*bn)/bn
                 bn = 1000000000
             printN p = printText p . pack . show'
-        drawRect renderer rect (Just white) Nothing
+            background = style ^. L.bgColor <|> Just white
+            fore = fromMaybe black $ style ^. L.fgColor
+            foreN = fromMaybe black $ style ^. L.sndColor
+        drawRect renderer rect background Nothing
         saveContext renderer
         intersectScissor renderer rect
-        line p1 p2 2 black
-        line p3 p4 2 black
+        line p1 p2 2 fore
+        line p3 p4 2 fore
         let (sx, sy) = (64*cx*ux, 64*cy*uy)
-            verLine x = line (Point x gy) (Point x (gy+gh)) 1 black
-            horLine y = line (Point gx y) (Point (gx+gw) y) 1 black
+            verLine x = line (Point x gy) (Point x (gy+gh)) 1 fore
+            horLine y = line (Point gx y) (Point (gx+gw) y) 1 fore
             uxl x = fromIntegral $ length $ show' $ uy*x
             clampX x = max (gx+8) $ min (gx+gw-8*(uxl x)-4) $ ox+8
             clampY = max (gy+16) $ min (gy+gh-16) $ oy+16
@@ -323,7 +326,7 @@ makeGraph graphDatas config@(GraphCfg{..}) state = widget where
             when (not $ null _gdColor) $
                 renderGraphData renderer newGraphData i
         when (_gcHideNumbers /= Just True) $ do
-            setFillColor renderer black
+            setFillColor renderer foreN
             drawInAlpha renderer 0.62 $ do
                 forM_ [fox..(fox+20)] verN
                 forM_ [(fox-1),(fox-2)..(fox-20)] verN
