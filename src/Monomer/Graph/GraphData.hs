@@ -12,11 +12,13 @@ module Monomer.Graph.GraphData
     , graphFill_
     , graphFillAlpha
     , graphOnChange
+    , graphOnChangeReq
     ) where
 
 import Control.Applicative ((<|>))
 import Data.Default
 import Monomer.Graphics.Types
+import Monomer.Widgets.Single
 
 {-|
 Options for graph data:
@@ -31,8 +33,10 @@ Options for graph data:
 - 'graphFill': whether to fill the area surrounded by points.
 - 'graphFillAlpha': transparency level of the filled area.
 - 'graphOnChange': event to raise when a point is dragged.
+- 'graphOnChangeReq': 'WidgetRequest' to generate when a point is
+dragged.
 -}
-data GraphData e = GraphData
+data GraphData s e = GraphData
     { _gdPoints :: [(Double, Double)]
     , _gdColor :: Maybe Color
     , _gdHoverColor :: Maybe Color
@@ -41,10 +45,10 @@ data GraphData e = GraphData
     , _gdSeparate :: Maybe Bool
     , _gdFill :: Maybe Bool
     , _gdFillAlpha :: Maybe Double
-    , _gdOnChange :: Maybe (Int -> (Double, Double) -> e)
+    , _gdChangeReq :: [Int -> (Double, Double) -> WidgetRequest s e]
     }
 
-instance Default (GraphData e) where
+instance Default (GraphData s e) where
     def = GraphData
         { _gdPoints = []
         , _gdColor = Nothing
@@ -54,10 +58,10 @@ instance Default (GraphData e) where
         , _gdSeparate = Nothing
         , _gdFill = Nothing
         , _gdFillAlpha = Nothing
-        , _gdOnChange = Nothing
+        , _gdChangeReq = []
         }
 
-instance Semigroup (GraphData e) where
+instance Semigroup (GraphData s e) where
     (<>) a1 a2 = def
         { _gdPoints = _gdPoints a1 <> _gdPoints a2
         , _gdColor = _gdColor a2 <|> _gdColor a1
@@ -67,22 +71,22 @@ instance Semigroup (GraphData e) where
         , _gdSeparate = _gdSeparate a2 <|> _gdSeparate a1
         , _gdFill = _gdFill a2 <|> _gdFill a1
         , _gdFillAlpha = _gdFillAlpha a2 <|> _gdFillAlpha a1
-        , _gdOnChange = _gdOnChange a2 <|> _gdOnChange a1
+        , _gdChangeReq = _gdChangeReq a1 <> _gdChangeReq a2
         }
 
-instance Monoid (GraphData e) where
+instance Monoid (GraphData s e) where
     mempty = def
 
 {-|
 Render single point.
 -}
-graphPoint :: (Double, Double) -> GraphData e
+graphPoint :: (Double, Double) -> GraphData s e
 graphPoint point = graphPoints [point]
 
 {-|
 Use multiple points.
 -}
-graphPoints :: [(Double, Double)] -> GraphData e
+graphPoints :: [(Double, Double)] -> GraphData s e
 graphPoints points = def
     { _gdPoints = points
     }
@@ -91,7 +95,7 @@ graphPoints points = def
 Set the color (if this option is not used then the graph will not be
 rendered).
 -}
-graphColor :: Color -> GraphData e
+graphColor :: Color -> GraphData s e
 graphColor color = def
     { _gdColor = Just color
     }
@@ -100,7 +104,7 @@ graphColor color = def
 Set the color of hovered point (if this option is not used then
 the color set by 'graphColor' is used).
 -}
-graphHoverColor :: Color -> GraphData e
+graphHoverColor :: Color -> GraphData s e
 graphHoverColor color = def
     { _gdHoverColor = Just color
     }
@@ -109,7 +113,7 @@ graphHoverColor color = def
 Set the color of dragged point (if this option is not used then
 the color set by 'graphColor' is used).
 -}
-graphActiveColor :: Color -> GraphData e
+graphActiveColor :: Color -> GraphData s e
 graphActiveColor color = def
     { _gdActiveColor = Just color
     }
@@ -118,22 +122,22 @@ graphActiveColor color = def
 Width of the line connecting provided points. If only single point
 is rendered then its radius will be twice the width.
 -}
-graphWidth :: Double -> GraphData e
-graphWidth width = def
-    { _gdWidth = Just width
+graphWidth :: Double -> GraphData s e
+graphWidth w = def
+    { _gdWidth = Just w
     }
 
 {-|
 Do not connect the points and render them separately. Used when all
 points in the collection must have the same color.
 -}
-graphSeparate :: GraphData e
+graphSeparate :: GraphData s e
 graphSeparate = graphSeparate_ True
 
 {-|
 Whether the points should be rendered separately.
 -}
-graphSeparate_ :: Bool -> GraphData e
+graphSeparate_ :: Bool -> GraphData s e
 graphSeparate_ separate = def
     { _gdSeparate = Just separate
     }
@@ -141,13 +145,13 @@ graphSeparate_ separate = def
 {-|
 Fill the area surrounded by provided points with the color.
 -}
-graphFill :: GraphData e
+graphFill :: GraphData s e
 graphFill = graphFill_ True
 
 {-|
 Whether to fill the area surrounded by provided points.
 -}
-graphFill_ :: Bool -> GraphData e
+graphFill_ :: Bool -> GraphData s e
 graphFill_ v = def
     { _gdFill = Just v
     }
@@ -155,7 +159,7 @@ graphFill_ v = def
 {-|
 Transparency level of the filled area.
 -}
-graphFillAlpha :: Double -> GraphData e
+graphFillAlpha :: Double -> GraphData s e
 graphFillAlpha alpha = def
     { _gdFillAlpha = Just alpha
     }
@@ -165,7 +169,22 @@ Raises an event when a point is dragged by passing its index and
 new coordinates. This option is ignored if 'graphSeparate' is not
 enabled.
 -}
-graphOnChange :: (Int -> (Double, Double) -> e) -> GraphData e
-graphOnChange v = def
-    { _gdOnChange = Just v
+graphOnChange
+    :: WidgetEvent e
+    => (Int -> (Double, Double) -> e)
+    -> GraphData s e
+graphOnChange f = def
+    { _gdChangeReq = [(RaiseEvent .) . f]
+    }
+
+{-|
+Generates a 'WidgetRequest' when a point is dragged by passing its
+index and new coordinates. This option is ignored if 'graphSeparate'
+is not enabled.
+-}
+graphOnChangeReq
+    :: (Int -> (Double, Double) -> WidgetRequest s e)
+    -> GraphData s e
+graphOnChangeReq req = def
+    { _gdChangeReq = [req]
     }

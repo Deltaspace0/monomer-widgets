@@ -109,8 +109,8 @@ Creates a graph plotter using the list with 'GraphData'.
 -}
 graphWithData
     :: (WidgetEvent e)
-    => [[GraphData e]]  -- ^ The list with 'GraphData'.
-    -> WidgetNode s e   -- ^ The created graph plotter.
+    => [[GraphData s e]]  -- ^ The list with 'GraphData'.
+    -> WidgetNode s e     -- ^ The created graph plotter.
 graphWithData dataList = graphWithData_ dataList def
 
 {-|
@@ -119,9 +119,9 @@ config.
 -}
 graphWithData_
     :: (WidgetEvent e)
-    => [[GraphData e]]  -- ^ The list with 'GraphData'.
-    -> [GraphCfg s e]   -- ^ The config options.
-    -> WidgetNode s e   -- ^ The created graph plotter.
+    => [[GraphData s e]]  -- ^ The list with 'GraphData'.
+    -> [GraphCfg s e]     -- ^ The config options.
+    -> WidgetNode s e     -- ^ The created graph plotter.
 graphWithData_ dataList configs = node where
     node = defaultWidgetNode (WidgetType "graph") widget
     widget = makeGraph (mconcat <$> dataList) config def
@@ -129,7 +129,7 @@ graphWithData_ dataList configs = node where
 
 makeGraph
     :: (WidgetEvent e)
-    => [GraphData e]
+    => [GraphData s e]
     -> GraphCfg s e
     -> GraphState
     -> Widget s e
@@ -220,10 +220,7 @@ makeGraph graphDatas config@(GraphCfg{..}) state = widget where
                 }
         reqs = if not dragPoint
             then [RenderOnce]
-            else
-                [ RaiseEvent $ (fromJust report) dj (dx, dy)
-                , RenderOnce
-                ]
+            else ((\f -> f dj (dx, dy)) <$> report) <> [RenderOnce]
         dragPoint = not $ (null dp || null report)
         Point tx ty = _gsTranslation state
         Point cx cy = _gsScale state
@@ -231,7 +228,7 @@ makeGraph graphDatas config@(GraphCfg{..}) state = widget where
         mp = _gsMousePosition state
         (di, dj) = fromJust dp
         dp = _gsActivePoint state
-        report = _gdOnChange $ graphDatas!!di
+        report = _gdChangeReq $ graphDatas!!di
         hp = hoverPointData $ zip [0..] graphDatas
         hoverPointData [] = Nothing
         hoverPointData ((i, graphData):xs)

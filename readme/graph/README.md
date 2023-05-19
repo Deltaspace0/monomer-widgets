@@ -37,6 +37,7 @@ Here is the [example](/examples/graph/UI.hs) of an app using this widget.
 - `graphFill`. Fill the area surrounded by provided points with the color.
 - `graphFillAlpha`. Transparency level of the filled area.
 - `graphOnChange f`. Raises an event when a point is dragged by passing its index and new coordinates. This option is ignored if `graphSeparate` is not enabled.
+- `graphOnChangeReq f`. Generates a `WidgetRequest` when a point is dragged by passing its index and new coordinates. This option is ignored if `graphSeparate` is not enabled.
 
 ## Configuration
 
