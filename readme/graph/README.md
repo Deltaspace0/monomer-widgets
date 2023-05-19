@@ -42,6 +42,10 @@ Here is the [example](/examples/graph/UI.hs) of an app using this widget.
 ## Configuration
 
 - `[wheelRate r]`. Speed of scaling.
+- `[minTranslationX v]`. Minimum translation along X-axis.
+- `[maxTranslationX v]`. Maximum translation along X-axis.
+- `[minTranslationY v]`. Minimum translation along Y-axis.
+- `[maxTranslationY v]`. Maximum translation along Y-axis.
 - `[minScaleX v]`. Minimum scale along X-axis.
 - `[maxScaleX v]`. Maximum scale along X-axis.
 - `[minScaleY v]`. Minimum scale along Y-axis.

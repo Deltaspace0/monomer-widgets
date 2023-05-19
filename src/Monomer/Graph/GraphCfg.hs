@@ -3,6 +3,10 @@
 module Monomer.Graph.GraphCfg
     ( -- * Configuration
       GraphCfg(..)
+    , minTranslationX
+    , maxTranslationX
+    , minTranslationY
+    , maxTranslationY
     , minScaleX
     , maxScaleX
     , minScaleY
@@ -30,6 +34,10 @@ import Monomer.Widgets.Single
 Configuration options for graph:
 
 - 'wheelRate': speed of scaling.
+- 'minTranslationX': minimum translation along X-axis.
+- 'maxTranslationX': maximum translation along X-axis.
+- 'minTranslationY': minimum translation along Y-axis.
+- 'maxTranslationY': maximum translation along Y-axis.
 - 'minScaleX': minimum scale along X-axis.
 - 'maxScaleX': maximum scale along X-axis.
 - 'minScaleY': minimum scale along Y-axis.
@@ -45,6 +53,10 @@ Configuration options for graph:
 -}
 data GraphCfg s e = GraphCfg
     { _gcWheelRate :: Maybe Double
+    , _gcMinTransX :: Maybe Double
+    , _gcMaxTransX :: Maybe Double
+    , _gcMinTransY :: Maybe Double
+    , _gcMaxTransY :: Maybe Double
     , _gcMinScaleX :: Maybe Double
     , _gcMaxScaleX :: Maybe Double
     , _gcMinScaleY :: Maybe Double
@@ -61,6 +73,10 @@ data GraphCfg s e = GraphCfg
 instance Default (GraphCfg s e) where
     def = GraphCfg
         { _gcWheelRate = Nothing
+        , _gcMinTransX = Nothing
+        , _gcMaxTransX = Nothing
+        , _gcMinTransY = Nothing
+        , _gcMaxTransY = Nothing
         , _gcMinScaleX = Nothing
         , _gcMaxScaleX = Nothing
         , _gcMinScaleY = Nothing
@@ -77,6 +93,10 @@ instance Default (GraphCfg s e) where
 instance Semigroup (GraphCfg s e) where
     (<>) a1 a2 = def
         { _gcWheelRate = _gcWheelRate a2 <|> _gcWheelRate a1
+        , _gcMinTransX = _gcMinTransX a2 <|> _gcMinTransX a1
+        , _gcMaxTransX = _gcMaxTransX a2 <|> _gcMaxTransX a1
+        , _gcMinTransY = _gcMinTransY a2 <|> _gcMinTransY a1
+        , _gcMaxTransY = _gcMaxTransY a2 <|> _gcMaxTransY a1
         , _gcMinScaleX = _gcMinScaleX a2 <|> _gcMinScaleX a1
         , _gcMaxScaleX = _gcMaxScaleX a2 <|> _gcMaxScaleX a1
         , _gcMinScaleY = _gcMinScaleY a2 <|> _gcMinScaleY a1
@@ -97,6 +117,38 @@ instance Monoid (GraphCfg s e) where
 instance CmbWheelRate (GraphCfg s e) Double where
     wheelRate rate = def {
         _gcWheelRate = Just rate
+    }
+
+{-|
+Minimum translation along X-axis.
+-}
+minTranslationX :: Double -> GraphCfg s e
+minTranslationX v = def
+    { _gcMinTransX = Just v
+    }
+
+{-|
+Maximum translation along X-axis.
+-}
+maxTranslationX :: Double -> GraphCfg s e
+maxTranslationX v = def
+    { _gcMaxTransX = Just v
+    }
+
+{-|
+Minimum translation along Y-axis.
+-}
+minTranslationY :: Double -> GraphCfg s e
+minTranslationY v = def
+    { _gcMinTransY = Just v
+    }
+
+{-|
+Maximum translation along Y-axis.
+-}
+maxTranslationY :: Double -> GraphCfg s e
+maxTranslationY v = def
+    { _gcMaxTransY = Just v
     }
 
 {-|

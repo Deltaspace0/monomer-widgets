@@ -375,12 +375,20 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
 
     state = newState where
         newState = orState
-            { _gsScale = Point cx' cy'
+            { _gsTranslation = Point tx' ty'
+            , _gsScale = Point cx' cy'
             }
+        tx' = max minTx $ min maxTx tx
+        ty' = max minTy $ min maxTy ty
         cx' = max minCx $ min maxCx cx
         cy' = max minCy $ min maxCy cy
+        minTx = fromMaybe (min maxTx tx) _gcMinTransX
+        maxTx = fromMaybe tx _gcMaxTransX
+        minTy = fromMaybe (min maxTy ty) _gcMinTransY
+        maxTy = fromMaybe ty _gcMaxTransY
         minCx = fromMaybe 0 _gcMinScaleX
         maxCx = fromMaybe cx _gcMaxScaleX
         minCy = fromMaybe 0 _gcMinScaleY
         maxCy = fromMaybe cy _gcMaxScaleY
+        Point tx ty = _gsTranslation orState
         Point cx cy = _gsScale orState
