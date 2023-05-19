@@ -3,6 +3,10 @@
 module Monomer.Graph.GraphCfg
     ( -- * Configuration
       GraphCfg(..)
+    , minScaleX
+    , maxScaleX
+    , minScaleY
+    , maxScaleY
     , lockX
     , lockX_
     , lockY
@@ -26,6 +30,10 @@ import Monomer.Widgets.Single
 Configuration options for graph:
 
 - 'wheelRate': speed of scaling.
+- 'minScaleX': minimum scale along X-axis.
+- 'maxScaleX': maximum scale along X-axis.
+- 'minScaleY': minimum scale along Y-axis.
+- 'maxScaleY': maximum scale along Y-axis.
 - 'lockX': lock X-axis (scale only Y-axis).
 - 'lockY': lock Y-axis (scale only X-axis).
 - 'hideMinorGridlines': whether to hide minor gridlines.
@@ -37,6 +45,10 @@ Configuration options for graph:
 -}
 data GraphCfg s e = GraphCfg
     { _gcWheelRate :: Maybe Double
+    , _gcMinScaleX :: Maybe Double
+    , _gcMaxScaleX :: Maybe Double
+    , _gcMinScaleY :: Maybe Double
+    , _gcMaxScaleY :: Maybe Double
     , _gcLockX :: Maybe Bool
     , _gcLockY :: Maybe Bool
     , _gcHideMinor :: Maybe Bool
@@ -49,6 +61,10 @@ data GraphCfg s e = GraphCfg
 instance Default (GraphCfg s e) where
     def = GraphCfg
         { _gcWheelRate = Nothing
+        , _gcMinScaleX = Nothing
+        , _gcMaxScaleX = Nothing
+        , _gcMinScaleY = Nothing
+        , _gcMaxScaleY = Nothing
         , _gcLockX = Nothing
         , _gcLockY = Nothing
         , _gcHideMinor = Nothing
@@ -61,6 +77,10 @@ instance Default (GraphCfg s e) where
 instance Semigroup (GraphCfg s e) where
     (<>) a1 a2 = def
         { _gcWheelRate = _gcWheelRate a2 <|> _gcWheelRate a1
+        , _gcMinScaleX = _gcMinScaleX a2 <|> _gcMinScaleX a1
+        , _gcMaxScaleX = _gcMaxScaleX a2 <|> _gcMaxScaleX a1
+        , _gcMinScaleY = _gcMinScaleY a2 <|> _gcMinScaleY a1
+        , _gcMaxScaleY = _gcMaxScaleY a2 <|> _gcMaxScaleY a1
         , _gcLockX = _gcLockX a2 <|> _gcLockX a1
         , _gcLockY = _gcLockY a2 <|> _gcLockY a1
         , _gcHideMinor = _gcHideMinor a2 <|> _gcHideMinor a1
@@ -77,6 +97,38 @@ instance Monoid (GraphCfg s e) where
 instance CmbWheelRate (GraphCfg s e) Double where
     wheelRate rate = def {
         _gcWheelRate = Just rate
+    }
+
+{-|
+Minimum scale along X-axis.
+-}
+minScaleX :: Double -> GraphCfg s e
+minScaleX v = def
+    { _gcMinScaleX = Just v
+    }
+
+{-|
+Maximum scale along X-axis.
+-}
+maxScaleX :: Double -> GraphCfg s e
+maxScaleX v = def
+    { _gcMaxScaleX = Just v
+    }
+
+{-|
+Minimum scale along Y-axis.
+-}
+minScaleY :: Double -> GraphCfg s e
+minScaleY v = def
+    { _gcMinScaleY = Just v
+    }
+
+{-|
+Maximum scale along Y-axis.
+-}
+maxScaleY :: Double -> GraphCfg s e
+maxScaleY v = def
+    { _gcMaxScaleY = Just v
     }
 
 {-|

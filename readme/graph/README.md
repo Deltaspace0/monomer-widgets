@@ -42,6 +42,10 @@ Here is the [example](/examples/graph/UI.hs) of an app using this widget.
 ## Configuration
 
 - `[wheelRate r]`. Speed of scaling.
+- `[minScaleX v]`. Minimum scale along X-axis.
+- `[maxScaleX v]`. Maximum scale along X-axis.
+- `[minScaleY v]`. Minimum scale along Y-axis.
+- `[maxScaleY v]`. Maximum scale along Y-axis.
 - `[lockX]`. Lock X-axis (scale only Y-axis).
 - `[lockY]`. Lock Y-axis (scale only X-axis).
 - `[hideMinorGridlines]`. Hide minor gridlines.

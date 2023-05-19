@@ -133,7 +133,7 @@ makeGraph
     -> GraphCfg s e
     -> GraphState
     -> Widget s e
-makeGraph graphDatas config@(GraphCfg{..}) state = widget where
+makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
     widget = createSingle state def
         { singleGetCurrentStyle = getCurrentStyle
         , singleMerge = merge
@@ -372,3 +372,15 @@ makeGraph graphDatas config@(GraphCfg{..}) state = widget where
 
     makeNodeWithState newState = L.widget .~ newWidget where
         newWidget = makeGraph graphDatas config newState
+
+    state = newState where
+        newState = orState
+            { _gsScale = Point cx' cy'
+            }
+        cx' = max minCx $ min maxCx cx
+        cy' = max minCy $ min maxCy cy
+        minCx = fromMaybe 0 _gcMinScaleX
+        maxCx = fromMaybe cx _gcMaxScaleX
+        minCy = fromMaybe 0 _gcMinScaleY
+        maxCy = fromMaybe cy _gcMaxScaleY
+        Point cx cy = _gsScale orState
