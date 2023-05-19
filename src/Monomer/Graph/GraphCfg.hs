@@ -11,6 +11,8 @@ module Monomer.Graph.GraphCfg
     , hideMinorGridlines_
     , hideAxisNumbers
     , hideAxisNumbers_
+    , hideGrid
+    , hideGrid_
     , graphColors
     , onRightClick
     , onRightClickReq
@@ -28,6 +30,7 @@ Configuration options for graph:
 - 'lockY': lock Y-axis (scale only X-axis).
 - 'hideMinorGridlines': whether to hide minor gridlines.
 - 'hideAxisNumbers': whether to hide axis numbers.
+- 'hideGrid': whether to hide all gridlines and axis numbers.
 - 'graphColors': which colors should be used to plot graphs.
 - 'onRightClick': event to raise on right click.
 - 'onRightClickReq': 'WidgetRequest' to generate on right click.
@@ -38,6 +41,7 @@ data GraphCfg s e = GraphCfg
     , _gcLockY :: Maybe Bool
     , _gcHideMinor :: Maybe Bool
     , _gcHideNumbers :: Maybe Bool
+    , _gcHideGrid :: Maybe Bool
     , _gcGraphColors :: Maybe [Color]
     , _gcOnRightClickReq :: [(Double, Double) -> WidgetRequest s e]
     }
@@ -49,6 +53,7 @@ instance Default (GraphCfg s e) where
         , _gcLockY = Nothing
         , _gcHideMinor = Nothing
         , _gcHideNumbers = Nothing
+        , _gcHideGrid = Nothing
         , _gcGraphColors = Nothing
         , _gcOnRightClickReq = []
         }
@@ -60,6 +65,7 @@ instance Semigroup (GraphCfg s e) where
         , _gcLockY = _gcLockY a2 <|> _gcLockY a1
         , _gcHideMinor = _gcHideMinor a2 <|> _gcHideMinor a1
         , _gcHideNumbers = _gcHideNumbers a2 <|> _gcHideNumbers a1
+        , _gcHideGrid = _gcHideGrid a2 <|> _gcHideGrid a1
         , _gcGraphColors = _gcGraphColors a2 <|> _gcGraphColors a1
         , _gcOnRightClickReq =
             _gcOnRightClickReq a1 <> _gcOnRightClickReq a2
@@ -127,6 +133,20 @@ Whether to hide axis numbers.
 hideAxisNumbers_ :: Bool -> GraphCfg s e
 hideAxisNumbers_ hide = def
     { _gcHideNumbers = Just hide
+    }
+
+{-|
+Hide all gridlines and axis numbers.
+-}
+hideGrid :: GraphCfg s e
+hideGrid = hideGrid_ True
+
+{-|
+Whether to hide all gridlines and axis numbers.
+-}
+hideGrid_ :: Bool -> GraphCfg s e
+hideGrid_ hide = def
+    { _gcHideGrid = Just hide
     }
 
 {-|

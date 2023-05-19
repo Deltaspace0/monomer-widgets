@@ -291,8 +291,9 @@ makeGraph graphDatas config@(GraphCfg{..}) state = widget where
         drawRect renderer rect background Nothing
         saveContext renderer
         intersectScissor renderer rect
-        line p1 p2 2 fore
-        line p3 p4 2 fore
+        when (_gcHideGrid /= Just True) $ do
+            line p1 p2 2 fore
+            line p3 p4 2 fore
         let (sx, sy) = (64*cx*ux, 64*cy*uy)
             verLine x = line (Point x gy) (Point x (gy+gh)) 1 fore
             horLine y = line (Point gx y) (Point (gx+gw) y) 1 fore
@@ -307,25 +308,26 @@ makeGraph graphDatas config@(GraphCfg{..}) state = widget where
             ovy = oy-(round' $ ty*hs/sy)*sy/hs
             ovx1 = ox+fox*sx
             ovy1 = oy-foy*sy
-        when (_gcHideMinor /= Just True) $
+        unless (Just True `elem` [_gcHideMinor, _gcHideGrid]) $
             drawInAlpha renderer 0.2 $ do
                 forM_ [ovx, ovx-sx/vs..gx] verLine
                 forM_ [ovx, ovx+sx/vs..(gx+gw)] verLine
                 forM_ [ovy, ovy-sy/hs..gy] horLine
                 forM_ [ovy, ovy+sy/hs..(gy+gh)] horLine
-        drawInAlpha renderer 0.5 $ do
-            forM_ [ovx1, ovx1-sx..gx] verLine
-            forM_ [ovx1, ovx1+sx..(gx+gw)] verLine
-            forM_ [ovy1, ovy1-sy..gy] horLine
-            forM_ [ovy1, ovy1+sy..(gy+gh)] horLine
+        when (_gcHideGrid /= Just True) $
+            drawInAlpha renderer 0.5 $ do
+                forM_ [ovx1, ovx1-sx..gx] verLine
+                forM_ [ovx1, ovx1+sx..(gx+gw)] verLine
+                forM_ [ovy1, ovy1-sy..gy] horLine
+                forM_ [ovy1, ovy1+sy..(gy+gh)] horLine
         let p (x, y) = (64*cx*x+ox, 64*cy*(-y)+oy)
         forM_ (zip [0..] graphDatas) $ \(i, graphData) -> do
             let GraphData{..} = graphData
                 ps = p <$> _gdPoints
                 newGraphData = graphData {_gdPoints = ps}
-            when (not $ null _gdColor) $
+            unless (null _gdColor) $
                 renderGraphData renderer newGraphData i
-        when (_gcHideNumbers /= Just True) $ do
+        unless (Just True `elem` [_gcHideNumbers, _gcHideGrid]) $ do
             setFillColor renderer foreN
             drawInAlpha renderer 0.62 $ do
                 forM_ [fox..(fox+20)] verN
