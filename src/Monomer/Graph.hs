@@ -214,14 +214,14 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
         Point cx cy = _gsScale state
         newNode s = makeNodeWithState s node
 
-    handleMove wenv node p@(Point x y) = result where
+    handleMove wenv node moveP@(Point x y) = result where
         result = Just $ resultReqs newNode reqs
         newNode = makeNodeWithState newState node
         newState
             | isNodePressed wenv node && dragPoint = state
             | isNodePressed wenv node && (not $ null mp) = state
                 { _gsTranslation = Point (tx+x-mx0) (ty+y-my0)
-                , _gsMousePosition = Just p
+                , _gsMousePosition = Just moveP
                 }
             | otherwise = state
                 { _gsHoverPoint = hp
@@ -244,14 +244,18 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             | null hp' = hoverPointData xs
             | otherwise = (,) i <$> hp'
             where
-                hp' = getHP r $ zip [0..] $ _gdPoints graphData
+                hp' = getHP rs $ zip [0..] $ _gdPoints graphData
+                rs = (rx, ry)
+                rx = fromMaybe (r/64/cx) $ _gdRadius graphData
+                ry = fromMaybe (r/64/cy) $ _gdRadius graphData
                 r = 2*(fromMaybe 2 $ _gdWidth graphData)
         getHP _ [] = Nothing
-        getHP r ((j, pp):xs) = if checkHover pp r
+        getHP rs ((j, pp):xs) = if checkHover pp rs
             then Just j
-            else getHP r xs
-        checkHover (px, py) r = distance <= r**2 where
-            distance = ((px-dx)*cx*64)**2+((py-dy)*cy*64)**2
+            else getHP rs xs
+        checkHover (px, py) (rx, ry) = pointInEllipse p rect where
+            p = Point dx dy
+            rect = Rect (px-rx) (py-ry) (rx*2) (ry*2)
         (dx, dy) = ((x-ox)/64/cx, (oy-y)/64/cy)
         (ox, oy) = (gx+gw/2+tx, gy+gh/2+ty)
         Rect gx gy gw gh = _gsViewport state
@@ -346,14 +350,17 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
 
     renderGraphData renderer GraphData{..} i = do
         let GraphState{..} = state
+            Point cx cy = _gsScale
             ps = _gdPoints
             c = _gdColor
             w = fromMaybe 2 _gdWidth
+            rx = fromMaybe (w*2) $ (64*cx*) <$> _gdRadius
+            ry = fromMaybe (w*2) $ (64*cy*) <$> _gdRadius
             alpha = fromMaybe 0.32 _gdFillAlpha
             p (x, y) = Point x y
             connect (a, b) = drawLine renderer (p a) (p b) w c
             drawDot cs (Point x y) = drawEllipse renderer r cs where
-                r = Rect (x-w*2) (y-w*2) (w*4) (w*4)
+                r = Rect (x-rx) (y-ry) (rx*2) (ry*2)
             getSeparateColor j
                 | _gsActivePoint == Just (i, j) = _gdActiveColor
                 | _gsHoverPoint == Just (i, j) = _gdHoverColor

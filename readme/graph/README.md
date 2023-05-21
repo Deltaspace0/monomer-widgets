@@ -33,6 +33,7 @@ Here is the [example](/examples/graph/UI.hs) of an app using this widget.
 - `graphHoverColor color`. Set the color of hovered point (if this option is not used then the color set by `graphColor` is used).
 - `graphActiveColor color`. Set the color of dragged point (if this option is not used then the color set by `graphColor` is used).
 - `graphWidth width`. Width of the line connecting provided points. If only single point is rendered then its radius will be twice the width.
+- `graphRadius radius`. Radius of the provided points if they are rendered separately. The difference between `graphWidth` and `graphRadius` is that the former is given in pixels and renders the same when the scale changes while the latter is given in units of the Cartesian coordinate system and hence the points become bigger or smaller when the scale changes.
 - `graphSeparate`. Do not connect the points and render them separately. Used when all points in the collection must have the same color.
 - `graphFill`. Fill the area surrounded by provided points with the color.
 - `graphFillAlpha`. Transparency level of the filled area.

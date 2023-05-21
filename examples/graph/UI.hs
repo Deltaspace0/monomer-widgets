@@ -29,7 +29,7 @@ buildUI _ model = tree where
             ]
         ,   [ graphPoint $ model ^. yellowPos
             , graphColor yellow
-            , graphWidth 10
+            , graphRadius 0.42
             , graphHoverColor lightYellow
             , graphActiveColor black
             , graphSeparate

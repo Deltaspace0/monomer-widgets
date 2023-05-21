@@ -6,6 +6,7 @@ module Monomer.Graph.GraphData
     , graphHoverColor
     , graphActiveColor
     , graphWidth
+    , graphRadius
     , graphSeparate
     , graphSeparate_
     , graphFill
@@ -29,6 +30,7 @@ Options for graph data:
 - 'graphHoverColor': set the color of hovered point.
 - 'graphActiveColor': set the color of dragged point.
 - 'graphWidth': set the width of the line.
+- 'graphRadius': set the radius of the points.
 - 'graphSeparate': whether the points should be rendered separately.
 - 'graphFill': whether to fill the area surrounded by points.
 - 'graphFillAlpha': transparency level of the filled area.
@@ -42,6 +44,7 @@ data GraphData s e = GraphData
     , _gdHoverColor :: Maybe Color
     , _gdActiveColor :: Maybe Color
     , _gdWidth :: Maybe Double
+    , _gdRadius :: Maybe Double
     , _gdSeparate :: Maybe Bool
     , _gdFill :: Maybe Bool
     , _gdFillAlpha :: Maybe Double
@@ -55,6 +58,7 @@ instance Default (GraphData s e) where
         , _gdHoverColor = Nothing
         , _gdActiveColor = Nothing
         , _gdWidth = Nothing
+        , _gdRadius = Nothing
         , _gdSeparate = Nothing
         , _gdFill = Nothing
         , _gdFillAlpha = Nothing
@@ -68,6 +72,7 @@ instance Semigroup (GraphData s e) where
         , _gdHoverColor = _gdHoverColor a2 <|> _gdHoverColor a1
         , _gdActiveColor = _gdActiveColor a2 <|> _gdActiveColor a1
         , _gdWidth = _gdWidth a2 <|> _gdWidth a1
+        , _gdRadius = _gdRadius a2 <|> _gdRadius a1
         , _gdSeparate = _gdSeparate a2 <|> _gdSeparate a1
         , _gdFill = _gdFill a2 <|> _gdFill a1
         , _gdFillAlpha = _gdFillAlpha a2 <|> _gdFillAlpha a1
@@ -125,6 +130,18 @@ is rendered then its radius will be twice the width.
 graphWidth :: Double -> GraphData s e
 graphWidth w = def
     { _gdWidth = Just w
+    }
+
+{-|
+Radius of the provided points if they are rendered separately. The
+difference between `graphWidth` and `graphRadius` is that the former
+is given in pixels and renders the same when the scale changes while
+the latter is given in units of the Cartesian coordinate system and
+hence the points become bigger or smaller when the scale changes.
+-}
+graphRadius :: Double -> GraphData s e
+graphRadius r = def
+    { _gdRadius = Just r
     }
 
 {-|
