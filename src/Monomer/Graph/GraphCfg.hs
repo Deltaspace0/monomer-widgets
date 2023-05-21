@@ -9,6 +9,8 @@ module Monomer.Graph.GraphCfg
     , maximumX
     , minimumY
     , maximumY
+    , minScale
+    , maxScale
     , minScaleX
     , maxScaleX
     , minScaleY
@@ -42,6 +44,8 @@ Configuration options for graph:
 - 'maximumX': right limit along X-axis.
 - 'minimumY': bottom limit along Y-axis.
 - 'maximumY': top limit along Y-axis.
+- 'minScale': minimum scale along both X-axis and Y-axis.
+- 'maxScale': maximum scale along both X-axis and Y-axis.
 - 'minScaleX': minimum scale along X-axis.
 - 'maxScaleX': maximum scale along X-axis.
 - 'minScaleY': minimum scale along Y-axis.
@@ -171,6 +175,24 @@ Top limit along Y-axis.
 maximumY :: Double -> GraphCfg s e
 maximumY v = def
     { _gcMaxY = Just v
+    }
+
+{-|
+Minimum scale along both X-axis and Y-axis.
+-}
+minScale :: Double -> GraphCfg s e
+minScale v = def
+    { _gcMinScaleX = Just v
+    , _gcMinScaleY = Just v
+    }
+
+{-|
+Maximum scale along both X-axis and Y-axis.
+-}
+maxScale :: Double -> GraphCfg s e
+maxScale v = def
+    { _gcMaxScaleX = Just v
+    , _gcMaxScaleY = Just v
     }
 
 {-|

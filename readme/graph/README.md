@@ -48,6 +48,8 @@ Here is the [example](/examples/graph/UI.hs) of an app using this widget.
 - `[maximumX v]`. Right limit along X-axis.
 - `[minimumY v]`. Bottom limit along Y-axis.
 - `[maximumY v]`. Top limit along Y-axis.
+- `[minScale v]`. Minimum scale along both X-axis and Y-axis.
+- `[maxScale v]`. Maximum scale along both X-axis and Y-axis.
 - `[minScaleX v]`. Minimum scale along X-axis.
 - `[maxScaleX v]`. Maximum scale along X-axis.
 - `[minScaleY v]`. Minimum scale along Y-axis.
