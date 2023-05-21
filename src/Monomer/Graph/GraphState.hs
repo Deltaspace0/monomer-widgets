@@ -13,6 +13,7 @@ data GraphState = GraphState
     , _gsMousePosition :: Maybe Point
     , _gsHoverPoint :: Maybe (Int, Int)
     , _gsActivePoint :: Maybe (Int, Int)
+    , _gsViewport :: Rect
     } deriving (Eq, Show)
 
 instance Default GraphState where
@@ -24,4 +25,5 @@ instance Default GraphState where
         , _gsMousePosition = Nothing
         , _gsHoverPoint = Nothing
         , _gsActivePoint = Nothing
+        , _gsViewport = Rect 0 0 100 100
         }

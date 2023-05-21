@@ -3,10 +3,12 @@
 module Monomer.Graph.GraphCfg
     ( -- * Configuration
       GraphCfg(..)
-    , minTranslationX
-    , maxTranslationX
-    , minTranslationY
-    , maxTranslationY
+    , limitX
+    , limitY
+    , minimumX
+    , maximumX
+    , minimumY
+    , maximumY
     , minScaleX
     , maxScaleX
     , minScaleY
@@ -34,10 +36,12 @@ import Monomer.Widgets.Single
 Configuration options for graph:
 
 - 'wheelRate': speed of scaling.
-- 'minTranslationX': minimum translation along X-axis.
-- 'maxTranslationX': maximum translation along X-axis.
-- 'minTranslationY': minimum translation along Y-axis.
-- 'maxTranslationY': maximum translation along Y-axis.
+- 'limitX': limits along X-axis.
+- 'limitY': limits along Y-axis.
+- 'minimumX': left limit along X-axis.
+- 'maximumX': right limit along X-axis.
+- 'minimumY': bottom limit along Y-axis.
+- 'maximumY': top limit along Y-axis.
 - 'minScaleX': minimum scale along X-axis.
 - 'maxScaleX': maximum scale along X-axis.
 - 'minScaleY': minimum scale along Y-axis.
@@ -53,10 +57,10 @@ Configuration options for graph:
 -}
 data GraphCfg s e = GraphCfg
     { _gcWheelRate :: Maybe Double
-    , _gcMinTransX :: Maybe Double
-    , _gcMaxTransX :: Maybe Double
-    , _gcMinTransY :: Maybe Double
-    , _gcMaxTransY :: Maybe Double
+    , _gcMinX :: Maybe Double
+    , _gcMaxX :: Maybe Double
+    , _gcMinY :: Maybe Double
+    , _gcMaxY :: Maybe Double
     , _gcMinScaleX :: Maybe Double
     , _gcMaxScaleX :: Maybe Double
     , _gcMinScaleY :: Maybe Double
@@ -73,10 +77,10 @@ data GraphCfg s e = GraphCfg
 instance Default (GraphCfg s e) where
     def = GraphCfg
         { _gcWheelRate = Nothing
-        , _gcMinTransX = Nothing
-        , _gcMaxTransX = Nothing
-        , _gcMinTransY = Nothing
-        , _gcMaxTransY = Nothing
+        , _gcMinX = Nothing
+        , _gcMaxX = Nothing
+        , _gcMinY = Nothing
+        , _gcMaxY = Nothing
         , _gcMinScaleX = Nothing
         , _gcMaxScaleX = Nothing
         , _gcMinScaleY = Nothing
@@ -93,10 +97,10 @@ instance Default (GraphCfg s e) where
 instance Semigroup (GraphCfg s e) where
     (<>) a1 a2 = def
         { _gcWheelRate = _gcWheelRate a2 <|> _gcWheelRate a1
-        , _gcMinTransX = _gcMinTransX a2 <|> _gcMinTransX a1
-        , _gcMaxTransX = _gcMaxTransX a2 <|> _gcMaxTransX a1
-        , _gcMinTransY = _gcMinTransY a2 <|> _gcMinTransY a1
-        , _gcMaxTransY = _gcMaxTransY a2 <|> _gcMaxTransY a1
+        , _gcMinX = _gcMinX a2 <|> _gcMinX a1
+        , _gcMaxX = _gcMaxX a2 <|> _gcMaxX a1
+        , _gcMinY = _gcMinY a2 <|> _gcMinY a1
+        , _gcMaxY = _gcMaxY a2 <|> _gcMaxY a1
         , _gcMinScaleX = _gcMinScaleX a2 <|> _gcMinScaleX a1
         , _gcMaxScaleX = _gcMaxScaleX a2 <|> _gcMaxScaleX a1
         , _gcMinScaleY = _gcMinScaleY a2 <|> _gcMinScaleY a1
@@ -120,35 +124,53 @@ instance CmbWheelRate (GraphCfg s e) Double where
     }
 
 {-|
-Minimum translation along X-axis.
+Limits along X-axis.
 -}
-minTranslationX :: Double -> GraphCfg s e
-minTranslationX v = def
-    { _gcMinTransX = Just v
+limitX :: (Double, Double) -> GraphCfg s e
+limitX (a, b) = def
+    { _gcMinX = Just a
+    , _gcMaxX = Just b
     }
 
 {-|
-Maximum translation along X-axis.
+Limits along Y-axis.
 -}
-maxTranslationX :: Double -> GraphCfg s e
-maxTranslationX v = def
-    { _gcMaxTransX = Just v
+limitY :: (Double, Double) -> GraphCfg s e
+limitY (a, b) = def
+    { _gcMinY = Just a
+    , _gcMaxY = Just b
     }
 
 {-|
-Minimum translation along Y-axis.
+Left limit along X-axis.
 -}
-minTranslationY :: Double -> GraphCfg s e
-minTranslationY v = def
-    { _gcMinTransY = Just v
+minimumX :: Double -> GraphCfg s e
+minimumX v = def
+    { _gcMinX = Just v
     }
 
 {-|
-Maximum translation along Y-axis.
+Right limit along X-axis.
 -}
-maxTranslationY :: Double -> GraphCfg s e
-maxTranslationY v = def
-    { _gcMaxTransY = Just v
+maximumX :: Double -> GraphCfg s e
+maximumX v = def
+    { _gcMaxX = Just v
+    }
+
+{-|
+Bottom limit along Y-axis.
+-}
+minimumY :: Double -> GraphCfg s e
+minimumY v = def
+    { _gcMinY = Just v
+    }
+
+{-|
+Top limit along Y-axis.
+-}
+maximumY :: Double -> GraphCfg s e
+maximumY v = def
+    { _gcMaxY = Just v
     }
 
 {-|

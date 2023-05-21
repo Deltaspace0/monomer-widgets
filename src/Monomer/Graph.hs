@@ -136,10 +136,12 @@ makeGraph
 makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
     widget = createSingle state def
         { singleGetCurrentStyle = getCurrentStyle
+        , singleInit = init'
         , singleMerge = merge
         , singleHandleEvent = handleEvent
         , singleHandleMessage = handleMessage
         , singleGetSizeReq = getSizeReq
+        , singleResize = resize
         , singleRender = render
         }
 
@@ -148,6 +150,12 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
         cursor = if null (_gsHoverPoint state)
             then Nothing
             else Just CursorHand
+
+    init' wenv node = resultNode resNode where
+        resNode = makeNodeWithState newState node
+        newState = orState {_gsViewport = vp}
+        vp = getContentArea node style
+        style = currentStyle wenv node
 
     merge _ newNode _ oldState = resultNode resNode where
         resNode = makeNodeWithState oldState newNode
@@ -182,7 +190,8 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
                 ty' = my'-(my'-ty)*cy'/cy
                 (mx', my') = (mx-gx-gw/2, my-gy-gh/2)
                 (ux, uy) = (getUnit cx', getUnit cy')
-                (cx', cy') = (cx*rateX**wy, cy*rateY**wy)
+                (cx', cy') = clampScale gw gh newScale
+                newScale = (cx*rateX**wy, cy*rateY**wy)
                 rateX = if _gcLockX == Just True
                     then 1
                     else 1.05**wr
@@ -191,8 +200,7 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
                     else 1.05**wr
                 wr = fromMaybe 1 _gcWheelRate
         (ox, oy) = (gx+gw/2+tx, gy+gh/2+ty)
-        Rect gx gy gw gh = getContentArea node style
-        style = currentStyle wenv node
+        Rect gx gy gw gh = _gsViewport state
         getSec x = let l = 10**(mod' (logBase 10 x) 1) in
             if l >= 5 then 4 else 5
         getUnit x
@@ -246,8 +254,7 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             distance = ((px-dx)*cx*64)**2+((py-dy)*cy*64)**2
         (dx, dy) = ((x-ox)/64/cx, (oy-y)/64/cy)
         (ox, oy) = (gx+gw/2+tx, gy+gh/2+ty)
-        Rect gx gy gw gh = getContentArea node style
-        style = currentStyle wenv node
+        Rect gx gy gw gh = _gsViewport state
 
     resultRender node = Just $ resultReqs node [RenderOnce]
 
@@ -257,13 +264,17 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
 
     getNewState (GraphSetTranslation p) = state {_gsTranslation = p}
     getNewState (GraphSetScale p) = state {_gsScale = p}
-    getNewState GraphReset = def
+    getNewState GraphReset = def {_gsViewport = _gsViewport state}
 
     getSizeReq _ _ = (rangeSize 100 2000 1, rangeSize 100 2000 1)
 
+    resize _ node vp = resultNode resNode where
+        resNode = makeNodeWithState newState node
+        newState = state {_gsViewport = vp}
+
     render wenv node renderer = do
         let style = currentStyle wenv node
-            rect@(Rect gx gy gw gh) = getContentArea node style
+            rect@(Rect gx gy gw gh) = _gsViewport state
             Point tx ty = _gsTranslation state
             Point cx cy = _gsScale state
             Point ux uy = _gsUnit state
@@ -378,17 +389,23 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             { _gsTranslation = Point tx' ty'
             , _gsScale = Point cx' cy'
             }
-        tx' = max minTx $ min maxTx tx
-        ty' = max minTy $ min maxTy ty
-        cx' = max minCx $ min maxCx cx
-        cy' = max minCy $ min maxCy cy
-        minTx = fromMaybe (min maxTx tx) _gcMinTransX
-        maxTx = fromMaybe tx _gcMaxTransX
-        minTy = fromMaybe (min maxTy ty) _gcMinTransY
-        maxTy = fromMaybe ty _gcMaxTransY
-        minCx = fromMaybe 0 _gcMinScaleX
-        maxCx = fromMaybe cx _gcMaxScaleX
-        minCy = fromMaybe 0 _gcMinScaleY
-        maxCy = fromMaybe cy _gcMaxScaleY
+        tx' = max (w/2-maxX*64*cx') $ min (-w/2-minX*64*cx') tx
+        ty' = max (minY*64*cy'+h/2) $ min (maxY*64*cy'-h/2) ty
+        (cx', cy') = clampScale w h (cx, cy)
         Point tx ty = _gsTranslation orState
         Point cx cy = _gsScale orState
+        Rect _ _ w h = _gsViewport orState
+
+    clampScale w h (cx, cy) = (cx', cy') where
+        cx' = max minCx $ min maxCx cx
+        cy' = max minCy $ min maxCy cy
+        minCx = max minC $ fromMaybe 0 _gcMinScaleX
+        maxCx = fromMaybe cx _gcMaxScaleX
+        minCy = max minC $ fromMaybe 0 _gcMinScaleY
+        maxCy = fromMaybe cy _gcMaxScaleY
+        minC = max (w/64/(maxX-minX)) (h/64/(maxY-minY))
+
+    minX = fromMaybe (-10**999) _gcMinX
+    maxX = fromMaybe (10**999) _gcMaxX
+    minY = fromMaybe (-10**999) _gcMinY
+    maxY = fromMaybe (10**999) _gcMaxY
