@@ -3,240 +3,635 @@
 </span><span id="line-3"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Monomer.Graph.GraphCfg</span><span>
 </span><span id="line-4"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="hs-comment">-- * Configuration</span></span><span>
 </span><span id="line-5"></span><span>      </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier">GraphCfg</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
-</span><span id="line-6"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockX"><span class="hs-identifier">lockX</span></a></span><span>
-</span><span id="line-7"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockX_"><span class="hs-identifier">lockX_</span></a></span><span>
-</span><span id="line-8"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockY"><span class="hs-identifier">lockY</span></a></span><span>
-</span><span id="line-9"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockY_"><span class="hs-identifier">lockY_</span></a></span><span>
-</span><span id="line-10"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideMinorGridlines"><span class="hs-identifier">hideMinorGridlines</span></a></span><span>
-</span><span id="line-11"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideMinorGridlines_"><span class="hs-identifier">hideMinorGridlines_</span></a></span><span>
-</span><span id="line-12"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideAxisNumbers"><span class="hs-identifier">hideAxisNumbers</span></a></span><span>
-</span><span id="line-13"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideAxisNumbers_"><span class="hs-identifier">hideAxisNumbers_</span></a></span><span>
-</span><span id="line-14"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#graphColors"><span class="hs-identifier">graphColors</span></a></span><span>
-</span><span id="line-15"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Applicative</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(&lt;|&gt;)</span></span><span class="hs-special">)</span><span>
-</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Default</span></span><span>
-</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Single</span></span><span>
-</span><span id="line-20"></span><span>
-</span><span id="line-21"></span><span class="hs-comment">{-|
+</span><span id="line-6"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#limitX"><span class="hs-identifier">limitX</span></a></span><span>
+</span><span id="line-7"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#limitY"><span class="hs-identifier">limitY</span></a></span><span>
+</span><span id="line-8"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#minimumX"><span class="hs-identifier">minimumX</span></a></span><span>
+</span><span id="line-9"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#maximumX"><span class="hs-identifier">maximumX</span></a></span><span>
+</span><span id="line-10"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#minimumY"><span class="hs-identifier">minimumY</span></a></span><span>
+</span><span id="line-11"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#maximumY"><span class="hs-identifier">maximumY</span></a></span><span>
+</span><span id="line-12"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#minScale"><span class="hs-identifier">minScale</span></a></span><span>
+</span><span id="line-13"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#maxScale"><span class="hs-identifier">maxScale</span></a></span><span>
+</span><span id="line-14"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#minScaleX"><span class="hs-identifier">minScaleX</span></a></span><span>
+</span><span id="line-15"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#maxScaleX"><span class="hs-identifier">maxScaleX</span></a></span><span>
+</span><span id="line-16"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#minScaleY"><span class="hs-identifier">minScaleY</span></a></span><span>
+</span><span id="line-17"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#maxScaleY"><span class="hs-identifier">maxScaleY</span></a></span><span>
+</span><span id="line-18"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockX"><span class="hs-identifier">lockX</span></a></span><span>
+</span><span id="line-19"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockX_"><span class="hs-identifier">lockX_</span></a></span><span>
+</span><span id="line-20"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockY"><span class="hs-identifier">lockY</span></a></span><span>
+</span><span id="line-21"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockY_"><span class="hs-identifier">lockY_</span></a></span><span>
+</span><span id="line-22"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideMinorGridlines"><span class="hs-identifier">hideMinorGridlines</span></a></span><span>
+</span><span id="line-23"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideMinorGridlines_"><span class="hs-identifier">hideMinorGridlines_</span></a></span><span>
+</span><span id="line-24"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideAxisNumbers"><span class="hs-identifier">hideAxisNumbers</span></a></span><span>
+</span><span id="line-25"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideAxisNumbers_"><span class="hs-identifier">hideAxisNumbers_</span></a></span><span>
+</span><span id="line-26"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideGrid"><span class="hs-identifier">hideGrid</span></a></span><span>
+</span><span id="line-27"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideGrid_"><span class="hs-identifier">hideGrid_</span></a></span><span>
+</span><span id="line-28"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#graphColors"><span class="hs-identifier">graphColors</span></a></span><span>
+</span><span id="line-29"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#onRightClick"><span class="hs-identifier">onRightClick</span></a></span><span>
+</span><span id="line-30"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#onRightClickReq"><span class="hs-identifier">onRightClickReq</span></a></span><span>
+</span><span id="line-31"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Applicative</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(&lt;|&gt;)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-34"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Default</span></span><span>
+</span><span id="line-35"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Widgets.Single</span></span><span>
+</span><span id="line-36"></span><span>
+</span><span id="line-37"></span><span class="hs-comment">{-|
 Configuration options for graph:
 
 - 'wheelRate': speed of scaling.
+- 'limitX': limits along X-axis.
+- 'limitY': limits along Y-axis.
+- 'minimumX': left limit along X-axis.
+- 'maximumX': right limit along X-axis.
+- 'minimumY': bottom limit along Y-axis.
+- 'maximumY': top limit along Y-axis.
+- 'minScale': minimum scale along both X-axis and Y-axis.
+- 'maxScale': maximum scale along both X-axis and Y-axis.
+- 'minScaleX': minimum scale along X-axis.
+- 'maxScaleX': maximum scale along X-axis.
+- 'minScaleY': minimum scale along Y-axis.
+- 'maxScaleY': maximum scale along Y-axis.
 - 'lockX': lock X-axis (scale only Y-axis).
 - 'lockY': lock Y-axis (scale only X-axis).
 - 'hideMinorGridlines': whether to hide minor gridlines.
 - 'hideAxisNumbers': whether to hide axis numbers.
+- 'hideGrid': whether to hide all gridlines and axis numbers.
 - 'graphColors': which colors should be used to plot graphs.
+- 'onRightClick': event to raise on right click.
+- 'onRightClickReq': 'WidgetRequest' to generate on right click.
 -}</span><span>
-</span><span id="line-31"></span><span class="hs-keyword">data</span><span> </span><span id="GraphCfg"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-var">GraphCfg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="GraphCfg"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-var">GraphCfg</span></a></span></span><span>
-</span><span id="line-32"></span><span>    </span><span class="hs-special">{</span><span> </span><span id="_gcWheelRate"><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Double
+</span><span id="line-62"></span><span class="hs-keyword">data</span><span> </span><span id="GraphCfg"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-var">GraphCfg</span></a></span></span><span> </span><span id="local-6989586621679162965"><span class="annot"><a href="#local-6989586621679162965"><span class="hs-identifier hs-type">s</span></a></span></span><span> </span><span id="local-6989586621679162964"><span class="annot"><a href="#local-6989586621679162964"><span class="hs-identifier hs-type">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="GraphCfg"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-var">GraphCfg</span></a></span></span><span>
+</span><span id="line-63"></span><span>    </span><span class="hs-special">{</span><span> </span><span id="_gcWheelRate"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
 </span><a href="Monomer.Graph.GraphCfg.html#_gcWheelRate"><span class="hs-identifier hs-var hs-var">_gcWheelRate</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span>
-</span><span id="line-33"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcLockX"><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Bool
+</span><span id="line-64"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcMinX"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinX"><span class="hs-identifier hs-var hs-var">_gcMinX</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span>
+</span><span id="line-65"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcMaxX"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxX"><span class="hs-identifier hs-var hs-var">_gcMaxX</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span>
+</span><span id="line-66"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcMinY"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinY"><span class="hs-identifier hs-var hs-var">_gcMinY</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span>
+</span><span id="line-67"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcMaxY"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxY"><span class="hs-identifier hs-var hs-var">_gcMaxY</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span>
+</span><span id="line-68"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcMinScaleX"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinScaleX"><span class="hs-identifier hs-var hs-var">_gcMinScaleX</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span>
+</span><span id="line-69"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcMaxScaleX"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxScaleX"><span class="hs-identifier hs-var hs-var">_gcMaxScaleX</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span>
+</span><span id="line-70"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcMinScaleY"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinScaleY"><span class="hs-identifier hs-var hs-var">_gcMinScaleY</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span>
+</span><span id="line-71"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcMaxScaleY"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxScaleY"><span class="hs-identifier hs-var hs-var">_gcMaxScaleY</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span>
+</span><span id="line-72"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcLockX"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
 </span><a href="Monomer.Graph.GraphCfg.html#_gcLockX"><span class="hs-identifier hs-var hs-var">_gcLockX</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
-</span><span id="line-34"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcLockY"><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Bool
+</span><span id="line-73"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcLockY"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
 </span><a href="Monomer.Graph.GraphCfg.html#_gcLockY"><span class="hs-identifier hs-var hs-var">_gcLockY</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
-</span><span id="line-35"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcHideMinor"><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Bool
+</span><span id="line-74"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcHideMinor"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
 </span><a href="Monomer.Graph.GraphCfg.html#_gcHideMinor"><span class="hs-identifier hs-var hs-var">_gcHideMinor</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
-</span><span id="line-36"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcHideNumbers"><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Bool
+</span><span id="line-75"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcHideNumbers"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
 </span><a href="Monomer.Graph.GraphCfg.html#_gcHideNumbers"><span class="hs-identifier hs-var hs-var">_gcHideNumbers</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
-</span><span id="line-37"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcGraphColors"><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe [Color]
+</span><span id="line-76"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcHideGrid"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcHideGrid"><span class="hs-identifier hs-var hs-var">_gcHideGrid</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
+</span><span id="line-77"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcGraphColors"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe [Color]
 </span><a href="Monomer.Graph.GraphCfg.html#_gcGraphColors"><span class="hs-identifier hs-var hs-var">_gcGraphColors</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Color</span></span><span class="hs-special">]</span><span>
-</span><span id="line-38"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-39"></span><span>
-</span><span id="line-40"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Default</span></span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-41"></span><span>    </span><span id="local-6989586621679134675"><span class="annot"><span class="annottext">def :: GraphCfg
+</span><span id="line-78"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gcOnRightClickReq"><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; [(Double, Double) -&gt; WidgetRequest s e]
+</span><a href="Monomer.Graph.GraphCfg.html#_gcOnRightClickReq"><span class="hs-identifier hs-var hs-var">_gcOnRightClickReq</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetRequest</span></span><span> </span><span class="annot"><a href="#local-6989586621679162965"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162964"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-79"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-80"></span><span>
+</span><span id="line-81"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679162924"><span id="local-6989586621679162925"><span class="annot"><span class="hs-identifier hs-type">Default</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162925"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162924"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-82"></span><span>    </span><span id="local-6989586621679162794"><span class="annot"><span class="annottext">def :: GraphCfg s e
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">def</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span>
-</span><span id="line-42"></span><span>        </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcWheelRate :: Maybe Double
+</span><span id="line-83"></span><span>        </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcWheelRate :: Maybe Double
 </span><a href="Monomer.Graph.GraphCfg.html#_gcWheelRate"><span class="hs-identifier hs-var">_gcWheelRate</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-43"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcLockX :: Maybe Bool
+</span><span id="line-84"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMinX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinX"><span class="hs-identifier hs-var">_gcMinX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-85"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMaxX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxX"><span class="hs-identifier hs-var">_gcMaxX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-86"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMinY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinY"><span class="hs-identifier hs-var">_gcMinY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-87"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMaxY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxY"><span class="hs-identifier hs-var">_gcMaxY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-88"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMinScaleX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinScaleX"><span class="hs-identifier hs-var">_gcMinScaleX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-89"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMaxScaleX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxScaleX"><span class="hs-identifier hs-var">_gcMaxScaleX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-90"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMinScaleY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinScaleY"><span class="hs-identifier hs-var">_gcMinScaleY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-91"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMaxScaleY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxScaleY"><span class="hs-identifier hs-var">_gcMaxScaleY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-92"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcLockX :: Maybe Bool
 </span><a href="Monomer.Graph.GraphCfg.html#_gcLockX"><span class="hs-identifier hs-var">_gcLockX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-44"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcLockY :: Maybe Bool
+</span><span id="line-93"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcLockY :: Maybe Bool
 </span><a href="Monomer.Graph.GraphCfg.html#_gcLockY"><span class="hs-identifier hs-var">_gcLockY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-45"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcHideMinor :: Maybe Bool
+</span><span id="line-94"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcHideMinor :: Maybe Bool
 </span><a href="Monomer.Graph.GraphCfg.html#_gcHideMinor"><span class="hs-identifier hs-var">_gcHideMinor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-46"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcHideNumbers :: Maybe Bool
+</span><span id="line-95"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcHideNumbers :: Maybe Bool
 </span><a href="Monomer.Graph.GraphCfg.html#_gcHideNumbers"><span class="hs-identifier hs-var">_gcHideNumbers</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-47"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcGraphColors :: Maybe [Color]
+</span><span id="line-96"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcHideGrid :: Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcHideGrid"><span class="hs-identifier hs-var">_gcHideGrid</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-97"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcGraphColors :: Maybe [Color]
 </span><a href="Monomer.Graph.GraphCfg.html#_gcGraphColors"><span class="hs-identifier hs-var">_gcGraphColors</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-48"></span><span>        </span><span class="hs-special">}</span><span>
-</span><span id="line-49"></span><span>
-</span><span id="line-50"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679134669"><span id="local-6989586621679134671"><span class="annot"><span class="hs-identifier hs-type">Semigroup</span></span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-51"></span><span>    </span><span id="local-6989586621679134659"><span class="annot"><span class="annottext">&lt;&gt; :: GraphCfg -&gt; GraphCfg -&gt; GraphCfg
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">(&lt;&gt;)</span></span></span><span> </span><span id="local-6989586621679134658"><span class="annot"><span class="annottext">GraphCfg
-</span><a href="#local-6989586621679134658"><span class="hs-identifier hs-var">a1</span></a></span></span><span> </span><span id="local-6989586621679134657"><span class="annot"><span class="annottext">GraphCfg
-</span><a href="#local-6989586621679134657"><span class="hs-identifier hs-var">a2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span id="line-98"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcOnRightClickReq :: [(Double, Double) -&gt; WidgetRequest s e]
+</span><a href="Monomer.Graph.GraphCfg.html#_gcOnRightClickReq"><span class="hs-identifier hs-var">_gcOnRightClickReq</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-99"></span><span>        </span><span class="hs-special">}</span><span>
+</span><span id="line-100"></span><span>
+</span><span id="line-101"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679162788"><span id="local-6989586621679162790"><span id="local-6989586621679162919"><span id="local-6989586621679162920"><span class="annot"><span class="hs-identifier hs-type">Semigroup</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162920"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162919"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-102"></span><span>    </span><span id="local-6989586621679162767"><span class="annot"><span class="annottext">&lt;&gt; :: GraphCfg s e -&gt; GraphCfg s e -&gt; GraphCfg s e
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">(&lt;&gt;)</span></span></span><span> </span><span id="local-6989586621679162766"><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span></span><span> </span><span id="local-6989586621679162765"><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-52"></span><span>        </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcWheelRate :: Maybe Double
-</span><a href="Monomer.Graph.GraphCfg.html#_gcWheelRate"><span class="hs-identifier hs-var">_gcWheelRate</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Double
-</span><a href="Monomer.Graph.GraphCfg.html#_gcWheelRate"><span class="hs-identifier hs-var">_gcWheelRate</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg
-</span><a href="#local-6989586621679134657"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
-</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Double
-</span><a href="Monomer.Graph.GraphCfg.html#_gcWheelRate"><span class="hs-identifier hs-var">_gcWheelRate</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg
-</span><a href="#local-6989586621679134658"><span class="hs-identifier hs-var">a1</span></a></span><span>
-</span><span id="line-53"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcLockX :: Maybe Bool
-</span><a href="Monomer.Graph.GraphCfg.html#_gcLockX"><span class="hs-identifier hs-var">_gcLockX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Bool
-</span><a href="Monomer.Graph.GraphCfg.html#_gcLockX"><span class="hs-identifier hs-var">_gcLockX</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg
-</span><a href="#local-6989586621679134657"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
-</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Bool
-</span><a href="Monomer.Graph.GraphCfg.html#_gcLockX"><span class="hs-identifier hs-var">_gcLockX</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg
-</span><a href="#local-6989586621679134658"><span class="hs-identifier hs-var">a1</span></a></span><span>
-</span><span id="line-54"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcLockY :: Maybe Bool
-</span><a href="Monomer.Graph.GraphCfg.html#_gcLockY"><span class="hs-identifier hs-var">_gcLockY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Bool
-</span><a href="Monomer.Graph.GraphCfg.html#_gcLockY"><span class="hs-identifier hs-var">_gcLockY</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg
-</span><a href="#local-6989586621679134657"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
-</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Bool
-</span><a href="Monomer.Graph.GraphCfg.html#_gcLockY"><span class="hs-identifier hs-var">_gcLockY</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg
-</span><a href="#local-6989586621679134658"><span class="hs-identifier hs-var">a1</span></a></span><span>
-</span><span id="line-55"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcHideMinor :: Maybe Bool
-</span><a href="Monomer.Graph.GraphCfg.html#_gcHideMinor"><span class="hs-identifier hs-var">_gcHideMinor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Bool
-</span><a href="Monomer.Graph.GraphCfg.html#_gcHideMinor"><span class="hs-identifier hs-var">_gcHideMinor</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg
-</span><a href="#local-6989586621679134657"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
-</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Bool
-</span><a href="Monomer.Graph.GraphCfg.html#_gcHideMinor"><span class="hs-identifier hs-var">_gcHideMinor</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg
-</span><a href="#local-6989586621679134658"><span class="hs-identifier hs-var">a1</span></a></span><span>
-</span><span id="line-56"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcHideNumbers :: Maybe Bool
-</span><a href="Monomer.Graph.GraphCfg.html#_gcHideNumbers"><span class="hs-identifier hs-var">_gcHideNumbers</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Bool
-</span><a href="Monomer.Graph.GraphCfg.html#_gcHideNumbers"><span class="hs-identifier hs-var">_gcHideNumbers</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg
-</span><a href="#local-6989586621679134657"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
-</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe Bool
-</span><a href="Monomer.Graph.GraphCfg.html#_gcHideNumbers"><span class="hs-identifier hs-var">_gcHideNumbers</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg
-</span><a href="#local-6989586621679134658"><span class="hs-identifier hs-var">a1</span></a></span><span>
-</span><span id="line-57"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcGraphColors :: Maybe [Color]
-</span><a href="Monomer.Graph.GraphCfg.html#_gcGraphColors"><span class="hs-identifier hs-var">_gcGraphColors</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe [Color]
-</span><a href="Monomer.Graph.GraphCfg.html#_gcGraphColors"><span class="hs-identifier hs-var">_gcGraphColors</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg
-</span><a href="#local-6989586621679134657"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
-</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">GraphCfg -&gt; Maybe [Color]
-</span><a href="Monomer.Graph.GraphCfg.html#_gcGraphColors"><span class="hs-identifier hs-var">_gcGraphColors</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg
-</span><a href="#local-6989586621679134658"><span class="hs-identifier hs-var">a1</span></a></span><span>
-</span><span id="line-58"></span><span>        </span><span class="hs-special">}</span><span>
-</span><span id="line-59"></span><span>
-</span><span id="line-60"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679134650"><span id="local-6989586621679134652"><span class="annot"><span class="hs-identifier hs-type">Monoid</span></span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-61"></span><span>    </span><span id="local-6989586621679134647"><span class="annot"><span class="annottext">mempty :: GraphCfg
+</span><span id="line-103"></span><span>        </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcWheelRate :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcWheelRate"><span class="hs-identifier hs-var">_gcWheelRate</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcWheelRate"><span class="hs-identifier hs-var">_gcWheelRate</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcWheelRate"><span class="hs-identifier hs-var">_gcWheelRate</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-104"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMinX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinX"><span class="hs-identifier hs-var">_gcMinX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinX"><span class="hs-identifier hs-var">_gcMinX</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinX"><span class="hs-identifier hs-var">_gcMinX</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-105"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMaxX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxX"><span class="hs-identifier hs-var">_gcMaxX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxX"><span class="hs-identifier hs-var">_gcMaxX</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxX"><span class="hs-identifier hs-var">_gcMaxX</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-106"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMinY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinY"><span class="hs-identifier hs-var">_gcMinY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinY"><span class="hs-identifier hs-var">_gcMinY</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinY"><span class="hs-identifier hs-var">_gcMinY</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-107"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMaxY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxY"><span class="hs-identifier hs-var">_gcMaxY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxY"><span class="hs-identifier hs-var">_gcMaxY</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxY"><span class="hs-identifier hs-var">_gcMaxY</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-108"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMinScaleX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinScaleX"><span class="hs-identifier hs-var">_gcMinScaleX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinScaleX"><span class="hs-identifier hs-var">_gcMinScaleX</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinScaleX"><span class="hs-identifier hs-var">_gcMinScaleX</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-109"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMaxScaleX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxScaleX"><span class="hs-identifier hs-var">_gcMaxScaleX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxScaleX"><span class="hs-identifier hs-var">_gcMaxScaleX</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxScaleX"><span class="hs-identifier hs-var">_gcMaxScaleX</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-110"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMinScaleY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinScaleY"><span class="hs-identifier hs-var">_gcMinScaleY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinScaleY"><span class="hs-identifier hs-var">_gcMinScaleY</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinScaleY"><span class="hs-identifier hs-var">_gcMinScaleY</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-111"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMaxScaleY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxScaleY"><span class="hs-identifier hs-var">_gcMaxScaleY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxScaleY"><span class="hs-identifier hs-var">_gcMaxScaleY</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxScaleY"><span class="hs-identifier hs-var">_gcMaxScaleY</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-112"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcLockX :: Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcLockX"><span class="hs-identifier hs-var">_gcLockX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcLockX"><span class="hs-identifier hs-var">_gcLockX</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcLockX"><span class="hs-identifier hs-var">_gcLockX</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-113"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcLockY :: Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcLockY"><span class="hs-identifier hs-var">_gcLockY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcLockY"><span class="hs-identifier hs-var">_gcLockY</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcLockY"><span class="hs-identifier hs-var">_gcLockY</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-114"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcHideMinor :: Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcHideMinor"><span class="hs-identifier hs-var">_gcHideMinor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcHideMinor"><span class="hs-identifier hs-var">_gcHideMinor</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcHideMinor"><span class="hs-identifier hs-var">_gcHideMinor</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-115"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcHideNumbers :: Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcHideNumbers"><span class="hs-identifier hs-var">_gcHideNumbers</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcHideNumbers"><span class="hs-identifier hs-var">_gcHideNumbers</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcHideNumbers"><span class="hs-identifier hs-var">_gcHideNumbers</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-116"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcHideGrid :: Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcHideGrid"><span class="hs-identifier hs-var">_gcHideGrid</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcHideGrid"><span class="hs-identifier hs-var">_gcHideGrid</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcHideGrid"><span class="hs-identifier hs-var">_gcHideGrid</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-117"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcGraphColors :: Maybe [Color]
+</span><a href="Monomer.Graph.GraphCfg.html#_gcGraphColors"><span class="hs-identifier hs-var">_gcGraphColors</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe [Color]
+</span><a href="Monomer.Graph.GraphCfg.html#_gcGraphColors"><span class="hs-identifier hs-var">_gcGraphColors</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; Maybe [Color]
+</span><a href="Monomer.Graph.GraphCfg.html#_gcGraphColors"><span class="hs-identifier hs-var">_gcGraphColors</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><span id="line-118"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcOnRightClickReq :: [(Double, Double) -&gt; WidgetRequest s e]
+</span><a href="Monomer.Graph.GraphCfg.html#_gcOnRightClickReq"><span class="hs-identifier hs-var">_gcOnRightClickReq</span></a></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-119"></span><span>            </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; [(Double, Double) -&gt; WidgetRequest s e]
+</span><a href="Monomer.Graph.GraphCfg.html#_gcOnRightClickReq"><span class="hs-identifier hs-var">_gcOnRightClickReq</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162766"><span class="hs-identifier hs-var">a1</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall s e. GraphCfg s e -&gt; [(Double, Double) -&gt; WidgetRequest s e]
+</span><a href="Monomer.Graph.GraphCfg.html#_gcOnRightClickReq"><span class="hs-identifier hs-var">_gcOnRightClickReq</span></a></span><span> </span><span class="annot"><span class="annottext">GraphCfg s e
+</span><a href="#local-6989586621679162765"><span class="hs-identifier hs-var">a2</span></a></span><span>
+</span><span id="line-120"></span><span>        </span><span class="hs-special">}</span><span>
+</span><span id="line-121"></span><span>
+</span><span id="line-122"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679162758"><span id="local-6989586621679162760"><span id="local-6989586621679162912"><span id="local-6989586621679162913"><span class="annot"><span class="hs-identifier hs-type">Monoid</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162913"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162912"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span></span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-123"></span><span>    </span><span id="local-6989586621679162755"><span class="annot"><span class="annottext">mempty :: GraphCfg s e
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">mempty</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-62"></span><span>
-</span><span id="line-63"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CmbWheelRate</span></span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-64"></span><span>    </span><span id="local-6989586621679134642"><span class="annot"><span class="annottext">wheelRate :: Double -&gt; GraphCfg
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">wheelRate</span></span></span><span> </span><span id="local-6989586621679134640"><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679134640"><span class="hs-identifier hs-var">rate</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span id="line-124"></span><span>
+</span><span id="line-125"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679162905"><span id="local-6989586621679162906"><span class="annot"><span class="hs-identifier hs-type">CmbWheelRate</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162906"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162905"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-126"></span><span>    </span><span id="local-6989586621679162750"><span class="annot"><span class="annottext">wheelRate :: Double -&gt; GraphCfg s e
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">wheelRate</span></span></span><span> </span><span id="local-6989586621679162748"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162748"><span class="hs-identifier hs-var">rate</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-65"></span><span>        </span><span class="annot"><span class="annottext">_gcWheelRate :: Maybe Double
+</span><span id="line-127"></span><span>        </span><span class="annot"><span class="annottext">_gcWheelRate :: Maybe Double
 </span><a href="Monomer.Graph.GraphCfg.html#_gcWheelRate"><span class="hs-identifier hs-var">_gcWheelRate</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
-</span><a href="#local-6989586621679134640"><span class="hs-identifier hs-var">rate</span></a></span><span>
-</span><span id="line-66"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-67"></span><span>
-</span><span id="line-68"></span><span class="hs-comment">{-|
+</span><a href="#local-6989586621679162748"><span class="hs-identifier hs-var">rate</span></a></span><span>
+</span><span id="line-128"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-129"></span><span>
+</span><span id="line-130"></span><span class="hs-comment">{-|
+Limits along X-axis.
+-}</span><span>
+</span><span id="line-133"></span><span id="local-6989586621679162903"><span id="local-6989586621679162904"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#limitX"><span class="hs-identifier hs-type">limitX</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162904"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162903"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-134"></span><span id="limitX"><span class="annot"><span class="annottext">limitX :: forall s e. (Double, Double) -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#limitX"><span class="hs-identifier hs-var hs-var">limitX</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679162746"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162746"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679162745"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162745"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-135"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcMinX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinX"><span class="hs-identifier hs-var">_gcMinX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162746"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><span id="line-136"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMaxX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxX"><span class="hs-identifier hs-var">_gcMaxX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162745"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><span id="line-137"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-138"></span><span>
+</span><span id="line-139"></span><span class="hs-comment">{-|
+Limits along Y-axis.
+-}</span><span>
+</span><span id="line-142"></span><span id="local-6989586621679162743"><span id="local-6989586621679162744"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#limitY"><span class="hs-identifier hs-type">limitY</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162744"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162743"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-143"></span><span id="limitY"><span class="annot"><span class="annottext">limitY :: forall s e. (Double, Double) -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#limitY"><span class="hs-identifier hs-var hs-var">limitY</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679162741"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162741"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679162740"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162740"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-144"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcMinY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinY"><span class="hs-identifier hs-var">_gcMinY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162741"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><span id="line-145"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMaxY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxY"><span class="hs-identifier hs-var">_gcMaxY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162740"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><span id="line-146"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-147"></span><span>
+</span><span id="line-148"></span><span class="hs-comment">{-|
+Left limit along X-axis.
+-}</span><span>
+</span><span id="line-151"></span><span id="local-6989586621679162738"><span id="local-6989586621679162739"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#minimumX"><span class="hs-identifier hs-type">minimumX</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162739"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162738"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-152"></span><span id="minimumX"><span class="annot"><span class="annottext">minimumX :: forall s e. Double -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#minimumX"><span class="hs-identifier hs-var hs-var">minimumX</span></a></span></span><span> </span><span id="local-6989586621679162736"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162736"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-153"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcMinX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinX"><span class="hs-identifier hs-var">_gcMinX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162736"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-154"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-155"></span><span>
+</span><span id="line-156"></span><span class="hs-comment">{-|
+Right limit along X-axis.
+-}</span><span>
+</span><span id="line-159"></span><span id="local-6989586621679162734"><span id="local-6989586621679162735"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#maximumX"><span class="hs-identifier hs-type">maximumX</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162735"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162734"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-160"></span><span id="maximumX"><span class="annot"><span class="annottext">maximumX :: forall s e. Double -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#maximumX"><span class="hs-identifier hs-var hs-var">maximumX</span></a></span></span><span> </span><span id="local-6989586621679162732"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162732"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-161"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcMaxX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxX"><span class="hs-identifier hs-var">_gcMaxX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162732"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-162"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-163"></span><span>
+</span><span id="line-164"></span><span class="hs-comment">{-|
+Bottom limit along Y-axis.
+-}</span><span>
+</span><span id="line-167"></span><span id="local-6989586621679162730"><span id="local-6989586621679162731"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#minimumY"><span class="hs-identifier hs-type">minimumY</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162731"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162730"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-168"></span><span id="minimumY"><span class="annot"><span class="annottext">minimumY :: forall s e. Double -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#minimumY"><span class="hs-identifier hs-var hs-var">minimumY</span></a></span></span><span> </span><span id="local-6989586621679162728"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162728"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-169"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcMinY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinY"><span class="hs-identifier hs-var">_gcMinY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162728"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-170"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-171"></span><span>
+</span><span id="line-172"></span><span class="hs-comment">{-|
+Top limit along Y-axis.
+-}</span><span>
+</span><span id="line-175"></span><span id="local-6989586621679162726"><span id="local-6989586621679162727"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#maximumY"><span class="hs-identifier hs-type">maximumY</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162727"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162726"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-176"></span><span id="maximumY"><span class="annot"><span class="annottext">maximumY :: forall s e. Double -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#maximumY"><span class="hs-identifier hs-var hs-var">maximumY</span></a></span></span><span> </span><span id="local-6989586621679162724"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162724"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-177"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcMaxY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxY"><span class="hs-identifier hs-var">_gcMaxY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162724"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-178"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-179"></span><span>
+</span><span id="line-180"></span><span class="hs-comment">{-|
+Minimum scale along both X-axis and Y-axis.
+-}</span><span>
+</span><span id="line-183"></span><span id="local-6989586621679162722"><span id="local-6989586621679162723"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#minScale"><span class="hs-identifier hs-type">minScale</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162723"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162722"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-184"></span><span id="minScale"><span class="annot"><span class="annottext">minScale :: forall s e. Double -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#minScale"><span class="hs-identifier hs-var hs-var">minScale</span></a></span></span><span> </span><span id="local-6989586621679162720"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162720"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-185"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcMinScaleX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinScaleX"><span class="hs-identifier hs-var">_gcMinScaleX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162720"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-186"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMinScaleY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinScaleY"><span class="hs-identifier hs-var">_gcMinScaleY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162720"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-187"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-188"></span><span>
+</span><span id="line-189"></span><span class="hs-comment">{-|
+Maximum scale along both X-axis and Y-axis.
+-}</span><span>
+</span><span id="line-192"></span><span id="local-6989586621679162718"><span id="local-6989586621679162719"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#maxScale"><span class="hs-identifier hs-type">maxScale</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162719"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162718"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-193"></span><span id="maxScale"><span class="annot"><span class="annottext">maxScale :: forall s e. Double -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#maxScale"><span class="hs-identifier hs-var hs-var">maxScale</span></a></span></span><span> </span><span id="local-6989586621679162716"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162716"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-194"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcMaxScaleX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxScaleX"><span class="hs-identifier hs-var">_gcMaxScaleX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162716"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-195"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gcMaxScaleY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxScaleY"><span class="hs-identifier hs-var">_gcMaxScaleY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162716"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-196"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-197"></span><span>
+</span><span id="line-198"></span><span class="hs-comment">{-|
+Minimum scale along X-axis.
+-}</span><span>
+</span><span id="line-201"></span><span id="local-6989586621679162714"><span id="local-6989586621679162715"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#minScaleX"><span class="hs-identifier hs-type">minScaleX</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162715"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162714"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-202"></span><span id="minScaleX"><span class="annot"><span class="annottext">minScaleX :: forall s e. Double -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#minScaleX"><span class="hs-identifier hs-var hs-var">minScaleX</span></a></span></span><span> </span><span id="local-6989586621679162712"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162712"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-203"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcMinScaleX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinScaleX"><span class="hs-identifier hs-var">_gcMinScaleX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162712"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-204"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-205"></span><span>
+</span><span id="line-206"></span><span class="hs-comment">{-|
+Maximum scale along X-axis.
+-}</span><span>
+</span><span id="line-209"></span><span id="local-6989586621679162710"><span id="local-6989586621679162711"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#maxScaleX"><span class="hs-identifier hs-type">maxScaleX</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162711"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162710"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-210"></span><span id="maxScaleX"><span class="annot"><span class="annottext">maxScaleX :: forall s e. Double -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#maxScaleX"><span class="hs-identifier hs-var hs-var">maxScaleX</span></a></span></span><span> </span><span id="local-6989586621679162708"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162708"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-211"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcMaxScaleX :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxScaleX"><span class="hs-identifier hs-var">_gcMaxScaleX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162708"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-212"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-213"></span><span>
+</span><span id="line-214"></span><span class="hs-comment">{-|
+Minimum scale along Y-axis.
+-}</span><span>
+</span><span id="line-217"></span><span id="local-6989586621679162706"><span id="local-6989586621679162707"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#minScaleY"><span class="hs-identifier hs-type">minScaleY</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162707"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162706"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-218"></span><span id="minScaleY"><span class="annot"><span class="annottext">minScaleY :: forall s e. Double -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#minScaleY"><span class="hs-identifier hs-var hs-var">minScaleY</span></a></span></span><span> </span><span id="local-6989586621679162704"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162704"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-219"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcMinScaleY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMinScaleY"><span class="hs-identifier hs-var">_gcMinScaleY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162704"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-220"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-221"></span><span>
+</span><span id="line-222"></span><span class="hs-comment">{-|
+Maximum scale along Y-axis.
+-}</span><span>
+</span><span id="line-225"></span><span id="local-6989586621679162702"><span id="local-6989586621679162703"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#maxScaleY"><span class="hs-identifier hs-type">maxScaleY</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162703"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162702"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-226"></span><span id="maxScaleY"><span class="annot"><span class="annottext">maxScaleY :: forall s e. Double -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#maxScaleY"><span class="hs-identifier hs-var hs-var">maxScaleY</span></a></span></span><span> </span><span id="local-6989586621679162700"><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162700"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-227"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcMaxScaleY :: Maybe Double
+</span><a href="Monomer.Graph.GraphCfg.html#_gcMaxScaleY"><span class="hs-identifier hs-var">_gcMaxScaleY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><a href="#local-6989586621679162700"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><span id="line-228"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-229"></span><span>
+</span><span id="line-230"></span><span class="hs-comment">{-|
 Lock X-axis (scale only Y-axis).
 -}</span><span>
-</span><span id="line-71"></span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockX"><span class="hs-identifier hs-type">lockX</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span>
-</span><span id="line-72"></span><span id="lockX"><span class="annot"><span class="annottext">lockX :: GraphCfg
-</span><a href="Monomer.Graph.GraphCfg.html#lockX"><span class="hs-identifier hs-var hs-var">lockX</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; GraphCfg
+</span><span id="line-233"></span><span id="local-6989586621679162698"><span id="local-6989586621679162699"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockX"><span class="hs-identifier hs-type">lockX</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162699"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162698"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-234"></span><span id="lockX"><span class="annot"><span class="annottext">lockX :: forall s e. GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#lockX"><span class="hs-identifier hs-var hs-var">lockX</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. Bool -&gt; GraphCfg s e
 </span><a href="Monomer.Graph.GraphCfg.html#lockX_"><span class="hs-identifier hs-var">lockX_</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-73"></span><span>
-</span><span id="line-74"></span><span class="hs-comment">{-|
+</span><span id="line-235"></span><span>
+</span><span id="line-236"></span><span class="hs-comment">{-|
 Whether X-axis is locked and only Y-axis is scaled.
 -}</span><span>
-</span><span id="line-77"></span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockX_"><span class="hs-identifier hs-type">lockX_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span>
-</span><span id="line-78"></span><span id="lockX_"><span class="annot"><span class="annottext">lockX_ :: Bool -&gt; GraphCfg
-</span><a href="Monomer.Graph.GraphCfg.html#lockX_"><span class="hs-identifier hs-var hs-var">lockX_</span></a></span></span><span> </span><span id="local-6989586621679134639"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679134639"><span class="hs-identifier hs-var">lock</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span id="line-239"></span><span id="local-6989586621679162877"><span id="local-6989586621679162878"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockX_"><span class="hs-identifier hs-type">lockX_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162878"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162877"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-240"></span><span id="lockX_"><span class="annot"><span class="annottext">lockX_ :: forall s e. Bool -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#lockX_"><span class="hs-identifier hs-var hs-var">lockX_</span></a></span></span><span> </span><span id="local-6989586621679162696"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679162696"><span class="hs-identifier hs-var">lock</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-79"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcLockX :: Maybe Bool
+</span><span id="line-241"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcLockX :: Maybe Bool
 </span><a href="Monomer.Graph.GraphCfg.html#_gcLockX"><span class="hs-identifier hs-var">_gcLockX</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679134639"><span class="hs-identifier hs-var">lock</span></a></span><span>
-</span><span id="line-80"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-81"></span><span>
-</span><span id="line-82"></span><span class="hs-comment">{-|
+</span><a href="#local-6989586621679162696"><span class="hs-identifier hs-var">lock</span></a></span><span>
+</span><span id="line-242"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-243"></span><span>
+</span><span id="line-244"></span><span class="hs-comment">{-|
 Lock Y-axis (scale only X-axis).
 -}</span><span>
-</span><span id="line-85"></span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockY"><span class="hs-identifier hs-type">lockY</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span>
-</span><span id="line-86"></span><span id="lockY"><span class="annot"><span class="annottext">lockY :: GraphCfg
-</span><a href="Monomer.Graph.GraphCfg.html#lockY"><span class="hs-identifier hs-var hs-var">lockY</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; GraphCfg
+</span><span id="line-247"></span><span id="local-6989586621679162694"><span id="local-6989586621679162695"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockY"><span class="hs-identifier hs-type">lockY</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162695"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162694"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-248"></span><span id="lockY"><span class="annot"><span class="annottext">lockY :: forall s e. GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#lockY"><span class="hs-identifier hs-var hs-var">lockY</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. Bool -&gt; GraphCfg s e
 </span><a href="Monomer.Graph.GraphCfg.html#lockY_"><span class="hs-identifier hs-var">lockY_</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-87"></span><span>
-</span><span id="line-88"></span><span class="hs-comment">{-|
+</span><span id="line-249"></span><span>
+</span><span id="line-250"></span><span class="hs-comment">{-|
 Whether Y-axis is locked and only X-axis is scaled.
 -}</span><span>
-</span><span id="line-91"></span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockY_"><span class="hs-identifier hs-type">lockY_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span>
-</span><span id="line-92"></span><span id="lockY_"><span class="annot"><span class="annottext">lockY_ :: Bool -&gt; GraphCfg
-</span><a href="Monomer.Graph.GraphCfg.html#lockY_"><span class="hs-identifier hs-var hs-var">lockY_</span></a></span></span><span> </span><span id="local-6989586621679134638"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679134638"><span class="hs-identifier hs-var">lock</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span id="line-253"></span><span id="local-6989586621679162692"><span id="local-6989586621679162693"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#lockY_"><span class="hs-identifier hs-type">lockY_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162693"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162692"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-254"></span><span id="lockY_"><span class="annot"><span class="annottext">lockY_ :: forall s e. Bool -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#lockY_"><span class="hs-identifier hs-var hs-var">lockY_</span></a></span></span><span> </span><span id="local-6989586621679162690"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679162690"><span class="hs-identifier hs-var">lock</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-93"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcLockY :: Maybe Bool
+</span><span id="line-255"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcLockY :: Maybe Bool
 </span><a href="Monomer.Graph.GraphCfg.html#_gcLockY"><span class="hs-identifier hs-var">_gcLockY</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679134638"><span class="hs-identifier hs-var">lock</span></a></span><span>
-</span><span id="line-94"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-95"></span><span>
-</span><span id="line-96"></span><span class="hs-comment">{-|
+</span><a href="#local-6989586621679162690"><span class="hs-identifier hs-var">lock</span></a></span><span>
+</span><span id="line-256"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-257"></span><span>
+</span><span id="line-258"></span><span class="hs-comment">{-|
 Hide minor gridlines.
 -}</span><span>
-</span><span id="line-99"></span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideMinorGridlines"><span class="hs-identifier hs-type">hideMinorGridlines</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span>
-</span><span id="line-100"></span><span id="hideMinorGridlines"><span class="annot"><span class="annottext">hideMinorGridlines :: GraphCfg
-</span><a href="Monomer.Graph.GraphCfg.html#hideMinorGridlines"><span class="hs-identifier hs-var hs-var">hideMinorGridlines</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; GraphCfg
+</span><span id="line-261"></span><span id="local-6989586621679162688"><span id="local-6989586621679162689"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideMinorGridlines"><span class="hs-identifier hs-type">hideMinorGridlines</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162689"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162688"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-262"></span><span id="hideMinorGridlines"><span class="annot"><span class="annottext">hideMinorGridlines :: forall s e. GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#hideMinorGridlines"><span class="hs-identifier hs-var hs-var">hideMinorGridlines</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. Bool -&gt; GraphCfg s e
 </span><a href="Monomer.Graph.GraphCfg.html#hideMinorGridlines_"><span class="hs-identifier hs-var">hideMinorGridlines_</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-101"></span><span>
-</span><span id="line-102"></span><span class="hs-comment">{-|
+</span><span id="line-263"></span><span>
+</span><span id="line-264"></span><span class="hs-comment">{-|
 Whether to hide minor gridlines.
 -}</span><span>
-</span><span id="line-105"></span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideMinorGridlines_"><span class="hs-identifier hs-type">hideMinorGridlines_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span>
-</span><span id="line-106"></span><span id="hideMinorGridlines_"><span class="annot"><span class="annottext">hideMinorGridlines_ :: Bool -&gt; GraphCfg
-</span><a href="Monomer.Graph.GraphCfg.html#hideMinorGridlines_"><span class="hs-identifier hs-var hs-var">hideMinorGridlines_</span></a></span></span><span> </span><span id="local-6989586621679134637"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679134637"><span class="hs-identifier hs-var">hide</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span id="line-267"></span><span id="local-6989586621679162686"><span id="local-6989586621679162687"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideMinorGridlines_"><span class="hs-identifier hs-type">hideMinorGridlines_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162687"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162686"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-268"></span><span id="hideMinorGridlines_"><span class="annot"><span class="annottext">hideMinorGridlines_ :: forall s e. Bool -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#hideMinorGridlines_"><span class="hs-identifier hs-var hs-var">hideMinorGridlines_</span></a></span></span><span> </span><span id="local-6989586621679162684"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679162684"><span class="hs-identifier hs-var">hide</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-107"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcHideMinor :: Maybe Bool
+</span><span id="line-269"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcHideMinor :: Maybe Bool
 </span><a href="Monomer.Graph.GraphCfg.html#_gcHideMinor"><span class="hs-identifier hs-var">_gcHideMinor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679134637"><span class="hs-identifier hs-var">hide</span></a></span><span>
-</span><span id="line-108"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-109"></span><span>
-</span><span id="line-110"></span><span class="hs-comment">{-|
+</span><a href="#local-6989586621679162684"><span class="hs-identifier hs-var">hide</span></a></span><span>
+</span><span id="line-270"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-271"></span><span>
+</span><span id="line-272"></span><span class="hs-comment">{-|
 Hide axis numbers.
 -}</span><span>
-</span><span id="line-113"></span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideAxisNumbers"><span class="hs-identifier hs-type">hideAxisNumbers</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span>
-</span><span id="line-114"></span><span id="hideAxisNumbers"><span class="annot"><span class="annottext">hideAxisNumbers :: GraphCfg
-</span><a href="Monomer.Graph.GraphCfg.html#hideAxisNumbers"><span class="hs-identifier hs-var hs-var">hideAxisNumbers</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; GraphCfg
+</span><span id="line-275"></span><span id="local-6989586621679162682"><span id="local-6989586621679162683"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideAxisNumbers"><span class="hs-identifier hs-type">hideAxisNumbers</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162683"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162682"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-276"></span><span id="hideAxisNumbers"><span class="annot"><span class="annottext">hideAxisNumbers :: forall s e. GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#hideAxisNumbers"><span class="hs-identifier hs-var hs-var">hideAxisNumbers</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. Bool -&gt; GraphCfg s e
 </span><a href="Monomer.Graph.GraphCfg.html#hideAxisNumbers_"><span class="hs-identifier hs-var">hideAxisNumbers_</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-115"></span><span>
-</span><span id="line-116"></span><span class="hs-comment">{-|
+</span><span id="line-277"></span><span>
+</span><span id="line-278"></span><span class="hs-comment">{-|
 Whether to hide axis numbers.
 -}</span><span>
-</span><span id="line-119"></span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideAxisNumbers_"><span class="hs-identifier hs-type">hideAxisNumbers_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span>
-</span><span id="line-120"></span><span id="hideAxisNumbers_"><span class="annot"><span class="annottext">hideAxisNumbers_ :: Bool -&gt; GraphCfg
-</span><a href="Monomer.Graph.GraphCfg.html#hideAxisNumbers_"><span class="hs-identifier hs-var hs-var">hideAxisNumbers_</span></a></span></span><span> </span><span id="local-6989586621679134636"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679134636"><span class="hs-identifier hs-var">hide</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span id="line-281"></span><span id="local-6989586621679162680"><span id="local-6989586621679162681"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideAxisNumbers_"><span class="hs-identifier hs-type">hideAxisNumbers_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162681"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162680"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-282"></span><span id="hideAxisNumbers_"><span class="annot"><span class="annottext">hideAxisNumbers_ :: forall s e. Bool -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#hideAxisNumbers_"><span class="hs-identifier hs-var hs-var">hideAxisNumbers_</span></a></span></span><span> </span><span id="local-6989586621679162678"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679162678"><span class="hs-identifier hs-var">hide</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-121"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcHideNumbers :: Maybe Bool
+</span><span id="line-283"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcHideNumbers :: Maybe Bool
 </span><a href="Monomer.Graph.GraphCfg.html#_gcHideNumbers"><span class="hs-identifier hs-var">_gcHideNumbers</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679134636"><span class="hs-identifier hs-var">hide</span></a></span><span>
-</span><span id="line-122"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-123"></span><span>
-</span><span id="line-124"></span><span class="hs-comment">{-|
+</span><a href="#local-6989586621679162678"><span class="hs-identifier hs-var">hide</span></a></span><span>
+</span><span id="line-284"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-285"></span><span>
+</span><span id="line-286"></span><span class="hs-comment">{-|
+Hide all gridlines and axis numbers.
+-}</span><span>
+</span><span id="line-289"></span><span id="local-6989586621679162676"><span id="local-6989586621679162677"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideGrid"><span class="hs-identifier hs-type">hideGrid</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162677"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162676"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-290"></span><span id="hideGrid"><span class="annot"><span class="annottext">hideGrid :: forall s e. GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#hideGrid"><span class="hs-identifier hs-var hs-var">hideGrid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e. Bool -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#hideGrid_"><span class="hs-identifier hs-var">hideGrid_</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span>
+</span><span id="line-291"></span><span>
+</span><span id="line-292"></span><span class="hs-comment">{-|
+Whether to hide all gridlines and axis numbers.
+-}</span><span>
+</span><span id="line-295"></span><span id="local-6989586621679162674"><span id="local-6989586621679162675"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#hideGrid_"><span class="hs-identifier hs-type">hideGrid_</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162675"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162674"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-296"></span><span id="hideGrid_"><span class="annot"><span class="annottext">hideGrid_ :: forall s e. Bool -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#hideGrid_"><span class="hs-identifier hs-var hs-var">hideGrid_</span></a></span></span><span> </span><span id="local-6989586621679162672"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679162672"><span class="hs-identifier hs-var">hide</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-297"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcHideGrid :: Maybe Bool
+</span><a href="Monomer.Graph.GraphCfg.html#_gcHideGrid"><span class="hs-identifier hs-var">_gcHideGrid</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679162672"><span class="hs-identifier hs-var">hide</span></a></span><span>
+</span><span id="line-298"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-299"></span><span>
+</span><span id="line-300"></span><span class="hs-comment">{-|
 List of colors which are used to plot graphs. This list is then
 cycled when plotting graphs (in case there are more graphs than
 provided colors).
 -}</span><span>
-</span><span id="line-129"></span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#graphColors"><span class="hs-identifier hs-type">graphColors</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Color</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span>
-</span><span id="line-130"></span><span id="graphColors"><span class="annot"><span class="annottext">graphColors :: [Color] -&gt; GraphCfg
-</span><a href="Monomer.Graph.GraphCfg.html#graphColors"><span class="hs-identifier hs-var hs-var">graphColors</span></a></span></span><span> </span><span id="local-6989586621679134635"><span class="annot"><span class="annottext">[Color]
-</span><a href="#local-6989586621679134635"><span class="hs-identifier hs-var">colors</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span id="line-305"></span><span id="local-6989586621679162865"><span id="local-6989586621679162866"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#graphColors"><span class="hs-identifier hs-type">graphColors</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Color</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162866"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162865"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-306"></span><span id="graphColors"><span class="annot"><span class="annottext">graphColors :: forall s e. [Color] -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#graphColors"><span class="hs-identifier hs-var hs-var">graphColors</span></a></span></span><span> </span><span id="local-6989586621679162670"><span class="annot"><span class="annottext">[Color]
+</span><a href="#local-6989586621679162670"><span class="hs-identifier hs-var">colors</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
-</span><span id="line-131"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcGraphColors :: Maybe [Color]
+</span><span id="line-307"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcGraphColors :: Maybe [Color]
 </span><a href="Monomer.Graph.GraphCfg.html#_gcGraphColors"><span class="hs-identifier hs-var">_gcGraphColors</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">[Color]
-</span><a href="#local-6989586621679134635"><span class="hs-identifier hs-var">colors</span></a></span><span>
-</span><span id="line-132"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-133"></span></pre></body></html>
+</span><a href="#local-6989586621679162670"><span class="hs-identifier hs-var">colors</span></a></span><span>
+</span><span id="line-308"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-309"></span><span>
+</span><span id="line-310"></span><span class="hs-comment">{-|
+Event to raise on right click.
+-}</span><span>
+</span><span id="line-313"></span><span id="local-6989586621679162860"><span id="local-6989586621679162862"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#onRightClick"><span class="hs-identifier hs-type">onRightClick</span></a></span><span>
+</span><span id="line-314"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetEvent</span></span><span> </span><span class="annot"><a href="#local-6989586621679162862"><span class="hs-identifier hs-type">e</span></a></span><span>
+</span><span id="line-315"></span><span>    </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679162862"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-316"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162860"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162862"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-317"></span><span id="onRightClick"><span class="annot"><span class="annottext">onRightClick :: forall e s.
+WidgetEvent e =&gt;
+((Double, Double) -&gt; e) -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#onRightClick"><span class="hs-identifier hs-var hs-var">onRightClick</span></a></span></span><span> </span><span id="local-6989586621679162666"><span class="annot"><span class="annottext">(Double, Double) -&gt; e
+</span><a href="#local-6989586621679162666"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-318"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcOnRightClickReq :: [(Double, Double) -&gt; WidgetRequest s e]
+</span><a href="Monomer.Graph.GraphCfg.html#_gcOnRightClickReq"><span class="hs-identifier hs-var">_gcOnRightClickReq</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall s e. WidgetEvent e =&gt; e -&gt; WidgetRequest s e
+</span><span class="hs-identifier hs-var">RaiseEvent</span></span><span> </span><span class="annot"><span class="annottext">forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Double, Double) -&gt; e
+</span><a href="#local-6989586621679162666"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-319"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-320"></span><span>
+</span><span id="line-321"></span><span class="hs-comment">{-|
+'WidgetRequest' to generate on right click.
+-}</span><span>
+</span><span id="line-324"></span><span id="local-6989586621679162851"><span id="local-6989586621679162852"><span class="annot"><a href="Monomer.Graph.GraphCfg.html#onRightClickReq"><span class="hs-identifier hs-type">onRightClickReq</span></a></span><span>
+</span><span id="line-325"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetRequest</span></span><span> </span><span class="annot"><a href="#local-6989586621679162852"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162851"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-326"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphCfg.html#GraphCfg"><span class="hs-identifier hs-type">GraphCfg</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162852"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162851"><span class="hs-identifier hs-type">e</span></a></span></span></span><span>
+</span><span id="line-327"></span><span id="onRightClickReq"><span class="annot"><span class="annottext">onRightClickReq :: forall s e. ((Double, Double) -&gt; WidgetRequest s e) -&gt; GraphCfg s e
+</span><a href="Monomer.Graph.GraphCfg.html#onRightClickReq"><span class="hs-identifier hs-var hs-var">onRightClickReq</span></a></span></span><span> </span><span id="local-6989586621679162662"><span class="annot"><span class="annottext">(Double, Double) -&gt; WidgetRequest s e
+</span><a href="#local-6989586621679162662"><span class="hs-identifier hs-var">req</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span>
+</span><span id="line-328"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gcOnRightClickReq :: [(Double, Double) -&gt; WidgetRequest s e]
+</span><a href="Monomer.Graph.GraphCfg.html#_gcOnRightClickReq"><span class="hs-identifier hs-var">_gcOnRightClickReq</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(Double, Double) -&gt; WidgetRequest s e
+</span><a href="#local-6989586621679162662"><span class="hs-identifier hs-var">req</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-329"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-330"></span></pre></body></html>

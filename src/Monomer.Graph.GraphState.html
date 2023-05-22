@@ -20,13 +20,15 @@
 </span><a href="Monomer.Graph.GraphState.html#_gsHoverPoint"><span class="hs-identifier hs-var hs-var">_gsHoverPoint</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">)</span><span>
 </span><span id="line-15"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gsActivePoint"><span class="annot"><span class="annottext">GraphState -&gt; Maybe (Int, Int)
 </span><a href="Monomer.Graph.GraphState.html#_gsActivePoint"><span class="hs-identifier hs-var hs-var">_gsActivePoint</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">)</span><span>
-</span><span id="line-16"></span><span>    </span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679134928"><span id="local-6989586621679134940"><span class="annot"><span class="annottext">GraphState -&gt; GraphState -&gt; Bool
+</span><span id="line-16"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="_gsViewport"><span class="annot"><span class="annottext">GraphState -&gt; Rect
+</span><a href="Monomer.Graph.GraphState.html#_gsViewport"><span class="hs-identifier hs-var hs-var">_gsViewport</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Rect</span></span><span>
+</span><span id="line-17"></span><span>    </span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679163265"><span id="local-6989586621679163279"><span class="annot"><span class="annottext">GraphState -&gt; GraphState -&gt; Bool
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 /= :: GraphState -&gt; GraphState -&gt; Bool
 $c/= :: GraphState -&gt; GraphState -&gt; Bool
 == :: GraphState -&gt; GraphState -&gt; Bool
 $c== :: GraphState -&gt; GraphState -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679134905"><span id="local-6989586621679134907"><span id="local-6989586621679134921"><span class="annot"><span class="annottext">Int -&gt; GraphState -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679163240"><span id="local-6989586621679163242"><span id="local-6989586621679163258"><span class="annot"><span class="annottext">Int -&gt; GraphState -&gt; ShowS
 [GraphState] -&gt; ShowS
 GraphState -&gt; String
 forall a.
@@ -38,38 +40,45 @@ $cshow :: GraphState -&gt; String
 showsPrec :: Int -&gt; GraphState -&gt; ShowS
 $cshowsPrec :: Int -&gt; GraphState -&gt; ShowS
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">)</span><span>
-</span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Default</span></span><span> </span><span class="annot"><a href="Monomer.Graph.GraphState.html#GraphState"><span class="hs-identifier hs-type">GraphState</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-19"></span><span>    </span><span id="local-6989586621679134896"><span class="annot"><span class="annottext">def :: GraphState
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Default</span></span><span> </span><span class="annot"><a href="Monomer.Graph.GraphState.html#GraphState"><span class="hs-identifier hs-type">GraphState</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-20"></span><span>    </span><span id="local-6989586621679163231"><span class="annot"><span class="annottext">def :: GraphState
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">def</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Monomer.Graph.GraphState.html#GraphState"><span class="hs-identifier hs-type">GraphState</span></a></span><span>
-</span><span id="line-20"></span><span>        </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gsTranslation :: Point
+</span><span id="line-21"></span><span>        </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_gsTranslation :: Point
 </span><a href="Monomer.Graph.GraphState.html#_gsTranslation"><span class="hs-identifier hs-var">_gsTranslation</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Double -&gt; Double -&gt; Point
 </span><span class="hs-identifier hs-var">Point</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">0</span></span><span>
-</span><span id="line-21"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gsScale :: Point
+</span><span id="line-22"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gsScale :: Point
 </span><a href="Monomer.Graph.GraphState.html#_gsScale"><span class="hs-identifier hs-var">_gsScale</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Double -&gt; Double -&gt; Point
 </span><span class="hs-identifier hs-var">Point</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">1</span></span><span>
-</span><span id="line-22"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gsUnit :: Point
+</span><span id="line-23"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gsUnit :: Point
 </span><a href="Monomer.Graph.GraphState.html#_gsUnit"><span class="hs-identifier hs-var">_gsUnit</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Double -&gt; Double -&gt; Point
 </span><span class="hs-identifier hs-var">Point</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">1</span></span><span>
-</span><span id="line-23"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gsSections :: Point
+</span><span id="line-24"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gsSections :: Point
 </span><a href="Monomer.Graph.GraphState.html#_gsSections"><span class="hs-identifier hs-var">_gsSections</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Double -&gt; Double -&gt; Point
 </span><span class="hs-identifier hs-var">Point</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">5</span></span><span> </span><span class="annot"><span class="annottext">Double
 </span><span class="hs-number">5</span></span><span>
-</span><span id="line-24"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gsMousePosition :: Maybe Point
+</span><span id="line-25"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gsMousePosition :: Maybe Point
 </span><a href="Monomer.Graph.GraphState.html#_gsMousePosition"><span class="hs-identifier hs-var">_gsMousePosition</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-25"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gsHoverPoint :: Maybe (Int, Int)
+</span><span id="line-26"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gsHoverPoint :: Maybe (Int, Int)
 </span><a href="Monomer.Graph.GraphState.html#_gsHoverPoint"><span class="hs-identifier hs-var">_gsHoverPoint</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-26"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gsActivePoint :: Maybe (Int, Int)
+</span><span id="line-27"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gsActivePoint :: Maybe (Int, Int)
 </span><a href="Monomer.Graph.GraphState.html#_gsActivePoint"><span class="hs-identifier hs-var">_gsActivePoint</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-27"></span><span>        </span><span class="hs-special">}</span><span>
-</span><span id="line-28"></span></pre></body></html>
+</span><span id="line-28"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_gsViewport :: Rect
+</span><a href="Monomer.Graph.GraphState.html#_gsViewport"><span class="hs-identifier hs-var">_gsViewport</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Double -&gt; Double -&gt; Double -&gt; Double -&gt; Rect
+</span><span class="hs-identifier hs-var">Rect</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Double
+</span><span class="hs-number">100</span></span><span>
+</span><span id="line-29"></span><span>        </span><span class="hs-special">}</span><span>
+</span><span id="line-30"></span></pre></body></html>

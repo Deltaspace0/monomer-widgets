@@ -62,6 +62,7 @@ module Monomer.Dragboard.DragboardCfg
 --   dragging.</li>
 --   <li><a>renderSource</a>: whether to render the source widget when
 --   dragging.</li>
+--   <li><a>duration</a>: how long the animation lasts in ms.</li>
 --   <li><a>checkerConfig</a>: config options for checkerboard
 --   container.</li>
 --   <li><a>onFocus</a>: event to raise when focus is received.</li>
@@ -75,12 +76,13 @@ module Monomer.Dragboard.DragboardCfg
 --   board changes.</li>
 --   </ul>
 data DragboardCfg s e a
-DragboardCfg :: Maybe (Info a -> Bool) -> Maybe Int -> Maybe Color -> Maybe Bool -> Maybe Bool -> [CheckerboardCfg] -> [Path -> WidgetRequest s e] -> [Path -> WidgetRequest s e] -> [Info a -> WidgetRequest s e] -> DragboardCfg s e a
+DragboardCfg :: Maybe (Info a -> Bool) -> Maybe Int -> Maybe Color -> Maybe Bool -> Maybe Bool -> Maybe Millisecond -> [CheckerboardCfg] -> [Path -> WidgetRequest s e] -> [Path -> WidgetRequest s e] -> [Info a -> WidgetRequest s e] -> DragboardCfg s e a
 [_dcValidator] :: DragboardCfg s e a -> Maybe (Info a -> Bool)
 [_dcOffset] :: DragboardCfg s e a -> Maybe Int
 [_dcSelectColor] :: DragboardCfg s e a -> Maybe Color
 [_dcNoClick] :: DragboardCfg s e a -> Maybe Bool
 [_dcRenderS] :: DragboardCfg s e a -> Maybe Bool
+[_dcDuration] :: DragboardCfg s e a -> Maybe Millisecond
 [_dcCheckerCfg] :: DragboardCfg s e a -> [CheckerboardCfg]
 [_dcOnFocusReq] :: DragboardCfg s e a -> [Path -> WidgetRequest s e]
 [_dcOnBlurReq] :: DragboardCfg s e a -> [Path -> WidgetRequest s e]
@@ -127,6 +129,7 @@ checkerConfig :: [CheckerboardCfg] -> DragboardCfg s e a
 instance Data.Default.Class.Default (Monomer.Dragboard.DragboardCfg.DragboardCfg s e a)
 instance GHC.Base.Semigroup (Monomer.Dragboard.DragboardCfg.DragboardCfg s e a)
 instance GHC.Base.Monoid (Monomer.Dragboard.DragboardCfg.DragboardCfg s e a)
+instance Monomer.Core.Combinators.CmbDuration (Monomer.Dragboard.DragboardCfg.DragboardCfg s e a) Monomer.Core.WidgetTypes.Millisecond
 instance Monomer.Core.WidgetTypes.WidgetEvent e => Monomer.Core.Combinators.CmbOnFocus (Monomer.Dragboard.DragboardCfg.DragboardCfg s e a) e Monomer.Common.BasicTypes.Path
 instance Monomer.Core.Combinators.CmbOnFocusReq (Monomer.Dragboard.DragboardCfg.DragboardCfg s e a) s e Monomer.Common.BasicTypes.Path
 instance Monomer.Core.WidgetTypes.WidgetEvent e => Monomer.Core.Combinators.CmbOnBlur (Monomer.Dragboard.DragboardCfg.DragboardCfg s e a) e Monomer.Common.BasicTypes.Path
@@ -136,31 +139,36 @@ instance Monomer.Core.Combinators.CmbOnChangeReq (Monomer.Dragboard.DragboardCfg
 
 module Monomer.Dragboard.DragboardModel
 data DragboardModel a
-DragboardModel :: [[a]] -> Maybe Int -> DragboardModel a
+DragboardModel :: [[a]] -> Maybe Int -> Map Int Rect -> DragboardModel a
 [_dmBoardState] :: DragboardModel a -> [[a]]
 [_dmSelectedSquare] :: DragboardModel a -> Maybe Int
+[_dmAnimationSources] :: DragboardModel a -> Map Int Rect
 boardState :: HasBoardState s a => Lens' s a
 selectedSquare :: HasSelectedSquare s a => Lens' s a
+animationSources :: HasAnimationSources s a => Lens' s a
 initDragboardModel :: DragboardModel a
 instance Monomer.Dragboard.DragboardModel.HasSelectedSquare (Monomer.Dragboard.DragboardModel.DragboardModel a) (GHC.Maybe.Maybe GHC.Types.Int)
 instance Monomer.Dragboard.DragboardModel.HasBoardState (Monomer.Dragboard.DragboardModel.DragboardModel a) [[a]]
+instance Monomer.Dragboard.DragboardModel.HasAnimationSources (Monomer.Dragboard.DragboardModel.DragboardModel a) (Data.Map.Internal.Map GHC.Types.Int Monomer.Common.BasicTypes.Rect)
 instance GHC.Show.Show a => GHC.Show.Show (Monomer.Dragboard.DragboardModel.DragboardModel a)
 instance GHC.Classes.Eq a => GHC.Classes.Eq (Monomer.Dragboard.DragboardModel.DragboardModel a)
 
 module Monomer.Dragboard.DragboardEvent
 newtype DragId
 DragId :: Int -> DragId
-data DragboardEvent
-EventDrop :: Int -> DragId -> DragboardEvent
-EventClick :: Int -> DragboardEvent
-EventFocus :: Path -> DragboardEvent
-EventBlur :: Path -> DragboardEvent
-handleEvent :: WidgetData sp [[a]] -> DragboardCfg sp ep a -> EventHandler (DragboardModel a) DragboardEvent sp ep
+data DragboardEvent a
+EventDrop :: Int -> DragId -> DragboardEvent a
+EventClick :: Int -> DragboardEvent a
+EventFinished :: Int -> DragboardEvent a
+EventMerge :: DragboardModel a -> DragboardEvent a
+EventFocus :: Path -> DragboardEvent a
+EventBlur :: Path -> DragboardEvent a
+handleEvent :: Eq a => WidgetData sp [[a]] -> DragboardCfg sp ep a -> EventHandler (DragboardModel a) (DragboardEvent a) sp ep
 instance GHC.Classes.Eq Monomer.Dragboard.DragboardEvent.DragId
-instance GHC.Classes.Eq Monomer.Dragboard.DragboardEvent.DragboardEvent
+instance GHC.Classes.Eq a => GHC.Classes.Eq (Monomer.Dragboard.DragboardEvent.DragboardEvent a)
 
 module Monomer.Dragboard.UI
-buildUI :: Typeable a => DragboardCfg s e a -> Int -> Int -> (a -> Either Text Color) -> UIBuilder (DragboardModel a) DragboardEvent
+buildUI :: Typeable a => DragboardCfg s e a -> Int -> Int -> (a -> Either Text Color) -> UIBuilder (DragboardModel a) (DragboardEvent a)
 
 
 -- | This is a dragboard which uses checkerboard with draggable images or
@@ -197,7 +205,7 @@ dragboardV_ :: (WidgetModel s, WidgetEvent e, Eq a, Typeable a) => Int -> Int ->
 -- | Creates a dragboard providing a <a>WidgetData</a> instance, number of
 --   columns and rows, the function to get image path or color from the
 --   value and config.
-dragboardD_ :: (WidgetModel s, WidgetEvent e, Eq a, Typeable a) => Int -> Int -> WidgetData s [[a]] -> (a -> Either Text Color) -> [DragboardCfg s e a] -> [CompositeCfg (DragboardModel a) DragboardEvent s e] -> WidgetNode s e
+dragboardD_ :: (WidgetModel s, WidgetEvent e, Eq a, Typeable a) => Int -> Int -> WidgetData s [[a]] -> (a -> Either Text Color) -> [DragboardCfg s e a] -> [CompositeCfg (DragboardModel a) (DragboardEvent a) s e] -> WidgetNode s e
 
 module Monomer.EnhancedSlider.EnhancedSliderCfg
 
@@ -305,54 +313,129 @@ module Monomer.Graph.GraphCfg
 --   
 --   <ul>
 --   <li><a>wheelRate</a>: speed of scaling.</li>
+--   <li><a>limitX</a>: limits along X-axis.</li>
+--   <li><a>limitY</a>: limits along Y-axis.</li>
+--   <li><a>minimumX</a>: left limit along X-axis.</li>
+--   <li><a>maximumX</a>: right limit along X-axis.</li>
+--   <li><a>minimumY</a>: bottom limit along Y-axis.</li>
+--   <li><a>maximumY</a>: top limit along Y-axis.</li>
+--   <li><a>minScale</a>: minimum scale along both X-axis and Y-axis.</li>
+--   <li><a>maxScale</a>: maximum scale along both X-axis and Y-axis.</li>
+--   <li><a>minScaleX</a>: minimum scale along X-axis.</li>
+--   <li><a>maxScaleX</a>: maximum scale along X-axis.</li>
+--   <li><a>minScaleY</a>: minimum scale along Y-axis.</li>
+--   <li><a>maxScaleY</a>: maximum scale along Y-axis.</li>
 --   <li><a>lockX</a>: lock X-axis (scale only Y-axis).</li>
 --   <li><a>lockY</a>: lock Y-axis (scale only X-axis).</li>
 --   <li><a>hideMinorGridlines</a>: whether to hide minor gridlines.</li>
 --   <li><a>hideAxisNumbers</a>: whether to hide axis numbers.</li>
+--   <li><a>hideGrid</a>: whether to hide all gridlines and axis
+--   numbers.</li>
 --   <li><a>graphColors</a>: which colors should be used to plot
 --   graphs.</li>
+--   <li><a>onRightClick</a>: event to raise on right click.</li>
+--   <li><a>onRightClickReq</a>: <a>WidgetRequest</a> to generate on right
+--   click.</li>
 --   </ul>
-data GraphCfg
-GraphCfg :: Maybe Double -> Maybe Bool -> Maybe Bool -> Maybe Bool -> Maybe Bool -> Maybe [Color] -> GraphCfg
-[_gcWheelRate] :: GraphCfg -> Maybe Double
-[_gcLockX] :: GraphCfg -> Maybe Bool
-[_gcLockY] :: GraphCfg -> Maybe Bool
-[_gcHideMinor] :: GraphCfg -> Maybe Bool
-[_gcHideNumbers] :: GraphCfg -> Maybe Bool
-[_gcGraphColors] :: GraphCfg -> Maybe [Color]
+data GraphCfg s e
+GraphCfg :: Maybe Double -> Maybe Double -> Maybe Double -> Maybe Double -> Maybe Double -> Maybe Double -> Maybe Double -> Maybe Double -> Maybe Double -> Maybe Bool -> Maybe Bool -> Maybe Bool -> Maybe Bool -> Maybe Bool -> Maybe [Color] -> [(Double, Double) -> WidgetRequest s e] -> GraphCfg s e
+[_gcWheelRate] :: GraphCfg s e -> Maybe Double
+[_gcMinX] :: GraphCfg s e -> Maybe Double
+[_gcMaxX] :: GraphCfg s e -> Maybe Double
+[_gcMinY] :: GraphCfg s e -> Maybe Double
+[_gcMaxY] :: GraphCfg s e -> Maybe Double
+[_gcMinScaleX] :: GraphCfg s e -> Maybe Double
+[_gcMaxScaleX] :: GraphCfg s e -> Maybe Double
+[_gcMinScaleY] :: GraphCfg s e -> Maybe Double
+[_gcMaxScaleY] :: GraphCfg s e -> Maybe Double
+[_gcLockX] :: GraphCfg s e -> Maybe Bool
+[_gcLockY] :: GraphCfg s e -> Maybe Bool
+[_gcHideMinor] :: GraphCfg s e -> Maybe Bool
+[_gcHideNumbers] :: GraphCfg s e -> Maybe Bool
+[_gcHideGrid] :: GraphCfg s e -> Maybe Bool
+[_gcGraphColors] :: GraphCfg s e -> Maybe [Color]
+[_gcOnRightClickReq] :: GraphCfg s e -> [(Double, Double) -> WidgetRequest s e]
+
+-- | Limits along X-axis.
+limitX :: (Double, Double) -> GraphCfg s e
+
+-- | Limits along Y-axis.
+limitY :: (Double, Double) -> GraphCfg s e
+
+-- | Left limit along X-axis.
+minimumX :: Double -> GraphCfg s e
+
+-- | Right limit along X-axis.
+maximumX :: Double -> GraphCfg s e
+
+-- | Bottom limit along Y-axis.
+minimumY :: Double -> GraphCfg s e
+
+-- | Top limit along Y-axis.
+maximumY :: Double -> GraphCfg s e
+
+-- | Minimum scale along both X-axis and Y-axis.
+minScale :: Double -> GraphCfg s e
+
+-- | Maximum scale along both X-axis and Y-axis.
+maxScale :: Double -> GraphCfg s e
+
+-- | Minimum scale along X-axis.
+minScaleX :: Double -> GraphCfg s e
+
+-- | Maximum scale along X-axis.
+maxScaleX :: Double -> GraphCfg s e
+
+-- | Minimum scale along Y-axis.
+minScaleY :: Double -> GraphCfg s e
+
+-- | Maximum scale along Y-axis.
+maxScaleY :: Double -> GraphCfg s e
 
 -- | Lock X-axis (scale only Y-axis).
-lockX :: GraphCfg
+lockX :: GraphCfg s e
 
 -- | Whether X-axis is locked and only Y-axis is scaled.
-lockX_ :: Bool -> GraphCfg
+lockX_ :: Bool -> GraphCfg s e
 
 -- | Lock Y-axis (scale only X-axis).
-lockY :: GraphCfg
+lockY :: GraphCfg s e
 
 -- | Whether Y-axis is locked and only X-axis is scaled.
-lockY_ :: Bool -> GraphCfg
+lockY_ :: Bool -> GraphCfg s e
 
 -- | Hide minor gridlines.
-hideMinorGridlines :: GraphCfg
+hideMinorGridlines :: GraphCfg s e
 
 -- | Whether to hide minor gridlines.
-hideMinorGridlines_ :: Bool -> GraphCfg
+hideMinorGridlines_ :: Bool -> GraphCfg s e
 
 -- | Hide axis numbers.
-hideAxisNumbers :: GraphCfg
+hideAxisNumbers :: GraphCfg s e
 
 -- | Whether to hide axis numbers.
-hideAxisNumbers_ :: Bool -> GraphCfg
+hideAxisNumbers_ :: Bool -> GraphCfg s e
+
+-- | Hide all gridlines and axis numbers.
+hideGrid :: GraphCfg s e
+
+-- | Whether to hide all gridlines and axis numbers.
+hideGrid_ :: Bool -> GraphCfg s e
 
 -- | List of colors which are used to plot graphs. This list is then cycled
 --   when plotting graphs (in case there are more graphs than provided
 --   colors).
-graphColors :: [Color] -> GraphCfg
-instance Data.Default.Class.Default Monomer.Graph.GraphCfg.GraphCfg
-instance GHC.Base.Semigroup Monomer.Graph.GraphCfg.GraphCfg
-instance GHC.Base.Monoid Monomer.Graph.GraphCfg.GraphCfg
-instance Monomer.Core.Combinators.CmbWheelRate Monomer.Graph.GraphCfg.GraphCfg GHC.Types.Double
+graphColors :: [Color] -> GraphCfg s e
+
+-- | Event to raise on right click.
+onRightClick :: WidgetEvent e => ((Double, Double) -> e) -> GraphCfg s e
+
+-- | <a>WidgetRequest</a> to generate on right click.
+onRightClickReq :: ((Double, Double) -> WidgetRequest s e) -> GraphCfg s e
+instance Data.Default.Class.Default (Monomer.Graph.GraphCfg.GraphCfg s e)
+instance GHC.Base.Semigroup (Monomer.Graph.GraphCfg.GraphCfg s e)
+instance GHC.Base.Monoid (Monomer.Graph.GraphCfg.GraphCfg s e)
+instance Monomer.Core.Combinators.CmbWheelRate (Monomer.Graph.GraphCfg.GraphCfg s e) GHC.Types.Double
 
 module Monomer.Graph.GraphData
 
@@ -365,70 +448,100 @@ module Monomer.Graph.GraphData
 --   <li><a>graphHoverColor</a>: set the color of hovered point.</li>
 --   <li><a>graphActiveColor</a>: set the color of dragged point.</li>
 --   <li><a>graphWidth</a>: set the width of the line.</li>
+--   <li><a>graphRadius</a>: set the radius of the points.</li>
 --   <li><a>graphSeparate</a>: whether the points should be rendered
 --   separately.</li>
 --   <li><a>graphFill</a>: whether to fill the area surrounded by
 --   points.</li>
 --   <li><a>graphFillAlpha</a>: transparency level of the filled area.</li>
 --   <li><a>graphOnChange</a>: event to raise when a point is dragged.</li>
+--   <li><a>graphOnChangeReq</a>: <a>WidgetRequest</a> to generate when a
+--   point is dragged.</li>
+--   <li><a>graphOnClick</a>: event to raise when a point is clicked.</li>
+--   <li><a>graphOnClickReq</a>: <a>WidgetRequest</a> to generate when a
+--   point is clicked.</li>
 --   </ul>
-data GraphData e
-GraphData :: [(Double, Double)] -> Maybe Color -> Maybe Color -> Maybe Color -> Maybe Double -> Maybe Bool -> Maybe Bool -> Maybe Double -> Maybe (Int -> (Double, Double) -> e) -> GraphData e
-[_gdPoints] :: GraphData e -> [(Double, Double)]
-[_gdColor] :: GraphData e -> Maybe Color
-[_gdHoverColor] :: GraphData e -> Maybe Color
-[_gdActiveColor] :: GraphData e -> Maybe Color
-[_gdWidth] :: GraphData e -> Maybe Double
-[_gdSeparate] :: GraphData e -> Maybe Bool
-[_gdFill] :: GraphData e -> Maybe Bool
-[_gdFillAlpha] :: GraphData e -> Maybe Double
-[_gdOnChange] :: GraphData e -> Maybe (Int -> (Double, Double) -> e)
+data GraphData s e
+GraphData :: [(Double, Double)] -> Maybe Color -> Maybe Color -> Maybe Color -> Maybe Double -> Maybe Double -> Maybe Bool -> Maybe Bool -> Maybe Double -> [Int -> (Double, Double) -> WidgetRequest s e] -> [Int -> WidgetRequest s e] -> GraphData s e
+[_gdPoints] :: GraphData s e -> [(Double, Double)]
+[_gdColor] :: GraphData s e -> Maybe Color
+[_gdHoverColor] :: GraphData s e -> Maybe Color
+[_gdActiveColor] :: GraphData s e -> Maybe Color
+[_gdWidth] :: GraphData s e -> Maybe Double
+[_gdRadius] :: GraphData s e -> Maybe Double
+[_gdSeparate] :: GraphData s e -> Maybe Bool
+[_gdFill] :: GraphData s e -> Maybe Bool
+[_gdFillAlpha] :: GraphData s e -> Maybe Double
+[_gdChangeReq] :: GraphData s e -> [Int -> (Double, Double) -> WidgetRequest s e]
+[_gdClickReq] :: GraphData s e -> [Int -> WidgetRequest s e]
 
 -- | Render single point.
-graphPoint :: (Double, Double) -> GraphData e
+graphPoint :: (Double, Double) -> GraphData s e
 
 -- | Use multiple points.
-graphPoints :: [(Double, Double)] -> GraphData e
+graphPoints :: [(Double, Double)] -> GraphData s e
 
 -- | Set the color (if this option is not used then the graph will not be
 --   rendered).
-graphColor :: Color -> GraphData e
+graphColor :: Color -> GraphData s e
 
 -- | Set the color of hovered point (if this option is not used then the
 --   color set by <a>graphColor</a> is used).
-graphHoverColor :: Color -> GraphData e
+graphHoverColor :: Color -> GraphData s e
 
 -- | Set the color of dragged point (if this option is not used then the
 --   color set by <a>graphColor</a> is used).
-graphActiveColor :: Color -> GraphData e
+graphActiveColor :: Color -> GraphData s e
 
 -- | Width of the line connecting provided points. If only single point is
 --   rendered then its radius will be twice the width.
-graphWidth :: Double -> GraphData e
+graphWidth :: Double -> GraphData s e
+
+-- | Radius of the provided points if they are rendered separately. The
+--   difference between <a>graphWidth</a> and <a>graphRadius</a> is that
+--   the former is given in pixels and renders the same when the scale
+--   changes while the latter is given in units of the Cartesian coordinate
+--   system and hence the points become bigger or smaller when the scale
+--   changes.
+graphRadius :: Double -> GraphData s e
 
 -- | Do not connect the points and render them separately. Used when all
 --   points in the collection must have the same color.
-graphSeparate :: GraphData e
+graphSeparate :: GraphData s e
 
 -- | Whether the points should be rendered separately.
-graphSeparate_ :: Bool -> GraphData e
+graphSeparate_ :: Bool -> GraphData s e
 
 -- | Fill the area surrounded by provided points with the color.
-graphFill :: GraphData e
+graphFill :: GraphData s e
 
 -- | Whether to fill the area surrounded by provided points.
-graphFill_ :: Bool -> GraphData e
+graphFill_ :: Bool -> GraphData s e
 
 -- | Transparency level of the filled area.
-graphFillAlpha :: Double -> GraphData e
+graphFillAlpha :: Double -> GraphData s e
 
 -- | Raises an event when a point is dragged by passing its index and new
 --   coordinates. This option is ignored if <a>graphSeparate</a> is not
 --   enabled.
-graphOnChange :: (Int -> (Double, Double) -> e) -> GraphData e
-instance Data.Default.Class.Default (Monomer.Graph.GraphData.GraphData e)
-instance GHC.Base.Semigroup (Monomer.Graph.GraphData.GraphData e)
-instance GHC.Base.Monoid (Monomer.Graph.GraphData.GraphData e)
+graphOnChange :: WidgetEvent e => (Int -> (Double, Double) -> e) -> GraphData s e
+
+-- | Generates a <a>WidgetRequest</a> when a point is dragged by passing
+--   its index and new coordinates. This option is ignored if
+--   <a>graphSeparate</a> is not enabled.
+graphOnChangeReq :: (Int -> (Double, Double) -> WidgetRequest s e) -> GraphData s e
+
+-- | Raises an event when a point is clicked by passing its index. This
+--   option is ignored if <a>graphSeparate</a> is not enabled.
+graphOnClick :: WidgetEvent e => (Int -> e) -> GraphData s e
+
+-- | Generates a <a>WidgetRequest</a> when a point is clicked by passing
+--   its index. This option is ignored if <a>graphSeparate</a> is not
+--   enabled.
+graphOnClickReq :: (Int -> WidgetRequest s e) -> GraphData s e
+instance Data.Default.Class.Default (Monomer.Graph.GraphData.GraphData s e)
+instance GHC.Base.Semigroup (Monomer.Graph.GraphData.GraphData s e)
+instance GHC.Base.Monoid (Monomer.Graph.GraphData.GraphData s e)
 
 module Monomer.Graph.GraphMsg
 data GraphMsg
@@ -440,7 +553,7 @@ instance GHC.Classes.Eq Monomer.Graph.GraphMsg.GraphMsg
 
 module Monomer.Graph.GraphState
 data GraphState
-GraphState :: Point -> Point -> Point -> Point -> Maybe Point -> Maybe (Int, Int) -> Maybe (Int, Int) -> GraphState
+GraphState :: Point -> Point -> Point -> Point -> Maybe Point -> Maybe (Int, Int) -> Maybe (Int, Int) -> Rect -> GraphState
 [_gsTranslation] :: GraphState -> Point
 [_gsScale] :: GraphState -> Point
 [_gsUnit] :: GraphState -> Point
@@ -448,6 +561,7 @@ GraphState :: Point -> Point -> Point -> Point -> Maybe Point -> Maybe (Int, Int
 [_gsMousePosition] :: GraphState -> Maybe Point
 [_gsHoverPoint] :: GraphState -> Maybe (Int, Int)
 [_gsActivePoint] :: GraphState -> Maybe (Int, Int)
+[_gsViewport] :: GraphState -> Rect
 instance GHC.Show.Show Monomer.Graph.GraphState.GraphState
 instance GHC.Classes.Eq Monomer.Graph.GraphState.GraphState
 instance Data.Default.Class.Default Monomer.Graph.GraphState.GraphState
@@ -476,21 +590,21 @@ module Monomer.Graph
 graph :: WidgetEvent e => [[(Double, Double)]] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with points. Accepts config.
-graph_ :: WidgetEvent e => [[(Double, Double)]] -> [GraphCfg] -> WidgetNode s e
+graph_ :: WidgetEvent e => [[(Double, Double)]] -> [GraphCfg s e] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with colors and points.
 graphWithColors :: WidgetEvent e => [(Color, [(Double, Double)])] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with colors and points. Accepts
 --   config.
-graphWithColors_ :: WidgetEvent e => [(Color, [(Double, Double)])] -> [GraphCfg] -> WidgetNode s e
+graphWithColors_ :: WidgetEvent e => [(Color, [(Double, Double)])] -> [GraphCfg s e] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with <a>GraphData</a>.
-graphWithData :: WidgetEvent e => [[GraphData e]] -> WidgetNode s e
+graphWithData :: WidgetEvent e => [[GraphData s e]] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with <a>GraphData</a>. Accepts
 --   config.
-graphWithData_ :: WidgetEvent e => [[GraphData e]] -> [GraphCfg] -> WidgetNode s e
+graphWithData_ :: WidgetEvent e => [[GraphData s e]] -> [GraphCfg s e] -> WidgetNode s e
 
 module Monomer.SaveManager.SaveManagerCfg
 type Saves a = Seq (a, Text)

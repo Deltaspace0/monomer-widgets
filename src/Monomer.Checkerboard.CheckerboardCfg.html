@@ -23,7 +23,7 @@ Configuration options for checkerboard:
 </span><span id="line-21"></span><span>    </span><span class="hs-special">}</span><span>
 </span><span id="line-22"></span><span>
 </span><span id="line-23"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Default</span></span><span> </span><span class="annot"><a href="Monomer.Checkerboard.CheckerboardCfg.html#CheckerboardCfg"><span class="hs-identifier hs-type">CheckerboardCfg</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-24"></span><span>    </span><span id="local-6989586621679132093"><span class="annot"><span class="annottext">def :: CheckerboardCfg
+</span><span id="line-24"></span><span>    </span><span id="local-6989586621679159625"><span class="annot"><span class="annottext">def :: CheckerboardCfg
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">def</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Monomer.Checkerboard.CheckerboardCfg.html#CheckerboardCfg"><span class="hs-identifier hs-type">CheckerboardCfg</span></a></span><span>
 </span><span id="line-25"></span><span>        </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_ccBgLightColor :: Maybe Color
 </span><a href="Monomer.Checkerboard.CheckerboardCfg.html#_ccBgLightColor"><span class="hs-identifier hs-var">_ccBgLightColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Maybe a
@@ -33,31 +33,31 @@ Configuration options for checkerboard:
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
 </span><span id="line-27"></span><span>        </span><span class="hs-special">}</span><span>
 </span><span id="line-28"></span><span>
-</span><span id="line-29"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679132087"><span id="local-6989586621679132089"><span class="annot"><span class="hs-identifier hs-type">Semigroup</span></span><span> </span><span class="annot"><a href="Monomer.Checkerboard.CheckerboardCfg.html#CheckerboardCfg"><span class="hs-identifier hs-type">CheckerboardCfg</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-30"></span><span>    </span><span id="local-6989586621679132081"><span class="annot"><span class="annottext">&lt;&gt; :: CheckerboardCfg -&gt; CheckerboardCfg -&gt; CheckerboardCfg
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">(&lt;&gt;)</span></span></span><span> </span><span id="local-6989586621679132080"><span class="annot"><span class="annottext">CheckerboardCfg
-</span><a href="#local-6989586621679132080"><span class="hs-identifier hs-var">a1</span></a></span></span><span> </span><span id="local-6989586621679132079"><span class="annot"><span class="annottext">CheckerboardCfg
-</span><a href="#local-6989586621679132079"><span class="hs-identifier hs-var">a2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><span id="line-29"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679159619"><span id="local-6989586621679159621"><span class="annot"><span class="hs-identifier hs-type">Semigroup</span></span><span> </span><span class="annot"><a href="Monomer.Checkerboard.CheckerboardCfg.html#CheckerboardCfg"><span class="hs-identifier hs-type">CheckerboardCfg</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-30"></span><span>    </span><span id="local-6989586621679159613"><span class="annot"><span class="annottext">&lt;&gt; :: CheckerboardCfg -&gt; CheckerboardCfg -&gt; CheckerboardCfg
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">(&lt;&gt;)</span></span></span><span> </span><span id="local-6989586621679159612"><span class="annot"><span class="annottext">CheckerboardCfg
+</span><a href="#local-6989586621679159612"><span class="hs-identifier hs-var">a1</span></a></span></span><span> </span><span id="local-6989586621679159611"><span class="annot"><span class="annottext">CheckerboardCfg
+</span><a href="#local-6989586621679159611"><span class="hs-identifier hs-var">a2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
 </span><span id="line-31"></span><span>        </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_ccBgLightColor :: Maybe Color
 </span><a href="Monomer.Checkerboard.CheckerboardCfg.html#_ccBgLightColor"><span class="hs-identifier hs-var">_ccBgLightColor</span></a></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-32"></span><span>            </span><span class="annot"><span class="annottext">CheckerboardCfg -&gt; Maybe Color
 </span><a href="Monomer.Checkerboard.CheckerboardCfg.html#_ccBgLightColor"><span class="hs-identifier hs-var">_ccBgLightColor</span></a></span><span> </span><span class="annot"><span class="annottext">CheckerboardCfg
-</span><a href="#local-6989586621679132079"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><a href="#local-6989586621679159611"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
 </span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">CheckerboardCfg -&gt; Maybe Color
 </span><a href="Monomer.Checkerboard.CheckerboardCfg.html#_ccBgLightColor"><span class="hs-identifier hs-var">_ccBgLightColor</span></a></span><span> </span><span class="annot"><span class="annottext">CheckerboardCfg
-</span><a href="#local-6989586621679132080"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><a href="#local-6989586621679159612"><span class="hs-identifier hs-var">a1</span></a></span><span>
 </span><span id="line-33"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">_ccBgDarkColor :: Maybe Color
 </span><a href="Monomer.Checkerboard.CheckerboardCfg.html#_ccBgDarkColor"><span class="hs-identifier hs-var">_ccBgDarkColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CheckerboardCfg -&gt; Maybe Color
 </span><a href="Monomer.Checkerboard.CheckerboardCfg.html#_ccBgDarkColor"><span class="hs-identifier hs-var">_ccBgDarkColor</span></a></span><span> </span><span class="annot"><span class="annottext">CheckerboardCfg
-</span><a href="#local-6989586621679132079"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
+</span><a href="#local-6989586621679159611"><span class="hs-identifier hs-var">a2</span></a></span><span> </span><span class="annot"><span class="annottext">forall (f :: * -&gt; *) a. Alternative f =&gt; f a -&gt; f a -&gt; f a
 </span><span class="hs-operator hs-var">&lt;|&gt;</span></span><span> </span><span class="annot"><span class="annottext">CheckerboardCfg -&gt; Maybe Color
 </span><a href="Monomer.Checkerboard.CheckerboardCfg.html#_ccBgDarkColor"><span class="hs-identifier hs-var">_ccBgDarkColor</span></a></span><span> </span><span class="annot"><span class="annottext">CheckerboardCfg
-</span><a href="#local-6989586621679132080"><span class="hs-identifier hs-var">a1</span></a></span><span>
+</span><a href="#local-6989586621679159612"><span class="hs-identifier hs-var">a1</span></a></span><span>
 </span><span id="line-34"></span><span>        </span><span class="hs-special">}</span><span>
 </span><span id="line-35"></span><span>
-</span><span id="line-36"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679132072"><span id="local-6989586621679132074"><span class="annot"><span class="hs-identifier hs-type">Monoid</span></span><span> </span><span class="annot"><a href="Monomer.Checkerboard.CheckerboardCfg.html#CheckerboardCfg"><span class="hs-identifier hs-type">CheckerboardCfg</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-37"></span><span>    </span><span id="local-6989586621679132069"><span class="annot"><span class="annottext">mempty :: CheckerboardCfg
+</span><span id="line-36"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679159604"><span id="local-6989586621679159606"><span class="annot"><span class="hs-identifier hs-type">Monoid</span></span><span> </span><span class="annot"><a href="Monomer.Checkerboard.CheckerboardCfg.html#CheckerboardCfg"><span class="hs-identifier hs-type">CheckerboardCfg</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-37"></span><span>    </span><span id="local-6989586621679159601"><span class="annot"><span class="annottext">mempty :: CheckerboardCfg
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">mempty</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
 </span><span id="line-38"></span><span>
@@ -66,13 +66,13 @@ Sets color of light squares in the checkerboard pattern.
 -}</span><span>
 </span><span id="line-42"></span><span class="annot"><a href="Monomer.Checkerboard.CheckerboardCfg.html#lightColor"><span class="hs-identifier hs-type">lightColor</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Color</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Checkerboard.CheckerboardCfg.html#CheckerboardCfg"><span class="hs-identifier hs-type">CheckerboardCfg</span></a></span><span>
 </span><span id="line-43"></span><span id="lightColor"><span class="annot"><span class="annottext">lightColor :: Color -&gt; CheckerboardCfg
-</span><a href="Monomer.Checkerboard.CheckerboardCfg.html#lightColor"><span class="hs-identifier hs-var hs-var">lightColor</span></a></span></span><span> </span><span id="local-6989586621679132068"><span class="annot"><span class="annottext">Color
-</span><a href="#local-6989586621679132068"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><a href="Monomer.Checkerboard.CheckerboardCfg.html#lightColor"><span class="hs-identifier hs-var hs-var">lightColor</span></a></span></span><span> </span><span id="local-6989586621679159600"><span class="annot"><span class="annottext">Color
+</span><a href="#local-6989586621679159600"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
 </span><span id="line-44"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_ccBgLightColor :: Maybe Color
 </span><a href="Monomer.Checkerboard.CheckerboardCfg.html#_ccBgLightColor"><span class="hs-identifier hs-var">_ccBgLightColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Color
-</span><a href="#local-6989586621679132068"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><a href="#local-6989586621679159600"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-45"></span><span>    </span><span class="hs-special">}</span><span>
 </span><span id="line-46"></span><span>
 </span><span id="line-47"></span><span class="hs-comment">{-|
@@ -80,12 +80,12 @@ Sets color of dark squares in the checkerboard pattern.
 -}</span><span>
 </span><span id="line-50"></span><span class="annot"><a href="Monomer.Checkerboard.CheckerboardCfg.html#darkColor"><span class="hs-identifier hs-type">darkColor</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Color</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Monomer.Checkerboard.CheckerboardCfg.html#CheckerboardCfg"><span class="hs-identifier hs-type">CheckerboardCfg</span></a></span><span>
 </span><span id="line-51"></span><span id="darkColor"><span class="annot"><span class="annottext">darkColor :: Color -&gt; CheckerboardCfg
-</span><a href="Monomer.Checkerboard.CheckerboardCfg.html#darkColor"><span class="hs-identifier hs-var hs-var">darkColor</span></a></span></span><span> </span><span id="local-6989586621679132067"><span class="annot"><span class="annottext">Color
-</span><a href="#local-6989586621679132067"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><a href="Monomer.Checkerboard.CheckerboardCfg.html#darkColor"><span class="hs-identifier hs-var hs-var">darkColor</span></a></span></span><span> </span><span id="local-6989586621679159599"><span class="annot"><span class="annottext">Color
+</span><a href="#local-6989586621679159599"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span>
 </span><span id="line-52"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">_ccBgDarkColor :: Maybe Color
 </span><a href="Monomer.Checkerboard.CheckerboardCfg.html#_ccBgDarkColor"><span class="hs-identifier hs-var">_ccBgDarkColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Color
-</span><a href="#local-6989586621679132067"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><a href="#local-6989586621679159599"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-53"></span><span>    </span><span class="hs-special">}</span><span>
 </span><span id="line-54"></span></pre></body></html>
