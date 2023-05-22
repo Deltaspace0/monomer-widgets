@@ -164,7 +164,7 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
         result = case event of
             ButtonAction p _ BtnPressed _ -> resultPressed p
             ButtonAction p BtnRight BtnReleased _ -> resultRight p
-            ButtonAction _ _ BtnReleased _ -> resultReleased
+            ButtonAction _ _ BtnReleased _ -> handleReleased node
             Move p -> handleMove wenv node p
             WheelScroll p (Point _ wy) _ -> resultScroll p wy
             _ -> Nothing
@@ -174,10 +174,6 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
         resultPressed p = resultRender $ newNode $ state
             { _gsMousePosition = Just p
             , _gsActivePoint = _gsHoverPoint state
-            }
-        resultReleased = Just $ resultNode $ newNode $ state
-            { _gsMousePosition = Nothing
-            , _gsActivePoint = Nothing
             }
         resultScroll p = resultRender . newScroll p
         newScroll (Point mx my) wy = newNode $ state
@@ -213,6 +209,17 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
         Point tx ty = _gsTranslation state
         Point cx cy = _gsScale state
         newNode s = makeNodeWithState s node
+
+    handleReleased node = Just $ resultReqs newNode reqs where
+        newNode = makeNodeWithState newState node
+        newState = state
+            { _gsMousePosition = Nothing
+            , _gsActivePoint = Nothing
+            }
+        reqs = if null (_gsActivePoint state)
+            then []
+            else ($ j) <$> (_gdClickReq $ graphDatas!!i)
+        (i, j) = fromJust $ _gsActivePoint state
 
     handleMove wenv node moveP@(Point x y) = result where
         result = Just $ resultReqs newNode reqs

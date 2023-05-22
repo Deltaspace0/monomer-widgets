@@ -35,6 +35,14 @@ buildUI _ model = tree where
             , graphSeparate
             , graphOnChange $ AppYellowChange
             ]
+        ,   [ graphPoint (-3, -2)
+            , graphSeparate
+            , graphRadius 0.34
+            , graphColor violet
+            , graphHoverColor pink
+            , graphActiveColor purple
+            , graphOnClick $ const AppRemovePoints
+            ]
         ,   [ graphPoints [(-1, 4), (0, 5), (1, 4), (0, 3)]
             , graphColor blue
             , graphSeparate

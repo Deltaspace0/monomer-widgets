@@ -14,6 +14,8 @@ module Monomer.Graph.GraphData
     , graphFillAlpha
     , graphOnChange
     , graphOnChangeReq
+    , graphOnClick
+    , graphOnClickReq
     ) where
 
 import Control.Applicative ((<|>))
@@ -37,6 +39,9 @@ Options for graph data:
 - 'graphOnChange': event to raise when a point is dragged.
 - 'graphOnChangeReq': 'WidgetRequest' to generate when a point is
 dragged.
+- 'graphOnClick': event to raise when a point is clicked.
+- 'graphOnClickReq': 'WidgetRequest' to generate when a point is
+clicked.
 -}
 data GraphData s e = GraphData
     { _gdPoints :: [(Double, Double)]
@@ -49,6 +54,7 @@ data GraphData s e = GraphData
     , _gdFill :: Maybe Bool
     , _gdFillAlpha :: Maybe Double
     , _gdChangeReq :: [Int -> (Double, Double) -> WidgetRequest s e]
+    , _gdClickReq :: [Int -> WidgetRequest s e]
     }
 
 instance Default (GraphData s e) where
@@ -63,6 +69,7 @@ instance Default (GraphData s e) where
         , _gdFill = Nothing
         , _gdFillAlpha = Nothing
         , _gdChangeReq = []
+        , _gdClickReq = []
         }
 
 instance Semigroup (GraphData s e) where
@@ -77,6 +84,7 @@ instance Semigroup (GraphData s e) where
         , _gdFill = _gdFill a2 <|> _gdFill a1
         , _gdFillAlpha = _gdFillAlpha a2 <|> _gdFillAlpha a1
         , _gdChangeReq = _gdChangeReq a1 <> _gdChangeReq a2
+        , _gdClickReq = _gdClickReq a1 <> _gdClickReq a2
         }
 
 instance Monoid (GraphData s e) where
@@ -204,4 +212,22 @@ graphOnChangeReq
     -> GraphData s e
 graphOnChangeReq req = def
     { _gdChangeReq = [req]
+    }
+
+{-|
+Raises an event when a point is clicked by passing its index. This
+option is ignored if 'graphSeparate' is not enabled.
+-}
+graphOnClick :: WidgetEvent e => (Int -> e) -> GraphData s e
+graphOnClick f = def
+    { _gdClickReq = [RaiseEvent . f]
+    }
+
+{-|
+Generates a 'WidgetRequest' when a point is clicked by passing its
+index. This option is ignored if 'graphSeparate' is not enabled.
+-}
+graphOnClickReq :: (Int -> WidgetRequest s e) -> GraphData s e
+graphOnClickReq req = def
+    { _gdClickReq = [req]
     }
