@@ -233,17 +233,31 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             | otherwise = state
                 { _gsHoverPoint = hp
                 }
-        reqs = if not dragPoint
-            then [RenderOnce]
-            else ((\f -> f dj (dx, dy)) <$> report) <> [RenderOnce]
-        dragPoint = not $ (null dp || null report)
+        reqs = concat
+            [ if dragPoint
+                then (\f -> f dj (dx, dy)) <$> reportC
+                else []
+            , if null hps || hp == hps
+                then []
+                else ($ lj) <$> reportL
+            , if null hp || hp == hps
+                then []
+                else ($ hj) <$> reportE
+            , [RenderOnce]
+            ]
+        dragPoint = not $ (null dp || null reportC)
         Point tx ty = _gsTranslation state
         Point cx cy = _gsScale state
         Point mx0 my0 = fromJust mp
         mp = _gsMousePosition state
         (di, dj) = fromJust dp
         dp = _gsActivePoint state
-        report = _gdChangeReq $ graphDatas!!di
+        reportC = _gdChangeReq $ graphDatas!!di
+        reportE = _gdEnterReq $ graphDatas!!hi
+        reportL = _gdLeaveReq $ graphDatas!!li
+        (li, lj) = fromJust hps
+        (hi, hj) = fromJust hp
+        hps = _gsHoverPoint state
         hp = hoverPointData $ zip [0..] graphDatas
         hoverPointData [] = Nothing
         hoverPointData ((i, graphData):xs)

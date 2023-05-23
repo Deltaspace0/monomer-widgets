@@ -14,6 +14,10 @@ module Monomer.Graph.GraphData
     , graphFillAlpha
     , graphOnChange
     , graphOnChangeReq
+    , graphOnEnter
+    , graphOnEnterReq
+    , graphOnLeave
+    , graphOnLeaveReq
     , graphOnClick
     , graphOnClickReq
     ) where
@@ -39,6 +43,12 @@ Options for graph data:
 - 'graphOnChange': event to raise when a point is dragged.
 - 'graphOnChangeReq': 'WidgetRequest' to generate when a point is
 dragged.
+- 'graphOnEnter': event to raise when mouse enters point area.
+- 'graphOnEnterReq': 'WidgetRequest' to generate when mouse enters
+point area.
+- 'graphOnLeave': event to raise when mouse leaves point area.
+- 'graphOnLeaveReq': 'WidgetRequest' to generate when mouse leaves
+point area.
 - 'graphOnClick': event to raise when a point is clicked.
 - 'graphOnClickReq': 'WidgetRequest' to generate when a point is
 clicked.
@@ -54,6 +64,8 @@ data GraphData s e = GraphData
     , _gdFill :: Maybe Bool
     , _gdFillAlpha :: Maybe Double
     , _gdChangeReq :: [Int -> (Double, Double) -> WidgetRequest s e]
+    , _gdEnterReq :: [Int -> WidgetRequest s e]
+    , _gdLeaveReq :: [Int -> WidgetRequest s e]
     , _gdClickReq :: [Int -> WidgetRequest s e]
     }
 
@@ -69,6 +81,8 @@ instance Default (GraphData s e) where
         , _gdFill = Nothing
         , _gdFillAlpha = Nothing
         , _gdChangeReq = []
+        , _gdEnterReq = []
+        , _gdLeaveReq = []
         , _gdClickReq = []
         }
 
@@ -84,6 +98,8 @@ instance Semigroup (GraphData s e) where
         , _gdFill = _gdFill a2 <|> _gdFill a1
         , _gdFillAlpha = _gdFillAlpha a2 <|> _gdFillAlpha a1
         , _gdChangeReq = _gdChangeReq a1 <> _gdChangeReq a2
+        , _gdEnterReq = _gdEnterReq a1 <> _gdEnterReq a2
+        , _gdLeaveReq = _gdLeaveReq a1 <> _gdLeaveReq a2
         , _gdClickReq = _gdClickReq a1 <> _gdClickReq a2
         }
 
@@ -212,6 +228,42 @@ graphOnChangeReq
     -> GraphData s e
 graphOnChangeReq req = def
     { _gdChangeReq = [req]
+    }
+
+{-|
+Raises an event when mouse enters point area by passing its index.
+This option is ignored if 'graphSeparate' is not enabled.
+-}
+graphOnEnter :: WidgetEvent e => (Int -> e) -> GraphData s e
+graphOnEnter f = def
+    { _gdEnterReq = [RaiseEvent . f]
+    }
+
+{-|
+Generates a 'WidgetRequest' when mouse enters point area by passing
+its index. This option is ignored if 'graphSeparate' is not enabled.
+-}
+graphOnEnterReq :: (Int -> WidgetRequest s e) -> GraphData s e
+graphOnEnterReq req = def
+    { _gdEnterReq = [req]
+    }
+
+{-|
+Raises an event when mouse leaves point area by passing its index.
+This option is ignored if 'graphSeparate' is not enabled.
+-}
+graphOnLeave :: WidgetEvent e => (Int -> e) -> GraphData s e
+graphOnLeave f = def
+    { _gdLeaveReq = [RaiseEvent . f]
+    }
+
+{-|
+Generates a 'WidgetRequest' when mouse leaves point area by passing
+its index. This option is ignored if 'graphSeparate' is not enabled.
+-}
+graphOnLeaveReq :: (Int -> WidgetRequest s e) -> GraphData s e
+graphOnLeaveReq req = def
+    { _gdLeaveReq = [req]
     }
 
 {-|
