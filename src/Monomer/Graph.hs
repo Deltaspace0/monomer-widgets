@@ -374,14 +374,17 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             Point cx cy = _gsScale
             ps = _gdPoints
             c = _gdColor
+            bc = _gdBorderColor
             w = fromMaybe 2 _gdWidth
             rx = fromMaybe (w*2) $ (64*cx*) <$> _gdRadius
             ry = fromMaybe (w*2) $ (64*cy*) <$> _gdRadius
             alpha = fromMaybe 0.32 _gdFillAlpha
             p (x, y) = Point x y
             connect (a, b) = drawLine renderer (p a) (p b) w c
-            drawDot cs (Point x y) = drawEllipse renderer r cs where
-                r = Rect (x-rx) (y-ry) (rx*2) (ry*2)
+            drawDot cs (Point x y) = do
+                let r = Rect (x-rx) (y-ry) (rx*2) (ry*2)
+                drawEllipse renderer r cs
+                drawEllipseBorder renderer r bc $ w/2
             getSeparateColor j
                 | _gsActivePoint == Just (i, j) = _gdActiveColor
                 | _gsHoverPoint == Just (i, j) = _gdHoverColor

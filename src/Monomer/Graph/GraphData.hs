@@ -5,6 +5,7 @@ module Monomer.Graph.GraphData
     , graphColor
     , graphHoverColor
     , graphActiveColor
+    , graphBorderColor
     , graphWidth
     , graphRadius
     , graphSeparate
@@ -35,6 +36,7 @@ Options for graph data:
 - 'graphColor': set the color.
 - 'graphHoverColor': set the color of hovered point.
 - 'graphActiveColor': set the color of dragged point.
+- 'graphBorderColor': set the color of point border.
 - 'graphWidth': set the width of the line.
 - 'graphRadius': set the radius of the points.
 - 'graphSeparate': whether the points should be rendered separately.
@@ -58,6 +60,7 @@ data GraphData s e = GraphData
     , _gdColor :: Maybe Color
     , _gdHoverColor :: Maybe Color
     , _gdActiveColor :: Maybe Color
+    , _gdBorderColor :: Maybe Color
     , _gdWidth :: Maybe Double
     , _gdRadius :: Maybe Double
     , _gdSeparate :: Maybe Bool
@@ -75,6 +78,7 @@ instance Default (GraphData s e) where
         , _gdColor = Nothing
         , _gdHoverColor = Nothing
         , _gdActiveColor = Nothing
+        , _gdBorderColor = Nothing
         , _gdWidth = Nothing
         , _gdRadius = Nothing
         , _gdSeparate = Nothing
@@ -92,6 +96,7 @@ instance Semigroup (GraphData s e) where
         , _gdColor = _gdColor a2 <|> _gdColor a1
         , _gdHoverColor = _gdHoverColor a2 <|> _gdHoverColor a1
         , _gdActiveColor = _gdActiveColor a2 <|> _gdActiveColor a1
+        , _gdBorderColor = _gdBorderColor a2 <|> _gdBorderColor a1
         , _gdWidth = _gdWidth a2 <|> _gdWidth a1
         , _gdRadius = _gdRadius a2 <|> _gdRadius a1
         , _gdSeparate = _gdSeparate a2 <|> _gdSeparate a1
@@ -145,6 +150,15 @@ the color set by 'graphColor' is used).
 graphActiveColor :: Color -> GraphData s e
 graphActiveColor color = def
     { _gdActiveColor = Just color
+    }
+
+{-|
+Set the color of point border. The width of the border will be half
+the width set by 'graphWidth'.
+-}
+graphBorderColor :: Color -> GraphData s e
+graphBorderColor color = def
+    { _gdBorderColor = Just color
     }
 
 {-|
