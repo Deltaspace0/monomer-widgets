@@ -3,18 +3,21 @@
 </span><span id="line-3"></span><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-4"></span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Common.BasicTypes</span></span><span>
-</span><span id="line-6"></span><span>
-</span><span id="line-7"></span><span class="hs-keyword">data</span><span> </span><span id="GraphMsg"><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphMsg"><span class="hs-identifier hs-var">GraphMsg</span></a></span></span><span>
-</span><span id="line-8"></span><span>    </span><span class="hs-glyph">=</span><span> </span><span id="GraphSetTranslation"><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphSetTranslation"><span class="hs-identifier hs-var">GraphSetTranslation</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Point</span></span><span>
-</span><span id="line-9"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="GraphSetScale"><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphSetScale"><span class="hs-identifier hs-var">GraphSetScale</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Point</span></span><span>
-</span><span id="line-10"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="GraphReset"><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphReset"><span class="hs-identifier hs-var">GraphReset</span></a></span></span><span>
-</span><span id="line-11"></span><span>    </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679163208"><span id="local-6989586621679163213"><span class="annot"><span class="annottext">GraphMsg -&gt; GraphMsg -&gt; Bool
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Monomer.Core.WidgetTypes</span></span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">data</span><span> </span><span id="GraphMsg"><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphMsg"><span class="hs-identifier hs-var">GraphMsg</span></a></span></span><span>
+</span><span id="line-9"></span><span>    </span><span class="hs-glyph">=</span><span> </span><span id="GraphSetTranslation"><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphSetTranslation"><span class="hs-identifier hs-var">GraphSetTranslation</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Point</span></span><span>
+</span><span id="line-10"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="GraphSetScale"><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphSetScale"><span class="hs-identifier hs-var">GraphSetScale</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Point</span></span><span>
+</span><span id="line-11"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="GraphReset"><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphReset"><span class="hs-identifier hs-var">GraphReset</span></a></span></span><span>
+</span><span id="line-12"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="GraphStopAnimations"><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphStopAnimations"><span class="hs-identifier hs-var">GraphStopAnimations</span></a></span></span><span>
+</span><span id="line-13"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="GraphFinished"><span class="annot"><a href="Monomer.Graph.GraphMsg.html#GraphFinished"><span class="hs-identifier hs-var">GraphFinished</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Millisecond</span></span><span>
+</span><span id="line-14"></span><span>    </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679165983"><span id="local-6989586621679165992"><span class="annot"><span class="annottext">GraphMsg -&gt; GraphMsg -&gt; Bool
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 /= :: GraphMsg -&gt; GraphMsg -&gt; Bool
 $c/= :: GraphMsg -&gt; GraphMsg -&gt; Bool
 == :: GraphMsg -&gt; GraphMsg -&gt; Bool
 $c== :: GraphMsg -&gt; GraphMsg -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679163195"><span id="local-6989586621679163197"><span id="local-6989586621679163205"><span class="annot"><span class="annottext">Int -&gt; GraphMsg -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679165965"><span id="local-6989586621679165967"><span id="local-6989586621679165980"><span class="annot"><span class="annottext">Int -&gt; GraphMsg -&gt; ShowS
 [GraphMsg] -&gt; ShowS
 GraphMsg -&gt; String
 forall a.
@@ -26,4 +29,4 @@ $cshow :: GraphMsg -&gt; String
 showsPrec :: Int -&gt; GraphMsg -&gt; ShowS
 $cshowsPrec :: Int -&gt; GraphMsg -&gt; ShowS
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">)</span><span>
-</span><span id="line-12"></span></pre></body></html>
+</span><span id="line-15"></span></pre></body></html>

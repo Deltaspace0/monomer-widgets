@@ -34,51 +34,51 @@ checkerboard 3 3 [filler, filler, label &quot;:D&quot;]
 Creates a checkerboard container for multiple items using number
 of columns and rows.
 -}</span><span>
-</span><span id="line-37"></span><span id="local-6989586621679159797"><span id="local-6989586621679159799"><span id="local-6989586621679159801"><span class="annot"><a href="Monomer.Checkerboard.html#checkerboard"><span class="hs-identifier hs-type">checkerboard</span></a></span><span>
-</span><span id="line-38"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">WidgetModel</span></span><span> </span><span class="annot"><a href="#local-6989586621679159801"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetEvent</span></span><span> </span><span class="annot"><a href="#local-6989586621679159799"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Traversable</span></span><span> </span><span class="annot"><a href="#local-6989586621679159797"><span class="hs-identifier hs-type">t</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-37"></span><span id="local-6989586621679162484"><span id="local-6989586621679162486"><span id="local-6989586621679162488"><span class="annot"><a href="Monomer.Checkerboard.html#checkerboard"><span class="hs-identifier hs-type">checkerboard</span></a></span><span>
+</span><span id="line-38"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">WidgetModel</span></span><span> </span><span class="annot"><a href="#local-6989586621679162488"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetEvent</span></span><span> </span><span class="annot"><a href="#local-6989586621679162486"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Traversable</span></span><span> </span><span class="annot"><a href="#local-6989586621679162484"><span class="hs-identifier hs-type">t</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-39"></span><span>    </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>                 </span><span class="hs-comment">-- ^ Number of columns.</span><span>
 </span><span id="line-40"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>                 </span><span class="hs-comment">-- ^ Number of rows.</span><span>
-</span><span id="line-41"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679159797"><span class="hs-identifier hs-type">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">WidgetNode</span></span><span> </span><span class="annot"><a href="#local-6989586621679159801"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679159799"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span>  </span><span class="hs-comment">-- ^ The list of items.</span><span>
-</span><span id="line-42"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetNode</span></span><span> </span><span class="annot"><a href="#local-6989586621679159801"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679159799"><span class="hs-identifier hs-type">e</span></a></span></span></span></span><span>      </span><span class="hs-comment">-- ^ The created checkerboard.</span><span>
+</span><span id="line-41"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679162484"><span class="hs-identifier hs-type">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">WidgetNode</span></span><span> </span><span class="annot"><a href="#local-6989586621679162488"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162486"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span>  </span><span class="hs-comment">-- ^ The list of items.</span><span>
+</span><span id="line-42"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetNode</span></span><span> </span><span class="annot"><a href="#local-6989586621679162488"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162486"><span class="hs-identifier hs-type">e</span></a></span></span></span></span><span>      </span><span class="hs-comment">-- ^ The created checkerboard.</span><span>
 </span><span id="line-43"></span><span id="checkerboard"><span class="annot"><span class="annottext">checkerboard :: forall s e (t :: * -&gt; *).
 (WidgetModel s, WidgetEvent e, Traversable t) =&gt;
 Int -&gt; Int -&gt; t (WidgetNode s e) -&gt; WidgetNode s e
-</span><a href="Monomer.Checkerboard.html#checkerboard"><span class="hs-identifier hs-var hs-var">checkerboard</span></a></span></span><span> </span><span id="local-6989586621679159732"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679159732"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679159731"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679159731"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679159730"><span class="annot"><span class="annottext">t (WidgetNode s e)
-</span><a href="#local-6989586621679159730"><span class="hs-identifier hs-var">children</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e (t :: * -&gt; *).
+</span><a href="Monomer.Checkerboard.html#checkerboard"><span class="hs-identifier hs-var hs-var">checkerboard</span></a></span></span><span> </span><span id="local-6989586621679162419"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679162419"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679162418"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679162418"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679162417"><span class="annot"><span class="annottext">t (WidgetNode s e)
+</span><a href="#local-6989586621679162417"><span class="hs-identifier hs-var">children</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall s e (t :: * -&gt; *).
 (WidgetModel s, WidgetEvent e, Traversable t) =&gt;
 Int
 -&gt; Int -&gt; [CheckerboardCfg] -&gt; t (WidgetNode s e) -&gt; WidgetNode s e
 </span><a href="Monomer.Checkerboard.html#checkerboard_"><span class="hs-identifier hs-var">checkerboard_</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679159732"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679159731"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
+</span><a href="#local-6989586621679162419"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679162418"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Default a =&gt; a
 </span><span class="hs-identifier hs-var">def</span></span><span> </span><span class="annot"><span class="annottext">t (WidgetNode s e)
-</span><a href="#local-6989586621679159730"><span class="hs-identifier hs-var">children</span></a></span><span>
+</span><a href="#local-6989586621679162417"><span class="hs-identifier hs-var">children</span></a></span><span>
 </span><span id="line-44"></span><span>
 </span><span id="line-45"></span><span class="hs-comment">{-|
 Creates a checkerboard container for multiple items using number
 of columns and rows. Accepts config.
 -}</span><span>
-</span><span id="line-49"></span><span id="local-6989586621679159787"><span id="local-6989586621679159788"><span id="local-6989586621679159789"><span class="annot"><a href="Monomer.Checkerboard.html#checkerboard_"><span class="hs-identifier hs-type">checkerboard_</span></a></span><span>
-</span><span id="line-50"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">WidgetModel</span></span><span> </span><span class="annot"><a href="#local-6989586621679159789"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetEvent</span></span><span> </span><span class="annot"><a href="#local-6989586621679159788"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Traversable</span></span><span> </span><span class="annot"><a href="#local-6989586621679159787"><span class="hs-identifier hs-type">t</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-49"></span><span id="local-6989586621679162474"><span id="local-6989586621679162475"><span id="local-6989586621679162476"><span class="annot"><a href="Monomer.Checkerboard.html#checkerboard_"><span class="hs-identifier hs-type">checkerboard_</span></a></span><span>
+</span><span id="line-50"></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">WidgetModel</span></span><span> </span><span class="annot"><a href="#local-6989586621679162476"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetEvent</span></span><span> </span><span class="annot"><a href="#local-6989586621679162475"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Traversable</span></span><span> </span><span class="annot"><a href="#local-6989586621679162474"><span class="hs-identifier hs-type">t</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-51"></span><span>    </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>                 </span><span class="hs-comment">-- ^ Number of columns.</span><span>
 </span><span id="line-52"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>                 </span><span class="hs-comment">-- ^ Number of rows.</span><span>
 </span><span id="line-53"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Monomer.Checkerboard.CheckerboardCfg.html#CheckerboardCfg"><span class="hs-identifier hs-type">CheckerboardCfg</span></a></span><span class="hs-special">]</span><span>   </span><span class="hs-comment">-- ^ The config options.</span><span>
-</span><span id="line-54"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679159787"><span class="hs-identifier hs-type">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">WidgetNode</span></span><span> </span><span class="annot"><a href="#local-6989586621679159789"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679159788"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span>  </span><span class="hs-comment">-- ^ The list of items.</span><span>
-</span><span id="line-55"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetNode</span></span><span> </span><span class="annot"><a href="#local-6989586621679159789"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679159788"><span class="hs-identifier hs-type">e</span></a></span></span></span></span><span>      </span><span class="hs-comment">-- ^ The created checkerboard.</span><span>
+</span><span id="line-54"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679162474"><span class="hs-identifier hs-type">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">WidgetNode</span></span><span> </span><span class="annot"><a href="#local-6989586621679162476"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162475"><span class="hs-identifier hs-type">e</span></a></span><span class="hs-special">)</span><span>  </span><span class="hs-comment">-- ^ The list of items.</span><span>
+</span><span id="line-55"></span><span>    </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">WidgetNode</span></span><span> </span><span class="annot"><a href="#local-6989586621679162476"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679162475"><span class="hs-identifier hs-type">e</span></a></span></span></span></span><span>      </span><span class="hs-comment">-- ^ The created checkerboard.</span><span>
 </span><span id="line-56"></span><span id="checkerboard_"><span class="annot"><span class="annottext">checkerboard_ :: forall s e (t :: * -&gt; *).
 (WidgetModel s, WidgetEvent e, Traversable t) =&gt;
 Int
 -&gt; Int -&gt; [CheckerboardCfg] -&gt; t (WidgetNode s e) -&gt; WidgetNode s e
-</span><a href="Monomer.Checkerboard.html#checkerboard_"><span class="hs-identifier hs-var hs-var">checkerboard_</span></a></span></span><span> </span><span id="local-6989586621679159723"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679159723"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679159722"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679159722"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679159721"><span class="annot"><span class="annottext">[CheckerboardCfg]
-</span><a href="#local-6989586621679159721"><span class="hs-identifier hs-var">configs</span></a></span></span><span> </span><span id="local-6989586621679159720"><span class="annot"><span class="annottext">t (WidgetNode s e)
-</span><a href="#local-6989586621679159720"><span class="hs-identifier hs-var">children</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">WidgetNode s e
-</span><a href="#local-6989586621679159719"><span class="hs-identifier hs-var">tree</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-57"></span><span>    </span><span id="local-6989586621679159719"><span class="annot"><span class="annottext">tree :: WidgetNode s e
-</span><a href="#local-6989586621679159719"><span class="hs-identifier hs-var hs-var">tree</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) s e.
+</span><a href="Monomer.Checkerboard.html#checkerboard_"><span class="hs-identifier hs-var hs-var">checkerboard_</span></a></span></span><span> </span><span id="local-6989586621679162410"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679162410"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679162409"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679162409"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679162408"><span class="annot"><span class="annottext">[CheckerboardCfg]
+</span><a href="#local-6989586621679162408"><span class="hs-identifier hs-var">configs</span></a></span></span><span> </span><span id="local-6989586621679162407"><span class="annot"><span class="annottext">t (WidgetNode s e)
+</span><a href="#local-6989586621679162407"><span class="hs-identifier hs-var">children</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">WidgetNode s e
+</span><a href="#local-6989586621679162406"><span class="hs-identifier hs-var">tree</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-57"></span><span>    </span><span id="local-6989586621679162406"><span class="annot"><span class="annottext">tree :: WidgetNode s e
+</span><a href="#local-6989586621679162406"><span class="hs-identifier hs-var hs-var">tree</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) s e.
 Traversable t =&gt;
 t (WidgetNode s e) -&gt; WidgetNode s e
 </span><span class="hs-identifier hs-var">vgrid</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -86,101 +86,101 @@ t (WidgetNode s e) -&gt; WidgetNode s e
 </span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="annot"><span class="annottext">forall {s} {e} {s} {e}.
 [WidgetNode s e -&gt; WidgetNode s e]
 -&gt; [WidgetNode s e] -&gt; WidgetNode s e
-</span><a href="#local-6989586621679159712"><span class="hs-identifier hs-var">makeRow</span></a></span><span> </span><span class="annot"><span class="annottext">[[WidgetNode s e -&gt; WidgetNode s e]]
-</span><a href="#local-6989586621679159711"><span class="hs-identifier hs-var">boxGrid</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679162399"><span class="hs-identifier hs-var">makeRow</span></a></span><span> </span><span class="annot"><span class="annottext">[[WidgetNode s e -&gt; WidgetNode s e]]
+</span><a href="#local-6989586621679162398"><span class="hs-identifier hs-var">boxGrid</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[[WidgetNode s e]]
-</span><a href="#local-6989586621679159710"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><a href="#local-6989586621679162397"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; [a]
 </span><span class="hs-identifier hs-var">repeat</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-58"></span><span>    </span><span id="local-6989586621679159712"><span class="annot"><span class="annottext">makeRow :: [WidgetNode s e -&gt; WidgetNode s e]
+</span><span id="line-58"></span><span>    </span><span id="local-6989586621679162399"><span class="annot"><span class="annottext">makeRow :: [WidgetNode s e -&gt; WidgetNode s e]
 -&gt; [WidgetNode s e] -&gt; WidgetNode s e
-</span><a href="#local-6989586621679159712"><span class="hs-identifier hs-var hs-var">makeRow</span></a></span></span><span> </span><span id="local-6989586621679159706"><span class="annot"><span class="annottext">[WidgetNode s e -&gt; WidgetNode s e]
-</span><a href="#local-6989586621679159706"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679159705"><span class="annot"><span class="annottext">[WidgetNode s e]
-</span><a href="#local-6989586621679159705"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) s e.
+</span><a href="#local-6989586621679162399"><span class="hs-identifier hs-var hs-var">makeRow</span></a></span></span><span> </span><span id="local-6989586621679162393"><span class="annot"><span class="annottext">[WidgetNode s e -&gt; WidgetNode s e]
+</span><a href="#local-6989586621679162393"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679162392"><span class="annot"><span class="annottext">[WidgetNode s e]
+</span><a href="#local-6989586621679162392"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) s e.
 Traversable t =&gt;
 t (WidgetNode s e) -&gt; WidgetNode s e
 </span><span class="hs-identifier hs-var">hgrid</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">($)</span></span><span> </span><span class="annot"><span class="annottext">[WidgetNode s e -&gt; WidgetNode s e]
-</span><a href="#local-6989586621679159706"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679162393"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[WidgetNode s e]
-</span><a href="#local-6989586621679159705"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
+</span><a href="#local-6989586621679162392"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">forall a. Semigroup a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">&lt;&gt;</span></span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; [a]
 </span><span class="hs-identifier hs-var">repeat</span></span><span> </span><span class="annot"><span class="annottext">forall s e. WidgetNode s e
 </span><span class="hs-identifier hs-var">spacer</span></span><span>
-</span><span id="line-59"></span><span>    </span><span id="local-6989586621679159710"><span class="annot"><span class="annottext">cs :: [[WidgetNode s e]]
-</span><a href="#local-6989586621679159710"><span class="hs-identifier hs-var hs-var">cs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. Int -&gt; [e] -&gt; [[e]]
+</span><span id="line-59"></span><span>    </span><span id="local-6989586621679162397"><span class="annot"><span class="annottext">cs :: [[WidgetNode s e]]
+</span><a href="#local-6989586621679162397"><span class="hs-identifier hs-var hs-var">cs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall e. Int -&gt; [e] -&gt; [[e]]
 </span><span class="hs-identifier hs-var">chunksOf</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679159723"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679162410"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; [a]
 </span><span class="hs-identifier hs-var">toList</span></span><span> </span><span class="annot"><span class="annottext">t (WidgetNode s e)
-</span><a href="#local-6989586621679159720"><span class="hs-identifier hs-var">children</span></a></span><span>
-</span><span id="line-60"></span><span>    </span><span id="local-6989586621679159711"><span class="annot"><span class="annottext">boxGrid :: [[WidgetNode s e -&gt; WidgetNode s e]]
-</span><a href="#local-6989586621679159711"><span class="hs-identifier hs-var hs-var">boxGrid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Int -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679162407"><span class="hs-identifier hs-var">children</span></a></span><span>
+</span><span id="line-60"></span><span>    </span><span id="local-6989586621679162398"><span class="annot"><span class="annottext">boxGrid :: [[WidgetNode s e -&gt; WidgetNode s e]]
+</span><a href="#local-6989586621679162398"><span class="hs-identifier hs-var hs-var">boxGrid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Int -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">take</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679159722"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679162409"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">cycle</span></span><span>
 </span><span id="line-61"></span><span>        </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">forall a. Int -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">take</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679159723"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679162410"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">cycle</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall {s} {e}.
 (Typeable s, Typeable e) =&gt;
 WidgetNode s e -&gt; WidgetNode s e
-</span><a href="#local-6989586621679159690"><span class="hs-identifier hs-var">lightBox</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall {s} {e}.
+</span><a href="#local-6989586621679162377"><span class="hs-identifier hs-var">lightBox</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall {s} {e}.
 (Typeable s, Typeable e) =&gt;
 WidgetNode s e -&gt; WidgetNode s e
-</span><a href="#local-6989586621679159689"><span class="hs-identifier hs-var">darkBox</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679162376"><span class="hs-identifier hs-var">darkBox</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-62"></span><span>        </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall a. Int -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">take</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679159723"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><a href="#local-6989586621679162410"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">forall a. [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">cycle</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall {s} {e}.
 (Typeable s, Typeable e) =&gt;
 WidgetNode s e -&gt; WidgetNode s e
-</span><a href="#local-6989586621679159689"><span class="hs-identifier hs-var">darkBox</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall {s} {e}.
+</span><a href="#local-6989586621679162376"><span class="hs-identifier hs-var">darkBox</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">forall {s} {e}.
 (Typeable s, Typeable e) =&gt;
 WidgetNode s e -&gt; WidgetNode s e
-</span><a href="#local-6989586621679159690"><span class="hs-identifier hs-var">lightBox</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679162377"><span class="hs-identifier hs-var">lightBox</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-63"></span><span>        </span><span class="hs-special">]</span><span>
-</span><span id="line-64"></span><span>    </span><span id="local-6989586621679159690"><span class="annot"><span class="annottext">lightBox :: WidgetNode s e -&gt; WidgetNode s e
-</span><a href="#local-6989586621679159690"><span class="hs-identifier hs-var hs-var">lightBox</span></a></span></span><span> </span><span id="local-6989586621679159680"><span class="annot"><span class="annottext">WidgetNode s e
-</span><a href="#local-6989586621679159680"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall {s} {e}.
+</span><span id="line-64"></span><span>    </span><span id="local-6989586621679162377"><span class="annot"><span class="annottext">lightBox :: WidgetNode s e -&gt; WidgetNode s e
+</span><a href="#local-6989586621679162377"><span class="hs-identifier hs-var hs-var">lightBox</span></a></span></span><span> </span><span id="local-6989586621679162367"><span class="annot"><span class="annottext">WidgetNode s e
+</span><a href="#local-6989586621679162367"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall {s} {e}.
 (Typeable s, Typeable e) =&gt;
 WidgetNode s e -&gt; WidgetNode s e
 </span><span class="hs-identifier hs-var">box</span></span><span> </span><span class="annot"><span class="annottext">WidgetNode s e
-</span><a href="#local-6989586621679159680"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">forall t. CmbStyleBasic t =&gt; t -&gt; [StyleState] -&gt; t
+</span><a href="#local-6989586621679162367"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">forall t. CmbStyleBasic t =&gt; t -&gt; [StyleState] -&gt; t
 </span><span class="hs-operator hs-var">`styleBasic`</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall t. CmbBgColor t =&gt; Color -&gt; t
 </span><span class="hs-identifier hs-var">bgColor</span></span><span> </span><span class="annot"><span class="annottext">Color
-</span><a href="#local-6989586621679159676"><span class="hs-identifier hs-var">lc</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-65"></span><span>    </span><span id="local-6989586621679159689"><span class="annot"><span class="annottext">darkBox :: WidgetNode s e -&gt; WidgetNode s e
-</span><a href="#local-6989586621679159689"><span class="hs-identifier hs-var hs-var">darkBox</span></a></span></span><span> </span><span id="local-6989586621679159669"><span class="annot"><span class="annottext">WidgetNode s e
-</span><a href="#local-6989586621679159669"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall {s} {e}.
+</span><a href="#local-6989586621679162363"><span class="hs-identifier hs-var">lc</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-65"></span><span>    </span><span id="local-6989586621679162376"><span class="annot"><span class="annottext">darkBox :: WidgetNode s e -&gt; WidgetNode s e
+</span><a href="#local-6989586621679162376"><span class="hs-identifier hs-var hs-var">darkBox</span></a></span></span><span> </span><span id="local-6989586621679162356"><span class="annot"><span class="annottext">WidgetNode s e
+</span><a href="#local-6989586621679162356"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall {s} {e}.
 (Typeable s, Typeable e) =&gt;
 WidgetNode s e -&gt; WidgetNode s e
 </span><span class="hs-identifier hs-var">box</span></span><span> </span><span class="annot"><span class="annottext">WidgetNode s e
-</span><a href="#local-6989586621679159669"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">forall t. CmbStyleBasic t =&gt; t -&gt; [StyleState] -&gt; t
+</span><a href="#local-6989586621679162356"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">forall t. CmbStyleBasic t =&gt; t -&gt; [StyleState] -&gt; t
 </span><span class="hs-operator hs-var">`styleBasic`</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">forall t. CmbBgColor t =&gt; Color -&gt; t
 </span><span class="hs-identifier hs-var">bgColor</span></span><span> </span><span class="annot"><span class="annottext">Color
-</span><a href="#local-6989586621679159668"><span class="hs-identifier hs-var">dc</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-66"></span><span>    </span><span id="local-6989586621679159676"><span class="annot"><span class="annottext">lc :: Color
-</span><a href="#local-6989586621679159676"><span class="hs-identifier hs-var hs-var">lc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a -&gt; a
+</span><a href="#local-6989586621679162355"><span class="hs-identifier hs-var">dc</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-66"></span><span>    </span><span id="local-6989586621679162363"><span class="annot"><span class="annottext">lc :: Color
+</span><a href="#local-6989586621679162363"><span class="hs-identifier hs-var hs-var">lc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a -&gt; a
 </span><span class="hs-identifier hs-var">fromMaybe</span></span><span> </span><span class="annot"><span class="annottext">Color
 </span><span class="hs-identifier hs-var">white</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CheckerboardCfg -&gt; Maybe Color
 </span><a href="Monomer.Checkerboard.CheckerboardCfg.html#_ccBgLightColor"><span class="hs-identifier hs-var">_ccBgLightColor</span></a></span><span> </span><span class="annot"><span class="annottext">CheckerboardCfg
-</span><a href="#local-6989586621679159664"><span class="hs-identifier hs-var">config</span></a></span><span>
-</span><span id="line-67"></span><span>    </span><span id="local-6989586621679159668"><span class="annot"><span class="annottext">dc :: Color
-</span><a href="#local-6989586621679159668"><span class="hs-identifier hs-var hs-var">dc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a -&gt; a
+</span><a href="#local-6989586621679162351"><span class="hs-identifier hs-var">config</span></a></span><span>
+</span><span id="line-67"></span><span>    </span><span id="local-6989586621679162355"><span class="annot"><span class="annottext">dc :: Color
+</span><a href="#local-6989586621679162355"><span class="hs-identifier hs-var hs-var">dc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. a -&gt; Maybe a -&gt; a
 </span><span class="hs-identifier hs-var">fromMaybe</span></span><span> </span><span class="annot"><span class="annottext">Color
 </span><span class="hs-identifier hs-var">black</span></span><span> </span><span class="annot"><span class="annottext">forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CheckerboardCfg -&gt; Maybe Color
 </span><a href="Monomer.Checkerboard.CheckerboardCfg.html#_ccBgDarkColor"><span class="hs-identifier hs-var">_ccBgDarkColor</span></a></span><span> </span><span class="annot"><span class="annottext">CheckerboardCfg
-</span><a href="#local-6989586621679159664"><span class="hs-identifier hs-var">config</span></a></span><span>
-</span><span id="line-68"></span><span>    </span><span id="local-6989586621679159664"><span class="annot"><span class="annottext">config :: CheckerboardCfg
-</span><a href="#local-6989586621679159664"><span class="hs-identifier hs-var hs-var">config</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Monoid a =&gt; [a] -&gt; a
+</span><a href="#local-6989586621679162351"><span class="hs-identifier hs-var">config</span></a></span><span>
+</span><span id="line-68"></span><span>    </span><span id="local-6989586621679162351"><span class="annot"><span class="annottext">config :: CheckerboardCfg
+</span><a href="#local-6989586621679162351"><span class="hs-identifier hs-var hs-var">config</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">forall a. Monoid a =&gt; [a] -&gt; a
 </span><span class="hs-identifier hs-var">mconcat</span></span><span> </span><span class="annot"><span class="annottext">[CheckerboardCfg]
-</span><a href="#local-6989586621679159721"><span class="hs-identifier hs-var">configs</span></a></span><span>
+</span><a href="#local-6989586621679162408"><span class="hs-identifier hs-var">configs</span></a></span><span>
 </span><span id="line-69"></span></pre></body></html>

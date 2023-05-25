@@ -447,6 +447,7 @@ module Monomer.Graph.GraphData
 --   <li><a>graphColor</a>: set the color.</li>
 --   <li><a>graphHoverColor</a>: set the color of hovered point.</li>
 --   <li><a>graphActiveColor</a>: set the color of dragged point.</li>
+--   <li><a>graphBorderColor</a>: set the color of point border.</li>
 --   <li><a>graphWidth</a>: set the width of the line.</li>
 --   <li><a>graphRadius</a>: set the radius of the points.</li>
 --   <li><a>graphSeparate</a>: whether the points should be rendered
@@ -454,25 +455,43 @@ module Monomer.Graph.GraphData
 --   <li><a>graphFill</a>: whether to fill the area surrounded by
 --   points.</li>
 --   <li><a>graphFillAlpha</a>: transparency level of the filled area.</li>
+--   <li><a>graphDuration</a>: how long the animation lasts in ms.</li>
+--   <li><a>graphOnFinished</a>: event to raise when animation is
+--   complete.</li>
+--   <li><a>graphOnFinishedReq</a>: <a>WidgetRequest</a> to generate when
+--   animation is complete.</li>
 --   <li><a>graphOnChange</a>: event to raise when a point is dragged.</li>
 --   <li><a>graphOnChangeReq</a>: <a>WidgetRequest</a> to generate when a
 --   point is dragged.</li>
+--   <li><a>graphOnEnter</a>: event to raise when mouse enters point
+--   area.</li>
+--   <li><a>graphOnEnterReq</a>: <a>WidgetRequest</a> to generate when
+--   mouse enters point area.</li>
+--   <li><a>graphOnLeave</a>: event to raise when mouse leaves point
+--   area.</li>
+--   <li><a>graphOnLeaveReq</a>: <a>WidgetRequest</a> to generate when
+--   mouse leaves point area.</li>
 --   <li><a>graphOnClick</a>: event to raise when a point is clicked.</li>
 --   <li><a>graphOnClickReq</a>: <a>WidgetRequest</a> to generate when a
 --   point is clicked.</li>
 --   </ul>
 data GraphData s e
-GraphData :: [(Double, Double)] -> Maybe Color -> Maybe Color -> Maybe Color -> Maybe Double -> Maybe Double -> Maybe Bool -> Maybe Bool -> Maybe Double -> [Int -> (Double, Double) -> WidgetRequest s e] -> [Int -> WidgetRequest s e] -> GraphData s e
+GraphData :: [(Double, Double)] -> Maybe Color -> Maybe Color -> Maybe Color -> Maybe Color -> Maybe Double -> Maybe Double -> Maybe Bool -> Maybe Bool -> Maybe Double -> Maybe Millisecond -> [WidgetRequest s e] -> [Int -> (Double, Double) -> WidgetRequest s e] -> [Int -> WidgetRequest s e] -> [Int -> WidgetRequest s e] -> [Int -> WidgetRequest s e] -> GraphData s e
 [_gdPoints] :: GraphData s e -> [(Double, Double)]
 [_gdColor] :: GraphData s e -> Maybe Color
 [_gdHoverColor] :: GraphData s e -> Maybe Color
 [_gdActiveColor] :: GraphData s e -> Maybe Color
+[_gdBorderColor] :: GraphData s e -> Maybe Color
 [_gdWidth] :: GraphData s e -> Maybe Double
 [_gdRadius] :: GraphData s e -> Maybe Double
 [_gdSeparate] :: GraphData s e -> Maybe Bool
 [_gdFill] :: GraphData s e -> Maybe Bool
 [_gdFillAlpha] :: GraphData s e -> Maybe Double
+[_gdDuration] :: GraphData s e -> Maybe Millisecond
+[_gdFinishedReq] :: GraphData s e -> [WidgetRequest s e]
 [_gdChangeReq] :: GraphData s e -> [Int -> (Double, Double) -> WidgetRequest s e]
+[_gdEnterReq] :: GraphData s e -> [Int -> WidgetRequest s e]
+[_gdLeaveReq] :: GraphData s e -> [Int -> WidgetRequest s e]
 [_gdClickReq] :: GraphData s e -> [Int -> WidgetRequest s e]
 
 -- | Render single point.
@@ -492,6 +511,10 @@ graphHoverColor :: Color -> GraphData s e
 -- | Set the color of dragged point (if this option is not used then the
 --   color set by <a>graphColor</a> is used).
 graphActiveColor :: Color -> GraphData s e
+
+-- | Set the color of point border. The width of the border will be half
+--   the width set by <a>graphWidth</a>.
+graphBorderColor :: Color -> GraphData s e
 
 -- | Width of the line connecting provided points. If only single point is
 --   rendered then its radius will be twice the width.
@@ -521,6 +544,16 @@ graphFill_ :: Bool -> GraphData s e
 -- | Transparency level of the filled area.
 graphFillAlpha :: Double -> GraphData s e
 
+-- | How long the animation lasts in ms. Animation starts when graph data
+--   changes (for example, point positions or color).
+graphDuration :: Millisecond -> GraphData s e
+
+-- | Raises an event when animation is complete.
+graphOnFinished :: WidgetEvent e => e -> GraphData s e
+
+-- | Generates a <a>WidgetRequest</a> when animation is complete.
+graphOnFinishedReq :: WidgetRequest s e -> GraphData s e
+
 -- | Raises an event when a point is dragged by passing its index and new
 --   coordinates. This option is ignored if <a>graphSeparate</a> is not
 --   enabled.
@@ -530,6 +563,24 @@ graphOnChange :: WidgetEvent e => (Int -> (Double, Double) -> e) -> GraphData s 
 --   its index and new coordinates. This option is ignored if
 --   <a>graphSeparate</a> is not enabled.
 graphOnChangeReq :: (Int -> (Double, Double) -> WidgetRequest s e) -> GraphData s e
+
+-- | Raises an event when mouse enters point area by passing its index.
+--   This option is ignored if <a>graphSeparate</a> is not enabled.
+graphOnEnter :: WidgetEvent e => (Int -> e) -> GraphData s e
+
+-- | Generates a <a>WidgetRequest</a> when mouse enters point area by
+--   passing its index. This option is ignored if <a>graphSeparate</a> is
+--   not enabled.
+graphOnEnterReq :: (Int -> WidgetRequest s e) -> GraphData s e
+
+-- | Raises an event when mouse leaves point area by passing its index.
+--   This option is ignored if <a>graphSeparate</a> is not enabled.
+graphOnLeave :: WidgetEvent e => (Int -> e) -> GraphData s e
+
+-- | Generates a <a>WidgetRequest</a> when mouse leaves point area by
+--   passing its index. This option is ignored if <a>graphSeparate</a> is
+--   not enabled.
+graphOnLeaveReq :: (Int -> WidgetRequest s e) -> GraphData s e
 
 -- | Raises an event when a point is clicked by passing its index. This
 --   option is ignored if <a>graphSeparate</a> is not enabled.
@@ -548,23 +599,26 @@ data GraphMsg
 GraphSetTranslation :: Point -> GraphMsg
 GraphSetScale :: Point -> GraphMsg
 GraphReset :: GraphMsg
+GraphStopAnimations :: GraphMsg
+GraphFinished :: Int -> Millisecond -> GraphMsg
 instance GHC.Show.Show Monomer.Graph.GraphMsg.GraphMsg
 instance GHC.Classes.Eq Monomer.Graph.GraphMsg.GraphMsg
 
 module Monomer.Graph.GraphState
-data GraphState
-GraphState :: Point -> Point -> Point -> Point -> Maybe Point -> Maybe (Int, Int) -> Maybe (Int, Int) -> Rect -> GraphState
-[_gsTranslation] :: GraphState -> Point
-[_gsScale] :: GraphState -> Point
-[_gsUnit] :: GraphState -> Point
-[_gsSections] :: GraphState -> Point
-[_gsMousePosition] :: GraphState -> Maybe Point
-[_gsHoverPoint] :: GraphState -> Maybe (Int, Int)
-[_gsActivePoint] :: GraphState -> Maybe (Int, Int)
-[_gsViewport] :: GraphState -> Rect
-instance GHC.Show.Show Monomer.Graph.GraphState.GraphState
-instance GHC.Classes.Eq Monomer.Graph.GraphState.GraphState
-instance Data.Default.Class.Default Monomer.Graph.GraphState.GraphState
+data GraphState s e
+GraphState :: Point -> Point -> Point -> Point -> Maybe Point -> Maybe (Int, Int) -> Maybe (Int, Int) -> Rect -> [GraphData s e] -> [GraphData s e] -> [(Bool, Millisecond)] -> GraphState s e
+[_gsTranslation] :: GraphState s e -> Point
+[_gsScale] :: GraphState s e -> Point
+[_gsUnit] :: GraphState s e -> Point
+[_gsSections] :: GraphState s e -> Point
+[_gsMousePosition] :: GraphState s e -> Maybe Point
+[_gsHoverPoint] :: GraphState s e -> Maybe (Int, Int)
+[_gsActivePoint] :: GraphState s e -> Maybe (Int, Int)
+[_gsViewport] :: GraphState s e -> Rect
+[_gsGraphDatas] :: GraphState s e -> [GraphData s e]
+[_gsPrevGraphDatas] :: GraphState s e -> [GraphData s e]
+[_gsAnimationStates] :: GraphState s e -> [(Bool, Millisecond)]
+instance Data.Default.Class.Default (Monomer.Graph.GraphState.GraphState s e)
 
 
 -- | This widget renders a Cartesian coordinate system and plots function
@@ -577,7 +631,11 @@ instance Data.Default.Class.Default Monomer.Graph.GraphState.GraphState
 --   <li><a>GraphSetTranslation</a> <a>Point</a></li>
 --   <li><a>GraphSetScale</a> <a>Point</a></li>
 --   <li><a>GraphReset</a></li>
+--   <li><a>GraphStopAnimations</a></li>
+--   <li><a>GraphFinished</a> <a>Int</a> <a>Millisecond</a></li>
 --   </ul>
+--   
+--   The last message is used internally.
 --   
 --   <pre>
 --   graph [[(1,2), (1,3)], [(0,0), (1,1)]]
@@ -587,24 +645,24 @@ instance Data.Default.Class.Default Monomer.Graph.GraphState.GraphState
 module Monomer.Graph
 
 -- | Creates a graph plotter using the list with points.
-graph :: WidgetEvent e => [[(Double, Double)]] -> WidgetNode s e
+graph :: (WidgetModel s, WidgetEvent e) => [[(Double, Double)]] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with points. Accepts config.
-graph_ :: WidgetEvent e => [[(Double, Double)]] -> [GraphCfg s e] -> WidgetNode s e
+graph_ :: (WidgetModel s, WidgetEvent e) => [[(Double, Double)]] -> [GraphCfg s e] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with colors and points.
-graphWithColors :: WidgetEvent e => [(Color, [(Double, Double)])] -> WidgetNode s e
+graphWithColors :: (WidgetModel s, WidgetEvent e) => [(Color, [(Double, Double)])] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with colors and points. Accepts
 --   config.
-graphWithColors_ :: WidgetEvent e => [(Color, [(Double, Double)])] -> [GraphCfg s e] -> WidgetNode s e
+graphWithColors_ :: (WidgetModel s, WidgetEvent e) => [(Color, [(Double, Double)])] -> [GraphCfg s e] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with <a>GraphData</a>.
-graphWithData :: WidgetEvent e => [[GraphData s e]] -> WidgetNode s e
+graphWithData :: (WidgetModel s, WidgetEvent e) => [[GraphData s e]] -> WidgetNode s e
 
 -- | Creates a graph plotter using the list with <a>GraphData</a>. Accepts
 --   config.
-graphWithData_ :: WidgetEvent e => [[GraphData s e]] -> [GraphCfg s e] -> WidgetNode s e
+graphWithData_ :: (WidgetModel s, WidgetEvent e) => [[GraphData s e]] -> [GraphCfg s e] -> WidgetNode s e
 
 module Monomer.SaveManager.SaveManagerCfg
 type Saves a = Seq (a, Text)
