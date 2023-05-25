@@ -8,6 +8,10 @@ This widget can receive 'GraphMsg' messages:
 - 'GraphSetTranslation' 'Point'
 - 'GraphSetScale' 'Point'
 - 'GraphReset'
+- 'GraphStopAnimations'
+- 'GraphFinished' 'Int' 'Millisecond'
+
+The last message is used internally.
 
 @
 graph [[(1,2), (1,3)], [(0,0), (1,1)]]
@@ -55,7 +59,7 @@ import Monomer.Graph.GraphState
 Creates a graph plotter using the list with points.
 -}
 graph
-    :: (WidgetEvent e)
+    :: (WidgetModel s, WidgetEvent e)
     => [[(Double, Double)]]  -- ^ The list with points.
     -> WidgetNode s e        -- ^ The created graph plotter.
 graph points = graph_ points def
@@ -64,7 +68,7 @@ graph points = graph_ points def
 Creates a graph plotter using the list with points. Accepts config.
 -}
 graph_
-    :: (WidgetEvent e)
+    :: (WidgetModel s, WidgetEvent e)
     => [[(Double, Double)]]  -- ^ The list with points.
     -> [GraphCfg s e]        -- ^ The config options.
     -> WidgetNode s e        -- ^ The created graph plotter.
@@ -78,7 +82,7 @@ graph_ points configs = graphWithColors_ colorPoints configs where
 Creates a graph plotter using the list with colors and points.
 -}
 graphWithColors
-    :: (WidgetEvent e)
+    :: (WidgetModel s, WidgetEvent e)
     => [(Color, [(Double, Double)])]
     -- ^ The list with colors and points.
     -> WidgetNode s e
@@ -90,7 +94,7 @@ Creates a graph plotter using the list with colors and points.
 Accepts config.
 -}
 graphWithColors_
-    :: (WidgetEvent e)
+    :: (WidgetModel s, WidgetEvent e)
     => [(Color, [(Double, Double)])]
     -- ^ The list with colors and points.
     -> [GraphCfg s e]
@@ -108,7 +112,7 @@ graphWithColors_ colorPoints configs = node where
 Creates a graph plotter using the list with 'GraphData'.
 -}
 graphWithData
-    :: (WidgetEvent e)
+    :: (WidgetModel s, WidgetEvent e)
     => [[GraphData s e]]  -- ^ The list with 'GraphData'.
     -> WidgetNode s e     -- ^ The created graph plotter.
 graphWithData dataList = graphWithData_ dataList def
@@ -118,7 +122,7 @@ Creates a graph plotter using the list with 'GraphData'. Accepts
 config.
 -}
 graphWithData_
-    :: (WidgetEvent e)
+    :: (WidgetModel s, WidgetEvent e)
     => [[GraphData s e]]  -- ^ The list with 'GraphData'.
     -> [GraphCfg s e]     -- ^ The config options.
     -> WidgetNode s e     -- ^ The created graph plotter.
@@ -128,10 +132,10 @@ graphWithData_ dataList configs = node where
     config = mconcat configs
 
 makeGraph
-    :: (WidgetEvent e)
+    :: (WidgetModel s, WidgetEvent e)
     => [GraphData s e]
     -> GraphCfg s e
-    -> GraphState
+    -> GraphState s e
     -> Widget s e
 makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
     widget = createSingle state def
@@ -151,14 +155,51 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             then Nothing
             else Just CursorHand
 
-    init' wenv node = resultNode resNode where
+    init' wenv node = resultReqs resNode req where
         resNode = makeNodeWithState newState node
-        newState = orState {_gsViewport = vp}
-        vp = getContentArea node style
+        newState = orState
+            { _gsViewport = getContentArea node style
+            , _gsGraphDatas = graphDatas
+            , _gsPrevGraphDatas = graphDatas
+            , _gsAnimationStates = graphDatas >> [(False, 0)]
+            }
         style = currentStyle wenv node
+        req = [RenderEvery (node ^. L.info . L.widgetId) 10 Nothing]
 
-    merge _ newNode _ oldState = resultNode resNode where
-        resNode = makeNodeWithState oldState newNode
+    merge wenv newNode _ oldState = resultReqs resNode req where
+        resNode = makeNodeWithState newState newNode
+        newState = oldState
+            { _gsGraphDatas = graphDatas
+            , _gsPrevGraphDatas = prev
+            , _gsAnimationStates = newStates
+            }
+        prev = zipWith3 choosePrev prevNew prevOld comparisons
+        choosePrev new old same = if same then old else new
+        prevNew = makeProgDatas ts oldState <> tailDatas
+        prevOld = _gsPrevGraphDatas oldState <> tailDatas
+        req = concat $ [RenderEvery widgetId 10 Nothing]:reqs
+        (newStates, reqs, comparisons) = unzip3 stateReqs
+        stateReqs = zipWith3 f [0..] graphDatas oldDatas
+        f i graphData oldData = stateReq where
+            stateReq = if isSame graphData oldData
+                then (states!!i, [], True)
+                else ((dur > 0, ts), [finReq], False)
+            finReq = delayedMessage newNode (GraphFinished i ts) dur
+            dur = fromMaybe 0 $ _gdDuration graphData
+        isSame a1 a2 = all id
+            [ _gdPoints a1 == _gdPoints a2
+            , _gdColor a1 == _gdColor a2
+            , _gdBorderColor a1 == _gdBorderColor a2
+            , _gdWidth a1 == _gdWidth a2
+            , _gdRadius a1 == _gdRadius a2
+            , _gdFillAlpha a1 == _gdFillAlpha a2
+            ]
+        oldDatas = _gsGraphDatas oldState <> tailDatas
+        tailDatas = drop lo graphDatas
+        lo = length $ _gsGraphDatas oldState
+        states = (_gsAnimationStates oldState) <> repeat (False, 0)
+        widgetId = newNode ^. L.info . L.widgetId
+        ts = wenv ^. L.timestamp
 
     handleEvent wenv node _ event = result where
         result = case event of
@@ -284,12 +325,37 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
     resultRender node = Just $ resultReqs node [RenderOnce]
 
     handleMessage _ node _ message = do
-        s <- getNewState <$> cast message
-        return $ resultReqs (makeNodeWithState s node) [RenderOnce]
+        let casted = cast message
+        s <- getNewState <$> casted
+        req <- getMessageReq node <$> casted
+        return $ resultReqs (makeNodeWithState s node) req
 
     getNewState (GraphSetTranslation p) = state {_gsTranslation = p}
     getNewState (GraphSetScale p) = state {_gsScale = p}
-    getNewState GraphReset = def {_gsViewport = _gsViewport state}
+    getNewState GraphReset = state
+        { _gsTranslation = _gsTranslation def
+        , _gsScale = _gsScale def
+        , _gsUnit = _gsUnit def
+        , _gsSections = _gsSections def
+        , _gsMousePosition = _gsMousePosition def
+        , _gsHoverPoint = _gsHoverPoint def
+        , _gsActivePoint = _gsActivePoint def
+        }
+    getNewState GraphStopAnimations = state
+        { _gsAnimationStates = graphDatas >> [(False, 0)]
+        }
+    getNewState _ = state
+
+    getMessageReq node GraphStopAnimations = [RenderStop i] where
+        i = node ^. L.info . L.widgetId
+    getMessageReq _ (GraphFinished i t) = req where
+        req = if i < length graphDatas && running && sameTs
+            then _gdFinishedReq $ graphDatas!!i
+            else []
+        running = fst animationState
+        sameTs = snd animationState == t
+        animationState = (_gsAnimationStates state)!!i
+    getMessageReq _ _ = [RenderOnce]
 
     getSizeReq _ _ = (rangeSize 100 2000 1, rangeSize 100 2000 1)
 
@@ -354,12 +420,13 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
                 forM_ [ovy1, ovy1-sy..gy] horLine
                 forM_ [ovy1, ovy1+sy..(gy+gh)] horLine
         let p (x, y) = (64*cx*x+ox, 64*cy*(-y)+oy)
-        forM_ (zip [0..] graphDatas) $ \(i, graphData) -> do
+            ts = wenv ^. L.timestamp
+            progDatas = makeProgDatas ts state
+        forM_ (zip [0..] progDatas) $ \(i, graphData) -> do
             let GraphData{..} = graphData
                 ps = p <$> _gdPoints
                 newGraphData = graphData {_gdPoints = ps}
-            unless (null _gdColor) $
-                renderGraphData renderer newGraphData i
+            renderGraphData renderer newGraphData i
         unless (Just True `elem` [_gcHideNumbers, _gcHideGrid]) $ do
             setFillColor renderer foreN
             drawInAlpha renderer 0.62 $ do
@@ -375,10 +442,10 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             ps = _gdPoints
             c = _gdColor
             bc = _gdBorderColor
-            w = fromMaybe 2 _gdWidth
+            w = fromJust _gdWidth
             rx = fromMaybe (w*2) $ (64*cx*) <$> _gdRadius
             ry = fromMaybe (w*2) $ (64*cy*) <$> _gdRadius
-            alpha = fromMaybe 0.32 _gdFillAlpha
+            alpha = fromJust _gdFillAlpha
             p (x, y) = Point x y
             connect (a, b) = drawLine renderer (p a) (p b) w c
             drawDot cs (Point x y) = do
@@ -405,6 +472,49 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             setFillColor renderer $ fromJust c
             fill renderer
             restoreContext renderer
+
+    makeProgDatas ts state' = result where
+        result = zipWith3 f newDatas oldDatas animationStates
+        f graphData oldData (running, start) = progData where
+            progData = graphData
+                { _gdPoints = zipWith progP ps' ps'''
+                , _gdColor = Just $ progC c' c''
+                , _gdBorderColor = Just $ progC bc' bc''
+                , _gdWidth = Just $ prog w' w''
+                , _gdRadius = if any null [rs', rs'']
+                    then rs'
+                    else prog <$> rs' <*> rs''
+                , _gdFillAlpha = Just $ prog alpha' alpha''
+                }
+            ps' = _gdPoints graphData
+            ps'' = _gdPoints oldData
+            ps''' = ps'' <> drop (length ps'') ps'
+            c' = fromMaybe transparent $ _gdColor graphData
+            c'' = fromMaybe transparent $ _gdColor oldData
+            bc' = fromMaybe transparent $ _gdBorderColor graphData
+            bc'' = fromMaybe transparent $ _gdBorderColor oldData
+            w' = fromMaybe 2 $ _gdWidth graphData
+            w'' = fromMaybe 2 $ _gdWidth oldData
+            rs' = _gdRadius graphData
+            rs'' = _gdRadius oldData
+            alpha' = fromMaybe 0.32 $ _gdFillAlpha graphData
+            alpha'' = fromMaybe 0.32 $ _gdFillAlpha oldData
+            progP (a', b') (a, b) = (prog a a', prog b b')
+            progC (Color r' g' b' a') (Color r g b a) = Color
+                { _colorR = round $ prog' r r'
+                , _colorG = round $ prog' g g'
+                , _colorB = round $ prog' b b'
+                , _colorA = prog a a'
+                }
+            prog' a b = prog (fromIntegral a) (fromIntegral b)
+            prog a b = a+(b-a)*progress
+            progress = if running
+                then max 0 $ min 1 $ (fromIntegral $ ts-start)/dur
+                else 1
+            dur = fromIntegral $ fromMaybe 0 $ _gdDuration graphData
+        newDatas = _gsGraphDatas state'
+        oldDatas = _gsPrevGraphDatas state'
+        animationStates = _gsAnimationStates state'
 
     floor' :: Double -> Double
     floor' x = fromIntegral $ (floor x :: Int)

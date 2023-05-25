@@ -13,6 +13,9 @@ module Monomer.Graph.GraphData
     , graphFill
     , graphFill_
     , graphFillAlpha
+    , graphDuration
+    , graphOnFinished
+    , graphOnFinishedReq
     , graphOnChange
     , graphOnChangeReq
     , graphOnEnter
@@ -42,6 +45,10 @@ Options for graph data:
 - 'graphSeparate': whether the points should be rendered separately.
 - 'graphFill': whether to fill the area surrounded by points.
 - 'graphFillAlpha': transparency level of the filled area.
+- 'graphDuration': how long the animation lasts in ms.
+- 'graphOnFinished': event to raise when animation is complete.
+- 'graphOnFinishedReq': 'WidgetRequest' to generate when animation
+is complete.
 - 'graphOnChange': event to raise when a point is dragged.
 - 'graphOnChangeReq': 'WidgetRequest' to generate when a point is
 dragged.
@@ -66,6 +73,8 @@ data GraphData s e = GraphData
     , _gdSeparate :: Maybe Bool
     , _gdFill :: Maybe Bool
     , _gdFillAlpha :: Maybe Double
+    , _gdDuration :: Maybe Millisecond
+    , _gdFinishedReq :: [WidgetRequest s e]
     , _gdChangeReq :: [Int -> (Double, Double) -> WidgetRequest s e]
     , _gdEnterReq :: [Int -> WidgetRequest s e]
     , _gdLeaveReq :: [Int -> WidgetRequest s e]
@@ -84,6 +93,8 @@ instance Default (GraphData s e) where
         , _gdSeparate = Nothing
         , _gdFill = Nothing
         , _gdFillAlpha = Nothing
+        , _gdDuration = Nothing
+        , _gdFinishedReq = []
         , _gdChangeReq = []
         , _gdEnterReq = []
         , _gdLeaveReq = []
@@ -102,6 +113,8 @@ instance Semigroup (GraphData s e) where
         , _gdSeparate = _gdSeparate a2 <|> _gdSeparate a1
         , _gdFill = _gdFill a2 <|> _gdFill a1
         , _gdFillAlpha = _gdFillAlpha a2 <|> _gdFillAlpha a1
+        , _gdDuration = _gdDuration a2 <|> _gdDuration a1
+        , _gdFinishedReq = _gdFinishedReq a1 <> _gdFinishedReq a2
         , _gdChangeReq = _gdChangeReq a1 <> _gdChangeReq a2
         , _gdEnterReq = _gdEnterReq a1 <> _gdEnterReq a2
         , _gdLeaveReq = _gdLeaveReq a1 <> _gdLeaveReq a2
@@ -217,6 +230,31 @@ Transparency level of the filled area.
 graphFillAlpha :: Double -> GraphData s e
 graphFillAlpha alpha = def
     { _gdFillAlpha = Just alpha
+    }
+
+{-|
+How long the animation lasts in ms. Animation starts when graph data
+changes (for example, point positions or color).
+-}
+graphDuration :: Millisecond -> GraphData s e
+graphDuration dur = def
+    { _gdDuration = Just dur
+    }
+
+{-|
+Raises an event when animation is complete.
+-}
+graphOnFinished :: WidgetEvent e => e -> GraphData s e
+graphOnFinished handler = def
+    { _gdFinishedReq = [RaiseEvent handler]
+    }
+
+{-|
+Generates a 'WidgetRequest' when animation is complete.
+-}
+graphOnFinishedReq :: WidgetRequest s e -> GraphData s e
+graphOnFinishedReq req = def
+    { _gdFinishedReq = [req]
     }
 
 {-|

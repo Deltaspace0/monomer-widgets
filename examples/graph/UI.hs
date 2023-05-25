@@ -20,6 +20,7 @@ buildUI _ model = tree where
             [ hslider parameter (-2) 2
             , button "Reset" AppResetGraph
             , button "Remove orange points" AppRemovePoints
+            , button "Stop animations" AppStopAnimations
             ]
         ] `styleBasic` [padding 16]
     points =
@@ -27,7 +28,7 @@ buildUI _ model = tree where
             [ graphPoints $ (\x -> (x, cos $ p*x)) <$> xs
             , graphColor red
             ]
-        ,   [ graphPoint $ model ^. yellowPos
+        ,   [ graphPoint yp
             , graphColor yellow
             , graphRadius 0.42
             , graphHoverColor lightYellow
@@ -44,10 +45,11 @@ buildUI _ model = tree where
             , graphOnClick $ const AppRemovePoints
             ]
         ,   [ graphPoints [(-1, 4), (0, 5), (1, 4), (0, 3)]
-            , graphColor blue
+            , graphColor $ rgb (round $ yx*50) (round yy*50) 255
             , graphSeparate
             , graphFill
             , graphFillAlpha 0.64
+            , graphDuration 500
             ]
         ,   [ graphPoints $ model ^. manyPoints
             , graphColor orange
@@ -57,3 +59,4 @@ buildUI _ model = tree where
         ]
     xs = [-10, -9.98..10]
     p = model ^. parameter
+    yp@(yx, yy) = model ^. yellowPos

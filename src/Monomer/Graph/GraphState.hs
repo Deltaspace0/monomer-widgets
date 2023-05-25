@@ -4,8 +4,11 @@ module Monomer.Graph.GraphState
 
 import Data.Default
 import Monomer.Common.BasicTypes
+import Monomer.Core.WidgetTypes
 
-data GraphState = GraphState
+import Monomer.Graph.GraphData
+
+data GraphState s e = GraphState
     { _gsTranslation :: Point
     , _gsScale :: Point
     , _gsUnit :: Point
@@ -14,9 +17,12 @@ data GraphState = GraphState
     , _gsHoverPoint :: Maybe (Int, Int)
     , _gsActivePoint :: Maybe (Int, Int)
     , _gsViewport :: Rect
-    } deriving (Eq, Show)
+    , _gsGraphDatas :: [GraphData s e]
+    , _gsPrevGraphDatas :: [GraphData s e]
+    , _gsAnimationStates :: [(Bool, Millisecond)]
+    }
 
-instance Default GraphState where
+instance Default (GraphState s e) where
     def = GraphState
         { _gsTranslation = Point 0 0
         , _gsScale = Point 1 1
@@ -26,4 +32,7 @@ instance Default GraphState where
         , _gsHoverPoint = Nothing
         , _gsActivePoint = Nothing
         , _gsViewport = Rect 0 0 100 100
+        , _gsGraphDatas = []
+        , _gsPrevGraphDatas = []
+        , _gsAnimationStates = []
         }

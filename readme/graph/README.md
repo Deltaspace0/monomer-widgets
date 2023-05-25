@@ -7,6 +7,10 @@ This widget can receive `GraphMsg` messages:
 - `GraphSetTranslation Point`
 - `GraphSetScale Point`
 - `GraphReset`
+- `GraphStopAnimations`
+- `GraphFinished Int Millisecond`
+
+The last message is used internally.
 
 ## Usage
 
@@ -38,6 +42,9 @@ Here is the [example](/examples/graph/UI.hs) of an app using this widget.
 - `graphSeparate`. Do not connect the points and render them separately. Used when all points in the collection must have the same color.
 - `graphFill`. Fill the area surrounded by provided points with the color.
 - `graphFillAlpha`. Transparency level of the filled area.
+- `graphDuration ms`. How long the animation lasts in ms. Animation starts when graph data changes (for example, point positions or color).
+- `graphOnFinished e`. Raises an event when animation is complete.
+- `graphOnFinishedReq req`. Generates a `WidgetRequest` when animation is complete.
 - `graphOnChange f`. Raises an event when a point is dragged by passing its index and new coordinates. This option is ignored if `graphSeparate` is not enabled.
 - `graphOnChangeReq f`. Generates a `WidgetRequest` when a point is dragged by passing its index and new coordinates. This option is ignored if `graphSeparate` is not enabled.
 - `graphOnEnter f`. Raises an event when mouse enters point area by passing its index. This option is ignored if `graphSeparate` is not enabled.

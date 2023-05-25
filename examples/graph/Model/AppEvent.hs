@@ -16,6 +16,7 @@ data AppEvent
     | AppAddPoint (Double, Double)
     | AppRemovePoints
     | AppOrangeChange Int (Double, Double)
+    | AppStopAnimations
     deriving (Eq, Show)
 
 handleEvent :: AppEventHandler AppModel AppEvent
@@ -30,3 +31,4 @@ handleEvent _ _ model event = case event of
     AppAddPoint p -> [Model $ model & manyPoints %~ (p:)]
     AppRemovePoints -> [Model $ model & manyPoints .~ []]
     AppOrangeChange i p -> [Model $ model & manyPoints . ix i .~ p]
+    AppStopAnimations -> [Message "mainGraph" GraphStopAnimations]
