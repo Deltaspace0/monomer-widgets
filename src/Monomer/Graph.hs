@@ -477,14 +477,14 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
         result = zipWith3 f newDatas oldDatas animationStates
         f graphData oldData (running, start) = progData where
             progData = graphData
-                { _gdPoints = zipWith progP ps' ps'''
-                , _gdColor = Just $ progC c' c''
-                , _gdBorderColor = Just $ progC bc' bc''
-                , _gdWidth = Just $ prog w' w''
+                { _gdPoints = zipWith progP ps''' ps'
+                , _gdColor = Just $ progC c'' c'
+                , _gdBorderColor = Just $ progC bc'' bc'
+                , _gdWidth = Just $ prog w'' w'
                 , _gdRadius = if any null [rs', rs'']
                     then rs'
-                    else prog <$> rs' <*> rs''
-                , _gdFillAlpha = Just $ prog alpha' alpha''
+                    else prog <$> rs'' <*> rs'
+                , _gdFillAlpha = Just $ prog alpha'' alpha'
                 }
             ps' = _gdPoints graphData
             ps'' = _gdPoints oldData
@@ -499,12 +499,12 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             rs'' = _gdRadius oldData
             alpha' = fromMaybe 0.32 $ _gdFillAlpha graphData
             alpha'' = fromMaybe 0.32 $ _gdFillAlpha oldData
-            progP (a', b') (a, b) = (prog a a', prog b b')
+            progP (a', b') (a, b) = (prog a' a, prog b' b)
             progC (Color r' g' b' a') (Color r g b a) = Color
-                { _colorR = round $ prog' r r'
-                , _colorG = round $ prog' g g'
-                , _colorB = round $ prog' b b'
-                , _colorA = prog a a'
+                { _colorR = round $ prog' r' r
+                , _colorG = round $ prog' g' g
+                , _colorB = round $ prog' b' b
+                , _colorA = prog a' a
                 }
             prog' a b = prog (fromIntegral a) (fromIntegral b)
             prog a b = a+(b-a)*progress
