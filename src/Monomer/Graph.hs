@@ -48,6 +48,7 @@ import Data.Typeable
 import Monomer.Graphics.ColorTable
 import Monomer.Widgets.Single
 import Numeric
+import qualified Data.Map as M
 import qualified Monomer.Lens as L
 
 import Monomer.Graph.GraphCfg
@@ -162,6 +163,7 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             , _gsGraphDatas = graphDatas
             , _gsPrevGraphDatas = graphDatas
             , _gsAnimationStates = graphDatas >> [(False, 0)]
+            , _gsKeyMap = graphKeyMap
             }
         style = currentStyle wenv node
         req = [RenderEvery (node ^. L.info . L.widgetId) 10 Nothing]
@@ -172,34 +174,43 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             { _gsGraphDatas = graphDatas
             , _gsPrevGraphDatas = prev
             , _gsAnimationStates = newStates
+            , _gsKeyMap = graphKeyMap
             }
-        prev = zipWith3 choosePrev prevNew prevOld comparisons
-        choosePrev new old same = if same then old else new
+        req = concat $ [RenderEvery widgetId 10 Nothing]:reqs
+        (newStates, reqs, prev) = unzip3 stateReqs
+        stateReqs = zipWith f graphDatas $ zip [0..] oldDatas
+        f graphData iold@(i', _) = stateReq where
+            stateReq
+                | isNewKey = ((False, 0), [], graphData)
+                | isSame = (states!!i, [], prevOld!!i)
+                | otherwise = ((dur > 0, ts), [msg], prevNew!!i)
+            msg = delayedMessage newNode (GraphFinished i' ts) dur
+            dur = fromMaybe 0 $ _gdDuration graphData
+            (i, oldData) = fromMaybe iold fromMap
+            fromMap = _gdKey graphData >>= flip M.lookup oldKeyMap
+            isNewKey = not (null $ _gdKey graphData) && null fromMap
+            isSame = all id
+                [ _gdPoints graphData == _gdPoints oldData
+                , _gdColor graphData == _gdColor oldData
+                , _gdBorderColor graphData == _gdBorderColor oldData
+                , _gdWidth graphData == _gdWidth oldData
+                , _gdRadius graphData == _gdRadius oldData
+                , _gdFillAlpha graphData == _gdFillAlpha oldData
+                ]
         prevNew = makeProgDatas ts oldState <> tailDatas
         prevOld = _gsPrevGraphDatas oldState <> tailDatas
-        req = concat $ [RenderEvery widgetId 10 Nothing]:reqs
-        (newStates, reqs, comparisons) = unzip3 stateReqs
-        stateReqs = zipWith3 f [0..] graphDatas oldDatas
-        f i graphData oldData = stateReq where
-            stateReq = if isSame graphData oldData
-                then (states!!i, [], True)
-                else ((dur > 0, ts), [finReq], False)
-            finReq = delayedMessage newNode (GraphFinished i ts) dur
-            dur = fromMaybe 0 $ _gdDuration graphData
-        isSame a1 a2 = all id
-            [ _gdPoints a1 == _gdPoints a2
-            , _gdColor a1 == _gdColor a2
-            , _gdBorderColor a1 == _gdBorderColor a2
-            , _gdWidth a1 == _gdWidth a2
-            , _gdRadius a1 == _gdRadius a2
-            , _gdFillAlpha a1 == _gdFillAlpha a2
-            ]
         oldDatas = _gsGraphDatas oldState <> tailDatas
         tailDatas = drop lo graphDatas
         lo = length $ _gsGraphDatas oldState
         states = (_gsAnimationStates oldState) <> repeat (False, 0)
         widgetId = newNode ^. L.info . L.widgetId
         ts = wenv ^. L.timestamp
+        oldKeyMap = _gsKeyMap oldState
+
+    graphKeyMap = foldl f M.empty $ zip [0..] graphDatas where
+        f keyMap (i, graphData@(GraphData{..})) = if null _gdKey
+            then keyMap
+            else M.insert (fromJust _gdKey) (i, graphData) keyMap
 
     handleEvent wenv node _ event = result where
         result = case event of

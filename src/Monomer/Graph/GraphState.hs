@@ -3,8 +3,11 @@ module Monomer.Graph.GraphState
     ) where
 
 import Data.Default
+import Data.Map (Map)
+import Data.Text (Text)
 import Monomer.Common.BasicTypes
 import Monomer.Core.WidgetTypes
+import qualified Data.Map as M
 
 import Monomer.Graph.GraphData
 
@@ -20,6 +23,7 @@ data GraphState s e = GraphState
     , _gsGraphDatas :: [GraphData s e]
     , _gsPrevGraphDatas :: [GraphData s e]
     , _gsAnimationStates :: [(Bool, Millisecond)]
+    , _gsKeyMap :: Map Text (Int, GraphData s e)
     }
 
 instance Default (GraphState s e) where
@@ -35,4 +39,5 @@ instance Default (GraphState s e) where
         , _gsGraphDatas = []
         , _gsPrevGraphDatas = []
         , _gsAnimationStates = []
+        , _gsKeyMap = M.empty
         }

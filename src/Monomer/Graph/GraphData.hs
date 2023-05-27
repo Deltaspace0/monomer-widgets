@@ -14,6 +14,7 @@ module Monomer.Graph.GraphData
     , graphFill_
     , graphFillAlpha
     , graphDuration
+    , graphKey
     , graphOnFinished
     , graphOnFinishedReq
     , graphOnChange
@@ -28,6 +29,7 @@ module Monomer.Graph.GraphData
 
 import Control.Applicative ((<|>))
 import Data.Default
+import Data.Text (Text)
 import Monomer.Graphics.Types
 import Monomer.Widgets.Single
 
@@ -46,6 +48,7 @@ Options for graph data:
 - 'graphFill': whether to fill the area surrounded by points.
 - 'graphFillAlpha': transparency level of the filled area.
 - 'graphDuration': how long the animation lasts in ms.
+- 'graphKey': 'Text' identifier of a graph data (used for merging).
 - 'graphOnFinished': event to raise when animation is complete.
 - 'graphOnFinishedReq': 'WidgetRequest' to generate when animation
 is complete.
@@ -74,6 +77,7 @@ data GraphData s e = GraphData
     , _gdFill :: Maybe Bool
     , _gdFillAlpha :: Maybe Double
     , _gdDuration :: Maybe Millisecond
+    , _gdKey :: Maybe Text
     , _gdFinishedReq :: [WidgetRequest s e]
     , _gdChangeReq :: [Int -> (Double, Double) -> WidgetRequest s e]
     , _gdEnterReq :: [Int -> WidgetRequest s e]
@@ -94,6 +98,7 @@ instance Default (GraphData s e) where
         , _gdFill = Nothing
         , _gdFillAlpha = Nothing
         , _gdDuration = Nothing
+        , _gdKey = Nothing
         , _gdFinishedReq = []
         , _gdChangeReq = []
         , _gdEnterReq = []
@@ -114,6 +119,7 @@ instance Semigroup (GraphData s e) where
         , _gdFill = _gdFill a2 <|> _gdFill a1
         , _gdFillAlpha = _gdFillAlpha a2 <|> _gdFillAlpha a1
         , _gdDuration = _gdDuration a2 <|> _gdDuration a1
+        , _gdKey = _gdKey a2 <|> _gdKey a1
         , _gdFinishedReq = _gdFinishedReq a1 <> _gdFinishedReq a2
         , _gdChangeReq = _gdChangeReq a1 <> _gdChangeReq a2
         , _gdEnterReq = _gdEnterReq a1 <> _gdEnterReq a2
@@ -239,6 +245,15 @@ changes (for example, point positions or color).
 graphDuration :: Millisecond -> GraphData s e
 graphDuration dur = def
     { _gdDuration = Just dur
+    }
+
+{-|
+Identifier of a graph data. It can be used to correctly run an
+animation when the order of graph datas is changed during merge.
+-}
+graphKey :: Text -> GraphData s e
+graphKey key = def
+    { _gdKey = Just key
     }
 
 {-|

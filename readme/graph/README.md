@@ -43,6 +43,7 @@ Here is the [example](/examples/graph/UI.hs) of an app using this widget.
 - `graphFill`. Fill the area surrounded by provided points with the color.
 - `graphFillAlpha`. Transparency level of the filled area.
 - `graphDuration ms`. How long the animation lasts in ms. Animation starts when graph data changes (for example, point positions or color).
+- `graphKey text`. Identifier of a graph data. It can be used to correctly run an animation when the order of graph datas is changed during merge.
 - `graphOnFinished e`. Raises an event when animation is complete.
 - `graphOnFinishedReq req`. Generates a `WidgetRequest` when animation is complete.
 - `graphOnChange f`. Raises an event when a point is dragged by passing its index and new coordinates. This option is ignored if `graphSeparate` is not enabled.
