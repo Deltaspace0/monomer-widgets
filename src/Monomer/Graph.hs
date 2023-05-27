@@ -437,7 +437,8 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             let GraphData{..} = graphData
                 ps = p <$> _gdPoints
                 newGraphData = graphData {_gdPoints = ps}
-            renderGraphData renderer newGraphData i
+            when (isInViewport newGraphData rect) $
+                renderGraphData renderer newGraphData i
         unless (Just True `elem` [_gcHideNumbers, _gcHideGrid]) $ do
             setFillColor renderer foreN
             drawInAlpha renderer 0.62 $ do
@@ -446,6 +447,19 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
                 forM_ [foy..(foy+20)] horN'
                 forM_ [(foy-1),(foy-2)..(foy-20)] horN'
         restoreContext renderer
+
+    isInViewport GraphData{..} (Rect gx gy gw gh) = result where
+        result = any inVp _gdPoints
+        inVp (x, y) = all id
+            [ x+rx >= gx
+            , x-rx <= gx+gw
+            , y+ry >= gy
+            , y-ry <= gy+gh
+            ]
+        rx = fromMaybe (w*2) $ (64*cx*) <$> _gdRadius
+        ry = fromMaybe (w*2) $ (64*cy*) <$> _gdRadius
+        w = fromJust _gdWidth
+        Point cx cy = _gsScale state
 
     renderGraphData renderer GraphData{..} i = do
         let GraphState{..} = state
