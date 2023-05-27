@@ -310,10 +310,9 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
         (li, lj) = fromJust hps
         (hi, hj) = fromJust hp
         hps = _gsHoverPoint state
-        hp = hoverPointData $ zip [0..] graphDatas
+        hp = hoverPointData clickableGraphDatas
         hoverPointData [] = Nothing
         hoverPointData ((i, graphData):xs)
-            | _gdSeparate graphData /= Just True = hoverPointData xs
             | null hp' = hoverPointData xs
             | otherwise = (,) i <$> hp'
             where
@@ -332,6 +331,12 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
         (dx, dy) = ((x-ox)/64/cx, (oy-y)/64/cy)
         (ox, oy) = (gx+gw/2+tx, gy+gh/2+ty)
         Rect gx gy gw gh = _gsViewport state
+
+    clickableGraphDatas = f $ zip [0..] graphDatas where
+        f [] = []
+        f (x@(_, graphData):xs)
+            | _gdSeparate graphData == Just True = x:(f xs)
+            | otherwise = f xs
 
     resultRender node = Just $ resultReqs node [RenderOnce]
 
