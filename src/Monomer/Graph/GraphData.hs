@@ -14,6 +14,7 @@ module Monomer.Graph.GraphData
     , graphFill_
     , graphFillAlpha
     , graphDuration
+    , graphAnimationTwist
     , graphKey
     , graphOnFinished
     , graphOnFinishedReq
@@ -48,6 +49,7 @@ Options for graph data:
 - 'graphFill': whether to fill the area surrounded by points.
 - 'graphFillAlpha': transparency level of the filled area.
 - 'graphDuration': how long the animation lasts in ms.
+- 'graphAnimationTwist': change the animation behavior.
 - 'graphKey': 'Text' identifier of a graph data (used for merging).
 - 'graphOnFinished': event to raise when animation is complete.
 - 'graphOnFinishedReq': 'WidgetRequest' to generate when animation
@@ -77,6 +79,7 @@ data GraphData s e = GraphData
     , _gdFill :: Maybe Bool
     , _gdFillAlpha :: Maybe Double
     , _gdDuration :: Maybe Millisecond
+    , _gdTwist :: Maybe (Double -> Double)
     , _gdKey :: Maybe Text
     , _gdFinishedReq :: [WidgetRequest s e]
     , _gdChangeReq :: [Int -> (Double, Double) -> WidgetRequest s e]
@@ -98,6 +101,7 @@ instance Default (GraphData s e) where
         , _gdFill = Nothing
         , _gdFillAlpha = Nothing
         , _gdDuration = Nothing
+        , _gdTwist = Nothing
         , _gdKey = Nothing
         , _gdFinishedReq = []
         , _gdChangeReq = []
@@ -119,6 +123,7 @@ instance Semigroup (GraphData s e) where
         , _gdFill = _gdFill a2 <|> _gdFill a1
         , _gdFillAlpha = _gdFillAlpha a2 <|> _gdFillAlpha a1
         , _gdDuration = _gdDuration a2 <|> _gdDuration a1
+        , _gdTwist = _gdTwist a2 <|> _gdTwist a1
         , _gdKey = _gdKey a2 <|> _gdKey a1
         , _gdFinishedReq = _gdFinishedReq a1 <> _gdFinishedReq a2
         , _gdChangeReq = _gdChangeReq a1 <> _gdChangeReq a2
@@ -245,6 +250,18 @@ changes (for example, point positions or color).
 graphDuration :: Millisecond -> GraphData s e
 graphDuration dur = def
     { _gdDuration = Just dur
+    }
+
+{-|
+Function which receives current animation progress (from 0 to 1) and
+returns modified progress. By default, previous graph data values
+change with uniform speed to new values during the animation (for
+example, if the radius is changed from 2 to 6 then at 0.5 animation
+progress the radius equals to 4).
+-}
+graphAnimationTwist :: (Double -> Double) -> GraphData s e
+graphAnimationTwist f = def
+    { _gdTwist = Just f
     }
 
 {-|

@@ -538,9 +538,10 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
                 }
             prog' a b = prog (fromIntegral a) (fromIntegral b)
             prog a b = a+(b-a)*progress
-            progress = if running
+            progress = twist $ if running
                 then max 0 $ min 1 $ (fromIntegral $ ts-start)/dur
                 else 1
+            twist = fromMaybe id $ _gdTwist graphData
             dur = fromIntegral $ fromMaybe 0 $ _gdDuration graphData
         newDatas = _gsGraphDatas state'
         oldDatas = _gsPrevGraphDatas state'
