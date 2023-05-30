@@ -37,7 +37,7 @@ module Monomer.Graph
     , graphWithData_
     ) where
 
-import Control.Applicative ((<|>))
+import Control.Applicative
 import Control.Lens
 import Control.Monad
 import Data.Default
@@ -181,21 +181,35 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             , _gsKeyMap = graphKeyMap
             }
         req = concat $ [RenderEvery widgetId 10 Nothing]:reqs
-        (newStates, reqs, prev) = unzip3 stateReqs
-        stateReqs = zipWith f graphDatas $ zip [0..] oldDatas
-        f graphData iold@(i', _) = stateReq where
+        (newStates, reqs, prev) = unzip3 $ getZipList $
+            f <$> ZipList [0..]
+              <*> ZipList graphDatas
+              <*> ZipList oldDatas
+              <*> ZipList (toList states)
+              <*> ZipList (toList prevOld)
+              <*> ZipList (toList prevNew)
+        f i' graphData oldData' ss po pn = stateReq where
             stateReq
                 | isNewKey = ((False, 0), [], graphData)
                 | isSame = (states', [], prevOld')
                 | otherwise = ((dur > 0, ts), [msg], prevNew')
-            states' = Seq.index states i
-            prevOld' = Seq.index prevOld i
-            prevNew' = Seq.index prevNew i
+            states' = if isSameKey
+                then ss
+                else Seq.index states i
+            prevOld' = if isSameKey
+                then po
+                else Seq.index prevOld i
+            prevNew' = if isSameKey
+                then pn
+                else Seq.index prevNew i
             msg = delayedMessage newNode (GraphFinished i' ts) dur
             dur = fromMaybe 0 $ _gdDuration graphData
-            (i, oldData) = fromMaybe iold fromMap
+            (i, oldData) = if null fromMap || isSameKey
+                then (i', oldData')
+                else fromJust fromMap
             fromMap = _gdKey graphData >>= flip M.lookup oldKeyMap
             isNewKey = not (null $ _gdKey graphData) && null fromMap
+            isSameKey = _gdKey graphData == _gdKey oldData'
             isSame = all id
                 [ _gdPoints graphData == _gdPoints oldData
                 , _gdColor graphData == _gdColor oldData
