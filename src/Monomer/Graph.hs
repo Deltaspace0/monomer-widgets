@@ -42,6 +42,7 @@ import Control.Lens
 import Control.Monad
 import Data.Default
 import Data.Fixed
+import Data.Foldable
 import Data.Maybe
 import Data.Text (pack)
 import Data.Typeable
@@ -49,6 +50,7 @@ import Monomer.Graphics.ColorTable
 import Monomer.Widgets.Single
 import Numeric
 import qualified Data.Map as M
+import qualified Data.Sequence as Seq
 import qualified Monomer.Lens as L
 
 import Monomer.Graph.GraphCfg
@@ -160,20 +162,22 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
         resNode = makeNodeWithState newState node
         newState = orState
             { _gsViewport = getContentArea node style
-            , _gsGraphDatas = graphDatas
-            , _gsPrevGraphDatas = graphDatas
-            , _gsAnimationStates = graphDatas >> [(False, 0)]
+            , _gsGraphDatas = graphSeq
+            , _gsPrevGraphDatas = graphSeq
+            , _gsAnimationStates = graphSeq *> noAnimation
             , _gsKeyMap = graphKeyMap
             }
+        graphSeq = Seq.fromList graphDatas
+        noAnimation = Seq.singleton (False, 0)
         style = currentStyle wenv node
         req = [RenderEvery (node ^. L.info . L.widgetId) 10 Nothing]
 
     merge wenv newNode _ oldState = resultReqs resNode req where
         resNode = makeNodeWithState newState newNode
         newState = oldState
-            { _gsGraphDatas = graphDatas
-            , _gsPrevGraphDatas = prev
-            , _gsAnimationStates = newStates
+            { _gsGraphDatas = graphSeq
+            , _gsPrevGraphDatas = Seq.fromList prev
+            , _gsAnimationStates = Seq.fromList newStates
             , _gsKeyMap = graphKeyMap
             }
         req = concat $ [RenderEvery widgetId 10 Nothing]:reqs
@@ -182,8 +186,11 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
         f graphData iold@(i', _) = stateReq where
             stateReq
                 | isNewKey = ((False, 0), [], graphData)
-                | isSame = (states!!i, [], prevOld!!i)
-                | otherwise = ((dur > 0, ts), [msg], prevNew!!i)
+                | isSame = (states', [], prevOld')
+                | otherwise = ((dur > 0, ts), [msg], prevNew')
+            states' = Seq.index states i
+            prevOld' = Seq.index prevOld i
+            prevNew' = Seq.index prevNew i
             msg = delayedMessage newNode (GraphFinished i' ts) dur
             dur = fromMaybe 0 $ _gdDuration graphData
             (i, oldData) = fromMaybe iold fromMap
@@ -199,12 +206,14 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
                 ]
         prevNew = makeProgDatas ts oldState <> tailDatas
         prevOld = _gsPrevGraphDatas oldState <> tailDatas
-        oldDatas = _gsGraphDatas oldState <> tailDatas
-        tailDatas = drop lo graphDatas
+        oldDatas = toList $ _gsGraphDatas oldState <> tailDatas
+        tailDatas = Seq.drop lo graphSeq
         lo = length $ _gsGraphDatas oldState
-        states = (_gsAnimationStates oldState) <> repeat (False, 0)
+        states = (_gsAnimationStates oldState) <> tailStates
+        tailStates = tailDatas *> Seq.singleton (False, 0)
         widgetId = newNode ^. L.info . L.widgetId
         ts = wenv ^. L.timestamp
+        graphSeq = Seq.fromList graphDatas
         oldKeyMap = _gsKeyMap oldState
 
     graphKeyMap = foldl f M.empty $ zip [0..] graphDatas where
@@ -270,7 +279,8 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             }
         reqs = if null (_gsActivePoint state)
             then []
-            else ($ j) <$> (_gdClickReq $ graphDatas!!i)
+            else ($ j) <$> _gdClickReq graphData
+        graphData = Seq.index (_gsGraphDatas state) i
         (i, j) = fromJust $ _gsActivePoint state
 
     handleMove wenv node moveP@(Point x y) = result where
@@ -304,9 +314,10 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
         mp = _gsMousePosition state
         (di, dj) = fromJust dp
         dp = _gsActivePoint state
-        reportC = _gdChangeReq $ graphDatas!!di
-        reportE = _gdEnterReq $ graphDatas!!hi
-        reportL = _gdLeaveReq $ graphDatas!!li
+        reportC = _gdChangeReq $ Seq.index graphSeq di
+        reportE = _gdEnterReq $ Seq.index graphSeq hi
+        reportL = _gdLeaveReq $ Seq.index graphSeq li
+        graphSeq = _gsGraphDatas state
         (li, lj) = fromJust hps
         (hi, hj) = fromJust hp
         hps = _gsHoverPoint state
@@ -358,19 +369,20 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
         , _gsActivePoint = _gsActivePoint def
         }
     getNewState GraphStopAnimations = state
-        { _gsAnimationStates = graphDatas >> [(False, 0)]
-        }
+        { _gsAnimationStates = _gsGraphDatas state *> noAnimation
+        } where noAnimation = Seq.singleton (False, 0)
     getNewState _ = state
 
     getMessageReq node GraphStopAnimations = [RenderStop i] where
         i = node ^. L.info . L.widgetId
     getMessageReq _ (GraphFinished i t) = req where
-        req = if i < length graphDatas && running && sameTs
-            then _gdFinishedReq $ graphDatas!!i
+        req = if i < Seq.length graphSeq && running && sameTs
+            then _gdFinishedReq $ Seq.index graphSeq i
             else []
         running = fst animationState
         sameTs = snd animationState == t
-        animationState = (_gsAnimationStates state)!!i
+        animationState = Seq.index (_gsAnimationStates state) i
+        graphSeq = _gsGraphDatas state
     getMessageReq _ _ = [RenderOnce]
 
     getSizeReq _ _ = (rangeSize 100 2000 1, rangeSize 100 2000 1)
@@ -437,7 +449,7 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
                 forM_ [ovy1, ovy1+sy..(gy+gh)] horLine
         let p (x, y) = (64*cx*x+ox, 64*cy*(-y)+oy)
             ts = wenv ^. L.timestamp
-            progDatas = makeProgDatas ts state
+            progDatas = toList $ makeProgDatas ts state
         forM_ (zip [0..] progDatas) $ \(i, graphData) -> do
             let GraphData{..} = graphData
                 ps = p <$> _gdPoints
@@ -504,7 +516,7 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
             restoreContext renderer
 
     makeProgDatas ts state' = result where
-        result = zipWith3 f newDatas oldDatas animationStates
+        result = Seq.zipWith3 f newDatas oldDatas animationStates
         f graphData oldData (running, start) = progData where
             progData = graphData
                 { _gdPoints = zipWith progP ps''' ps'

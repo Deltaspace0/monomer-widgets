@@ -4,10 +4,12 @@ module Monomer.Graph.GraphState
 
 import Data.Default
 import Data.Map (Map)
+import Data.Sequence (Seq)
 import Data.Text (Text)
 import Monomer.Common.BasicTypes
 import Monomer.Core.WidgetTypes
 import qualified Data.Map as M
+import qualified Data.Sequence as Seq
 
 import Monomer.Graph.GraphData
 
@@ -20,9 +22,9 @@ data GraphState s e = GraphState
     , _gsHoverPoint :: Maybe (Int, Int)
     , _gsActivePoint :: Maybe (Int, Int)
     , _gsViewport :: Rect
-    , _gsGraphDatas :: [GraphData s e]
-    , _gsPrevGraphDatas :: [GraphData s e]
-    , _gsAnimationStates :: [(Bool, Millisecond)]
+    , _gsGraphDatas :: Seq (GraphData s e)
+    , _gsPrevGraphDatas :: Seq (GraphData s e)
+    , _gsAnimationStates :: Seq (Bool, Millisecond)
     , _gsKeyMap :: Map Text (Int, GraphData s e)
     }
 
@@ -36,8 +38,8 @@ instance Default (GraphState s e) where
         , _gsHoverPoint = Nothing
         , _gsActivePoint = Nothing
         , _gsViewport = Rect 0 0 100 100
-        , _gsGraphDatas = []
-        , _gsPrevGraphDatas = []
-        , _gsAnimationStates = []
+        , _gsGraphDatas = Seq.empty
+        , _gsPrevGraphDatas = Seq.empty
+        , _gsAnimationStates = Seq.empty
         , _gsKeyMap = M.empty
         }
