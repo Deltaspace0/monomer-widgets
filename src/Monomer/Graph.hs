@@ -563,7 +563,9 @@ makeGraph graphDatas config@(GraphCfg{..}) orState = widget where
                 , _colorA = prog a' a
                 }
             prog' a b = prog (fromIntegral a) (fromIntegral b)
-            prog a b = a+(b-a)*progress
+            prog a b = if progress == 1
+                then b
+                else a+(b-a)*progress
             progress = twist $ if running
                 then max 0 $ min 1 $ (fromIntegral $ ts-start)/dur
                 else 1
