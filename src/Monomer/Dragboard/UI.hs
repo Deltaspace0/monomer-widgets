@@ -64,7 +64,8 @@ buildUI DragboardCfg{..} c r getPathOrColor _ model = node where
                 [ animTranslation $ Point x y
                 , animScissor $ Rect (-10000) (-10000) 20000 20000
                 ]
-        (x, y) = ((x2-x1)*t/dur'-x2+x1, (y2-y1)*t/dur'-y2+y1)
+        (x, y) = ((x2-x1)*prog-x2+x1, (y2-y1)*prog-y2+y1)
+        prog = (sin $ (t/dur'-0.5)*pi)/2+0.5
         Rect x1 y1 _ _ = fromJust sourceRect
         sourceRect = Map.lookup i $ model ^. animationSources
     managed = makeWidget . getPathOrColor . head
