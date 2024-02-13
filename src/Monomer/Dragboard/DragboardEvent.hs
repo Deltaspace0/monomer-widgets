@@ -96,9 +96,7 @@ clickHandle i wenv config model@(DragboardModel{..}) = resp where
     newSelected = if null dropResponses
         then Just i
         else Nothing
-    insertSource = if null sourceRect
-        then id
-        else Map.insert i $ fromJust sourceRect
+    insertSource = maybe id (Map.insert i) sourceRect
     sourceRect = view L.viewport <$> sourceInfo
     sourceInfo = nodeInfoFromKey wenv $ WidgetKey sourceKey
     destinationKey = WidgetKey $ "dragItem" <> showt i
