@@ -19,7 +19,7 @@ import qualified Monomer.Lens as L
 import Monomer.Dragboard.DragboardCfg
 import Monomer.Dragboard.DragboardModel
 
-newtype DragId = DragId Int deriving Eq
+newtype DragId = DragId Int deriving (Eq, Show)
 
 data DragboardEvent a
     = EventDrop Int DragId
