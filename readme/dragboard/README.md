@@ -25,6 +25,7 @@ and returns whether this move is valid or not. If move is not valid
 then the board state will not change.
 - `[dragIdOffset i]`. When there are multiple dragboards, it is possible to drag an item from one dragboard to another. In order to ignore drop events caused by foreign items or to process them properly, the dragboards should use different offsets (for example, if each dragboard has less than 1000 squares, then multiples of 1000 can be used as offsets).
 - `[selectColor color]`. Color of selected square.
+- `[showLegalMoves]`. Whether to highlight legal moves.
 - `[disableClick]`. Whether items can be moved only by dragging.
 - `[renderSource]`. Whether to render the source widget when dragging.
 - `[duration ms]`. How long the animation lasts in ms.
