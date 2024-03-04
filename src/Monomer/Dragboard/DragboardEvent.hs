@@ -96,6 +96,7 @@ clickHandle i wenv config model@(DragboardModel{..}) = response where
             [ Model $ model
                 & selectedSquare .~ newSelected
                 & animationSources %~ insertSource
+            , Event EventUpdateLegalSquares
             , Event $ EventDrop i d
             , responseIf (not $ null dropResponses) $
                 Message destinationKey AnimationStart
