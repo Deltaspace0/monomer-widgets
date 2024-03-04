@@ -7,6 +7,7 @@ module Monomer.Dragboard.DragboardModel
     , boardState
     , selectedSquare
     , animationSources
+    , legalSquares
     , initDragboardModel
     ) where
 
@@ -19,6 +20,7 @@ data DragboardModel a = DragboardModel
     { _dmBoardState :: [[a]]
     , _dmSelectedSquare :: Maybe Int
     , _dmAnimationSources :: Map Int Rect
+    , _dmLegalSquares :: [Int]
     } deriving (Eq, Show)
 
 makeLensesWith abbreviatedFields 'DragboardModel
@@ -28,4 +30,5 @@ initDragboardModel = DragboardModel
     { _dmBoardState = []
     , _dmSelectedSquare = Nothing
     , _dmAnimationSources = Map.empty
+    , _dmLegalSquares = []
     }

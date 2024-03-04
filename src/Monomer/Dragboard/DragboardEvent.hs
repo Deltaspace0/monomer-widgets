@@ -24,6 +24,7 @@ newtype DragId = DragId Int deriving (Eq, Show)
 data DragboardEvent a
     = EventDrop Int DragId
     | EventClick Int
+    | EventUpdateLegalSquares
     | EventFinished Int
     | EventMerge (DragboardModel a)
     | EventFocus Path
@@ -43,6 +44,7 @@ handleEvent
 handleEvent wdata config wenv node model event = case event of
     EventDrop i d -> dropHandle i d wdata config model
     EventClick i -> clickHandle i wenv config model
+    EventUpdateLegalSquares -> updateLegalSquaresHandle config model
     EventFinished i -> finishedHandle i config model
     EventMerge m -> mergeHandle m wenv config model
     EventFocus prev -> focusHandle node prev config model
@@ -58,7 +60,12 @@ dropHandle ixTo (DragId ixFrom) wdata config model = response where
         then []
         else setBoardState <> report
     setBoardState = if validFrom
-        then [Model $ model & boardState .~ newState] <> dataReq
+        then
+            [ Model $ model
+                & boardState .~ newState
+                & selectedSquare .~ Nothing
+            , Event EventUpdateLegalSquares
+            ] <> dataReq
         else []
     valid = ($ changeInfo) <$> _dcValidator
     changeInfo = (_dmBoardState, ixTo, ixFrom)
@@ -81,8 +88,8 @@ clickHandle
     :: Int
     -> WidgetEnv (DragboardModel a) (DragboardEvent a)
     -> EventHandle a sp ep
-clickHandle i wenv config model@(DragboardModel{..}) = resp where
-    resp
+clickHandle i wenv config model@(DragboardModel{..}) = response where
+    response
         | null _dmSelectedSquare = setSelectedSquare $ Just i
         | _dmSelectedSquare == Just i = setSelectedSquare Nothing
         | otherwise =
@@ -104,7 +111,22 @@ clickHandle i wenv config model@(DragboardModel{..}) = resp where
     dropResponses = dropHandle i d (WidgetValue []) config' model
     config' = config <> (onChangeReq $ const RenderOnce)
     d = DragId $ fromJust _dmSelectedSquare
-    setSelectedSquare v = [Model $ model & selectedSquare .~ v]
+    setSelectedSquare v =
+        [ Model $ model & selectedSquare .~ v
+        , Event EventUpdateLegalSquares
+        ]
+
+updateLegalSquaresHandle :: EventHandle a sp ep
+updateLegalSquaresHandle config model = response where
+    response = [Model $ model & legalSquares .~ newLegalSquares]
+    newLegalSquares = case _dmSelectedSquare of
+        Nothing -> []
+        Just i -> filter (f i) [offset..(offset+(length _dmBoardState)-1)]
+    f ixFrom ixTo = (($ changeInfo) <$> _dcValidator) == Just True where
+        changeInfo = (_dmBoardState, ixTo, ixFrom)
+    offset = fromMaybe 0 _dcOffset
+    DragboardCfg{..} = config
+    DragboardModel{..} = model
 
 finishedHandle :: Int -> EventHandle a sp ep
 finishedHandle i _ _ = response where

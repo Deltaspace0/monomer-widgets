@@ -40,8 +40,8 @@ clicking = describe "clicking" $ do
         node = dragboard 2 1 field getColor
         noClick = dragboard_ 2 1 field getColor [disableClick]
         evtC (x1, y1) (x2, y2) =
-            [ evtRelease $ Point x1 y1
-            , evtRelease $ Point x2 y2
+            [ evtPress $ Point x1 y1
+            , evtPress $ Point x2 y2
             ]
         model p1 p2 n = nodeHandleEventModel wenv (evtC p1 p2) n
         f = view field

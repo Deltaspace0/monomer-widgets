@@ -9,6 +9,8 @@ module Monomer.Dragboard.DragboardCfg
     , moveValidator
     , dragIdOffset
     , selectColor
+    , showLegalMoves
+    , showLegalMoves_
     , disableClick
     , disableClick_
     , renderSource
@@ -29,6 +31,7 @@ Configuration options for dragboard:
 - 'moveValidator': function to check validity of a move.
 - 'dragIdOffset': offset for drag and drop event messages.
 - 'selectColor': color of selected square.
+- 'showLegalMoves': whether to highlight legal moves.
 - 'disableClick': whether items can be moved only by dragging.
 - 'renderSource': whether to render the source widget when dragging.
 - 'duration': how long the animation lasts in ms.
@@ -44,6 +47,7 @@ data DragboardCfg s e a = DragboardCfg
     { _dcValidator :: Maybe (Info a -> Bool)
     , _dcOffset :: Maybe Int
     , _dcSelectColor :: Maybe Color
+    , _dcShowLegal :: Maybe Bool
     , _dcNoClick :: Maybe Bool
     , _dcRenderS :: Maybe Bool
     , _dcDuration :: Maybe Millisecond
@@ -58,6 +62,7 @@ instance Default (DragboardCfg s e a) where
         { _dcValidator = Nothing
         , _dcOffset = Nothing
         , _dcSelectColor = Nothing
+        , _dcShowLegal = Nothing
         , _dcNoClick = Nothing
         , _dcRenderS = Nothing
         , _dcDuration = Nothing
@@ -72,6 +77,7 @@ instance Semigroup (DragboardCfg s e a) where
         { _dcValidator = _dcValidator a2 <|> _dcValidator a1
         , _dcOffset = _dcOffset a2 <|> _dcOffset a1
         , _dcSelectColor = _dcSelectColor a2 <|> _dcSelectColor a1
+        , _dcShowLegal = _dcShowLegal a2 <|> _dcShowLegal a1
         , _dcNoClick = _dcNoClick a2 <|> _dcNoClick a1
         , _dcRenderS = _dcRenderS a2 <|> _dcRenderS a1
         , _dcDuration = _dcDuration a2 <|> _dcDuration a1
@@ -159,6 +165,20 @@ Color of selected square which is yellow by default.
 selectColor :: Color -> DragboardCfg s e a
 selectColor color = def
     { _dcSelectColor = Just color
+    }
+
+{-|
+Highlights legal moves (requires the move validator).
+-}
+showLegalMoves :: DragboardCfg s e a
+showLegalMoves = showLegalMoves_ True
+
+{-|
+Whether to highlight legal moves.
+-}
+showLegalMoves_ :: Bool -> DragboardCfg s e a
+showLegalMoves_ v = def
+    { _dcShowLegal = Just v
     }
 
 {-|

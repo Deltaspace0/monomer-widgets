@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.35.1.
+-- This file has been generated from package.yaml by hpack version 0.36.0.
 --
 -- see: https://github.com/sol/hpack
 
@@ -34,6 +34,7 @@ library
       Monomer.Dragboard.UI
       Monomer.EnhancedSlider
       Monomer.EnhancedSlider.EnhancedSliderCfg
+      Monomer.EnhancedSlider.UI
       Monomer.Graph
       Monomer.Graph.GraphCfg
       Monomer.Graph.GraphData
@@ -44,7 +45,6 @@ library
       Monomer.SaveManager.SaveManagerModel
   other-modules:
       Monomer.EnhancedSlider.EnhancedSliderEvent
-      Monomer.EnhancedSlider.UI
       Monomer.SaveManager.SaveManagerEvent
       Monomer.SaveManager.UI
       Paths_monomer_widgets

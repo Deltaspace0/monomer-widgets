@@ -12,6 +12,7 @@ import Monomer.Checkerboard
 import Monomer.Core.Combinators
 import Monomer.Graphics.ColorTable
 import Monomer.Graphics.Types
+import Monomer.Graphics.Util
 import Monomer.Widgets.Animation
 import Monomer.Widgets.Containers.Box
 import Monomer.Widgets.Containers.Draggable
@@ -46,13 +47,15 @@ buildUI DragboardCfg{..} c r getPathOrColor _ model = node where
     makeDrop i = dropTarget (EventDrop i) . makeAnim i
     clickBox i x = if _dcNoClick == Just True
         then x
-        else paint i $ box_ [onBtnReleased $ \_ _ -> EventClick i] x
-    paint i x = if model ^. selectedSquare == Just i
-        then x `styleBasic` [bgColor selectedColor]
-        else x
+        else paint i $ box_ [onBtnPressed $ \_ _ -> EventClick i] x
+    paint i x
+        | legal i = x `styleBasic` [bgColor $ rgba 4 42 4 0.8]
+        | model ^. selectedSquare == Just i = x `styleBasic` [bgColor sColor]
+        | otherwise = x
+    legal i = _dcShowLegal == Just True && i `elem` model ^. legalSquares
+    sColor = fromMaybe yellow _dcSelectColor
     draggableConfigs = [draggableRenderSource_ renderS]
     renderS = fromMaybe False _dcRenderS
-    selectedColor = fromMaybe yellow _dcSelectColor
     makeAnim i x = animTransform_
         [ duration dur
         , onFinished $ EventFinished i
